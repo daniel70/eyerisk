@@ -1,0 +1,6 @@
+- Question kan een veld bevatten waarin wordt bijgehouden
+  hoevaak dit record voorkomt in een klant selectie
+- Met progress bars (d3.js) kan de voortgang worden aangegeven
+  hoeveel vragen er al zijn ingevuld en hoeveel nog moeten worden
+  ingevuld.
+- Accept | Mitigate | Transfer, swipe left, click, swipe right

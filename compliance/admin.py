@@ -1,5 +1,16 @@
 from django.contrib import admin
 from .models import Document, Question
 
-admin.site.register(Document)
-admin.site.register(Question)
+
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'is_active')
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('code', 'text', 'document')
+
+admin.site.register(Document, DocumentAdmin)
+admin.site.register(Question, QuestionAdmin)
+
+admin.site.site_title = "EyeRisk Administration"
+admin.site.site_header = "EyeRisk Administration"
