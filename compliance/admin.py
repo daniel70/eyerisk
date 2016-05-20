@@ -3,7 +3,7 @@ from .models import Document, Question
 
 
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_active')
+    list_display = ('name', 'is_active', 'nr_of_questions')
 
 
 class QuestionAdmin(admin.ModelAdmin):

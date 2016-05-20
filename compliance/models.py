@@ -9,6 +9,9 @@ class Document(models.Model):
     def __str__(self):
         return self.name
 
+    def nr_of_questions(self):
+        return Question.objects.filter(document=self).count()
+
     class Meta:
         ordering = ['name']
 

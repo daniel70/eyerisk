@@ -4,3 +4,5 @@
   hoeveel vragen er al zijn ingevuld en hoeveel nog moeten worden
   ingevuld.
 - Accept | Mitigate | Transfer, swipe left, click, swipe right
+- De geselecteerde vragen voor de ene klant kunnen als template dienen voor een andere klant
+  Hierbij worden alleen de vragen geimporteerd van Documenten die overeenkomen.
