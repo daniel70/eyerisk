@@ -1,1 +1,1 @@
-web: gunicorn eyerisk.eyerisk.wsgi --log-file -
+web: gunicorn eyerisk.wsgi --log-file -
