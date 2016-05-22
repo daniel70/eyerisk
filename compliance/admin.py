@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Document, Question
+from .models import Document, Question, Selection, SelectionDocument
 
 
 class DocumentAdmin(admin.ModelAdmin):
@@ -11,6 +11,8 @@ class QuestionAdmin(admin.ModelAdmin):
 
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Selection)
+admin.site.register(SelectionDocument)
 
 admin.site.site_title = "EyeRisk Administration"
 admin.site.site_header = "EyeRisk Administration"
