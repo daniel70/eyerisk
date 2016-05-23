@@ -1,5 +1,11 @@
 from django.shortcuts import render
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Selection
 
 
-def index(request):
-    return render(request, template_name='index.html')
+class SelectionIndexView(LoginRequiredMixin, generic.ListView):
+    template_name = 'compliance/index.html'
+    model = Selection
+    context_object_name = 'selection_list'
+

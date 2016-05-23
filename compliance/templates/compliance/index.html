@@ -1,0 +1,10 @@
+{% extends "compliance/base.html" %}
+
+{% block content %}
+<p>Hi there, my name is ted johnson</p>
+
+{% for selection in selection_list %}
+{{ selection.pk }} - {{ selection }}<br />
+{% endfor %}
+
+{% endblock content %}

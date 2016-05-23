@@ -1,8 +1,8 @@
 import django.contrib.auth.urls
 from django.conf.urls import url, include
-from .views import index
+from .views import SelectionIndexView
+
 
 urlpatterns = [
-    url(r'^$', index, name='index'),
-    url('^', include('django.contrib.auth.urls')),
+    url(r'^$', SelectionIndexView.as_view(), name='index'),
 ]
