@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block css %}
-<link href="{% static 'css/signin.css' %}" rel="stylesheet">
+<link href="{% static 'accounts/css/signin.css' %}" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -13,15 +13,6 @@
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
 
-    {% if next %}
-        {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed,
-        please login with an account that has access.</p>
-        {% else %}
-        <p>Please login to see this page.</p>
-        {% endif %}
-    {% endif %}
-
         <h2 class="form-signin-heading">EyeRisk sign in</h2>
         <label for="{{ form.username.id_for_label }}" class="sr-only">{{ form.username.label }}</label>
         <input  name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}"
@@ -29,11 +20,6 @@
         <label for="{{ form.password.id_for_label }}" class="sr-only">{{ form.password.label }}</label>
         <input  name="{{ form.password.html_name }}" type="password" id="{{ form.password.id_for_label }}"
                 class="form-control" placeholder="{{ form.password.label }}" required>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
