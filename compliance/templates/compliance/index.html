@@ -7,10 +7,13 @@
         <thead>
             <tr>
                 <th>
-                    Nr
+                    Name
                 </th>
                 <th>
-                    Name
+                    <!--edit -->
+                </th>
+                <th>
+                    <!--delete -->
                 </th>
             </tr>
         </thead>
@@ -18,15 +21,21 @@
             {% for selection in selection_list %}
             <tr>
                 <td>
-                    {{ selection.pk }}
+                    {{ selection }}
                 </td>
                 <td>
-                    {{ selection }}
+                    <a href="#"><span class="glyphicon glyphicon-pencil"></span> change</a>
+                </td>
+                <td>
+                    <a href="#"><span class="glyphicon glyphicon-trash"></span> delete</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    <div class="well well-sm text-right">
+        <a class="btn btn-primary" role="button" href="{% url 'selection-add' %}">ADD SELECTION</a>
+    </div>
 </div>
 
 {% endblock content %}

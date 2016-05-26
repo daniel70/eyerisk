@@ -9,3 +9,8 @@ class SelectionIndexView(LoginRequiredMixin, generic.ListView):
     model = Selection
     context_object_name = 'selection_list'
 
+
+class SelectionCreateView(LoginRequiredMixin, generic.CreateView):
+    template_name = 'compliance/selection-create.html'
+    model = Selection
+    fields = ['name']

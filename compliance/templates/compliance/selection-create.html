@@ -1,0 +1,9 @@
+{% extends "compliance/base.html" %}
+
+{% block content %}
+This is where we'll add a selection
+<form action="" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save" />
+</form>
+{% endblock content %}
