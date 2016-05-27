@@ -6,4 +6,14 @@ This is where we'll add a selection
     {{ form.as_p }}
     <input type="submit" value="Save" />
 </form>
+
+<div class="container">
+    <form action="" method="post" role="form">{% csrf_token %}
+        <div class="form-group">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <button type="submit" class="btn btn-primary">ADD SELECTION</button>
+    </form>
+</div>
 {% endblock content %}
