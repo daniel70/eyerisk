@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Selection
-
+from .forms import SelectionForm
 
 class SelectionIndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'compliance/index.html'
@@ -11,6 +11,5 @@ class SelectionIndexView(LoginRequiredMixin, generic.ListView):
 
 
 class SelectionCreateView(LoginRequiredMixin, generic.CreateView):
-    template_name = 'compliance/selection-create.html'
-    model = Selection
-    fields = ['name']
+    template_name = 'compliance/selection_create_form.html'
+    form_class = SelectionForm

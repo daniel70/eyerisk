@@ -18,6 +18,9 @@
             </tr>
         </thead>
         <tbody>
+            {% if not selection_list %}
+            <tr><td colspan="3">No selections yet, go ahead and create one!</td></tr>
+            {% endif %}
             {% for selection in selection_list %}
             <tr>
                 <td>

@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 
 
@@ -41,6 +42,9 @@ class Selection(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('selection-detail', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['name']
