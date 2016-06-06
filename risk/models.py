@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.signals import m2m_changed
 
 
 class Document(models.Model):
@@ -37,7 +38,7 @@ class Question(models.Model):
 
 class Selection(models.Model):
     name = models.CharField(max_length=30, unique=True)
-    documents = models.ManyToManyField(Document, limit_choices_to={'is_active': True})
+    documents = models.ManyToManyField(Document, limit_choices_to={'is_active': True}, blank=True)
     # questions = also M2M???
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
@@ -52,23 +53,47 @@ class Selection(models.Model):
         ordering = ['name']
 
 
-# class SelectionQuestion(models.Model):
-#     ACCEPT = 'A'
-#     MITIGATE = 'M'
-#     TRANSFER = 'T'
-#     AVOID = 'O'
-#     SELECTION_CHOICES = (
-#         (ACCEPT, 'Accept'),
-#         (MITIGATE, 'Mitigate'),
-#         (TRANSFER, 'Transfer'),
-#         (AVOID, 'Avoid'),
-#     )
-#
-#     selection = models.ForeignKey(Selection, on_delete=models.CASCADE)
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-#     decision = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=ACCEPT)
-#     created = models.DateTimeField(auto_now=True)
-#     updated = models.DateTimeField(auto_now_add=True)
-#
-#     class Meta:
-#         unique_together = ('selection', 'question')
+def selection_changed(sender, **kwargs):
+    """
+    When a Document is added or removed from a Selection, all of the Questions that belong to that
+    Document also need to be added or removed from the SelectionQuestion table.
+    This functionality is not provided in class based views save() method (or save_m2m).
+    However, a signal is fired every time this happens with a "pre_add" and a "post_add" action
+    """
+    action = kwargs.pop('action', None)
+    instance = kwargs.pop('instance', None)
+    pk_set = kwargs.pop('pk_set', None)
+    if action == "pre_add":
+        for pk in pk_set:
+            selectionquestions = []
+            for question in Question.objects.filter(document=pk):
+                selectionquestions.append(SelectionQuestion(selection=instance, question=question, response='A'))
+
+            SelectionQuestion.objects.bulk_create(selectionquestions)
+
+    if action == "pre_remove":
+        SelectionQuestion.objects.filter(selection=instance, question__document__in=pk_set).delete()
+
+m2m_changed.connect(selection_changed, sender=Selection.documents.through)
+
+
+class SelectionQuestion(models.Model):
+    ACCEPT = 'A'
+    MITIGATE = 'M'
+    TRANSFER = 'T'
+    AVOID = 'O'
+    SELECTION_CHOICES = (
+        (ACCEPT, 'Accept'),
+        (MITIGATE, 'Mitigate'),
+        (TRANSFER, 'Transfer'),
+        (AVOID, 'Avoid'),
+    )
+
+    selection = models.ForeignKey(Selection, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    response = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=ACCEPT)
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('selection', 'question')

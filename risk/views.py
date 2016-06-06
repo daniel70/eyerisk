@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Selection
@@ -26,6 +27,15 @@ class SelectionCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = 'risk/selection_create_form.html'
     form_class = SelectionForm  # will point to SelectionDocumentForm later
 
-    def form_valid(self, form):
 
-        super(SelectionCreateView, self).form_valid(form)
+
+class SelectionUpdate(LoginRequiredMixin, generic.UpdateView):
+    template_name = 'risk/selection_update_form.html'
+    form_class = SelectionForm
+    model = Selection
+
+
+class SelectionDelete(LoginRequiredMixin, generic.DeleteView):
+    template_name = 'risk/selection_confirm_delete.html'
+    model = Selection
+    success_url = reverse_lazy('selection-list')

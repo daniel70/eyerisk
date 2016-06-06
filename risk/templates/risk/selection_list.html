@@ -27,10 +27,10 @@
                     {{ selection }}
                 </td>
                 <td>
-                    <a href="#"><span class="glyphicon glyphicon-pencil"></span> change</a>
+                    <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span> change</a>
                 </td>
                 <td>
-                    <a href="#"><span class="glyphicon glyphicon-trash"></span> delete</a>
+                    <a href="{% url 'selection-delete' pk=selection.pk %}"><span class="glyphicon glyphicon-trash"></span> delete</a>
                 </td>
             </tr>
             {% endfor %}
