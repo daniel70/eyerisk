@@ -10,10 +10,9 @@
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
-
-        <link rel="stylesheet" href="{% static 'compliance/css/normalize.css' %}">
-        <link rel="stylesheet" href="{% static 'compliance/css/main.css' %}">
-        <script src="{% static 'compliance/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'risk/css/normalize.css' %}">
+        <link rel="stylesheet" href="{% static 'risk/css/main.css' %}">
+        <script src="{% static 'risk/js/vendor/modernizr-2.8.3.min.js' %}"></script>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
@@ -24,7 +23,7 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
               crossorigin="anonymous">
 
-        <link rel="stylesheet" href="{% static 'compliance/css/eyerisk.css' %}">
+        <link rel="stylesheet" href="{% static 'risk/css/eyerisk.css' %}">
         {% block css %}{% endblock css %}
     </head>
     <body>
@@ -46,14 +45,14 @@
               <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
                 <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Compliance<span class="caret"></span></a>
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">risk<span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li><a href="#">Documents</a></li>
                     <li><a href="#">Questions</a></li>
                     <li><a href="#">Selections</a></li>
                   </ul>
                 </li>
-                <li><a href="/risk/selection">Risk</a></li>
+                <li><a href="#">Risk</a></li>
               </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/admin">Admin</a></li>
@@ -67,9 +66,9 @@
         {% block content %}{% endblock content %}
 
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{% static "compliance/js/vendor/jquery-1.12.0.min.js" %}"><\/script>')</script>
-        <script src="{% static 'compliance/js/plugins.js' %}"></script>
-        <script src="{% static 'compliance/js/main.js' %}"></script>
+        <script>window.jQuery || document.write('<script src="{% static "risk/js/vendor/jquery-1.12.0.min.js" %}"><\/script>')</script>
+        <script src="{% static 'risk/js/plugins.js' %}"></script>
+        <script src="{% static 'risk/js/main.js' %}"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                 crossorigin="anonymous">

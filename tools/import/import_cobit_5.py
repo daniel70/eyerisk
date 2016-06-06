@@ -8,7 +8,7 @@ from datetime import datetime as dt
 
 url = os.environ['DATABASE_URL']
 document_id = 2  # Cobit 5.0 value in Document table
-sql = "INSERT INTO compliance_question (document_id, ordering, code, code_text, text, description, created, updated) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+sql = "INSERT INTO risk_question (document_id, ordering, code, code_text, text, description, created, updated) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
 
 filename = "cobit_5_2016.csv"
 with open(filename, encoding="utf-8", mode="r") as csv_file, psycopg2.connect(url) as conn:

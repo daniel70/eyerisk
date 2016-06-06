@@ -1,0 +1,5 @@
+.multiple-checkbox ul {
+/* Used to hide <li> elements in multiple checkbox forms for bootstrap forms */
+    padding-left: 0px;
+    list-style: none;
+}

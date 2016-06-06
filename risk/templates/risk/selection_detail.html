@@ -1,0 +1,13 @@
+{% extends "risk/base.html" %}
+{% load bootstrap %}
+{% block content %}
+<div class="container">
+    <h2>Name: {{ object.name }}</h2>
+    <dl>
+        <dt>Documents</dt>
+        {% for doc in object.documents.all %}
+        <dd>- {{ doc }}</dd>
+        {% endfor %}
+    </dl>
+</div>
+{% endblock content %}
