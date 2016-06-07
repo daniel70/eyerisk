@@ -5,18 +5,18 @@ from .models import Selection
 from .forms import SelectionForm
 
 
-class SelectionDetailView(generic.DetailView):
+class SelectionDetail(generic.DetailView):
     template_name = 'risk/selection_detail.html'
     model = Selection
 
 
-class SelectionListView(LoginRequiredMixin, generic.ListView):
+class SelectionList(LoginRequiredMixin, generic.ListView):
     template_name = 'risk/selection_list.html'
     model = Selection
     context_object_name = 'selection_list'
 
 
-class SelectionCreateView(LoginRequiredMixin, generic.CreateView):
+class SelectionCreate(LoginRequiredMixin, generic.CreateView):
     """
     When a Selection is created, we also need to associate SelectionDocuments
     and we need to copy the Questions for these Documents to the SelectionQuestion
