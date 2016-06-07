@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'compliance.apps.ComplianceConfig',
     'accounts.apps.AccountsConfig',
     'risk.apps.RiskConfig',
     'bootstrapform',
