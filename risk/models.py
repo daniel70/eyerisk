@@ -33,7 +33,7 @@ class Control(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.code
+        return self.practice_id
 
     class Meta:
         ordering = ['document', 'ordering']
