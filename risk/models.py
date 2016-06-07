@@ -19,6 +19,26 @@ class Document(models.Model):
         ordering = ['name']
 
 
+class Control(models.Model):
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
+    ordering = models.IntegerField()
+    area = models.CharField(max_length=25)
+    domain = models.CharField(max_length=75)
+    process_id = models.CharField(max_length=15)
+    process = models.CharField(max_length=200)
+    practice_id = models.CharField(max_length=15) # code
+    practice_name = models.CharField(max_length=100) # code_text
+    activity = models.TextField() # text
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.code
+
+    class Meta:
+        ordering = ['document', 'ordering']
+
+
 class Question(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     ordering = models.IntegerField()
