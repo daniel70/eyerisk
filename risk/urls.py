@@ -4,6 +4,7 @@ from .views import SelectionDetail, SelectionList, SelectionCreate, SelectionUpd
 
 
 urlpatterns = [
+    url(r'^$', SelectionList.as_view(), name='risk-home'),
     url(r'^selection/$', SelectionList.as_view(), name='selection-list'),
     url(r'^selection/(?P<pk>\d+)/$', SelectionDetail.as_view(), name='selection-detail'),
     url(r'^selection/create$', SelectionCreate.as_view(), name='selection-add'),

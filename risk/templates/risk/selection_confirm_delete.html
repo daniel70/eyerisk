@@ -3,8 +3,20 @@
 {% block content %}
 <div class="container">
     <form action="" method="post" role="form">{% csrf_token %}
-        <p>Are you sure you want to delete "{{ object }}"?</p>
-        <button type="submit" class="btn btn-danger">DELETE SELECTION</button>
+        <h3>Are you sure?</h3>
+        <p>Are you sure you want to delete the selection <b>"{{ object }}"</b>?</p>
+        {% if object.documents %}
+        <p>The following documents will also be deleted:</p>
+        <ul>
+            {% for doc in object.documents.all %}
+            <li>
+                {{ doc }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <button type="submit" class="btn btn-danger">Yes, I'm sure</button>
+        <button type="submit" class="btn ">No, take me back</button>
     </form>
 </div>
 {% endblock content %}

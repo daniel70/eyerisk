@@ -18,5 +18,5 @@ admin.site.register(Control, ControlAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Selection)
 
-admin.site.site_title = "EyeRisk Administration"
-admin.site.site_header = "EyeRisk Administration"
+admin.site.site_title = "EYE Risk Administration"
+admin.site.site_header = "EYE Risk Administration"

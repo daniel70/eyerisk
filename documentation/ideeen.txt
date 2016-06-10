@@ -8,3 +8,11 @@
 - Accept | Mitigate | Transfer, swipe left, click, swipe right
 - De geselecteerde vragen voor de ene klant kunnen als template dienen voor een andere klant
   Hierbij worden alleen de vragen geimporteerd van Documenten die overeenkomen.
+
+- Er zijn Controls en Measures
+- Nadat een Document actief is kunnen er geen inserts of deletes meer uitgevoerd worden,
+  hiervoor moet dan eerst het Document op inactief worden gezet, alle verwijzingen naar klanten
+  worden verwijderd en vervolgens kan het worden aangepast.
+
+- Het moet mogelijk zijn voor een klant om, naast de controls die door het systeem worden aangeleverd,
+  zelf controls toe te voegen.
