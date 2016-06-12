@@ -5,10 +5,10 @@
     <form action="" method="post" role="form">{% csrf_token %}
         <h3>Are you sure?</h3>
         <p>Are you sure you want to delete the selection <b>"{{ object }}"</b>?</p>
-        {% if object.documents %}
-        <p>The following documents will also be deleted:</p>
+        {% if object.standards %}
+        <p>The following standards will also be deleted:</p>
         <ul>
-            {% for doc in object.documents.all %}
+            {% for doc in object.standards.all %}
             <li>
                 {{ doc }}
             </li>

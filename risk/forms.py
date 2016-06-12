@@ -5,8 +5,8 @@ from .models import Selection
 class SelectionForm(ModelForm):
     class Meta:
         model = Selection
-        fields = ('name', 'documents')
+        fields = ('name', 'standards')
         widgets = {
             'name': TextInput(attrs={'class': 'form-control'}),
-            'documents': CheckboxSelectMultiple(),
+            'standards': CheckboxSelectMultiple(),
         }

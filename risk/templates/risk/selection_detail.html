@@ -4,9 +4,9 @@
 <div class="container">
     <h2>Name: {{ object.name }}</h2>
     <dl>
-        <dt>Documents</dt>
-        {% for doc in object.documents.all %}
-        <dd>- {{ doc }}</dd>
+        <dt>Standards</dt>
+        {% for standard in object.standards.all %}
+        <dd>- {{ standard }}</dd>
         {% endfor %}
     </dl>
 </div>

@@ -1,19 +1,19 @@
 from django.contrib import admin
-from .models import Document, Control, Question, Selection
+from .models import Standard, Control, Question, Selection
 
 
-class DocumentAdmin(admin.ModelAdmin):
+class StandardAdmin(admin.ModelAdmin):
     list_display = ('name', 'is_active', 'nr_of_questions')
 
 
 class ControlAdmin(admin.ModelAdmin):
-    list_display = ('practice_id', 'activity', 'document')
+    list_display = ('practice_id', 'activity', 'standard')
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('code', 'text', 'document')
+    list_display = ('code', 'text', 'standard')
 
-admin.site.register(Document, DocumentAdmin)
+admin.site.register(Standard, StandardAdmin)
 admin.site.register(Control, ControlAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Selection)
