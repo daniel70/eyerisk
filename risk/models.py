@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import m2m_changed
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Standard(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -12,8 +12,8 @@ class Standard(models.Model):
     def __str__(self):
         return self.name
 
-    def nr_of_questions(self):
-        return Question.objects.filter(standard=self).count()
+    def nr_of_controls(self):
+        return Control.objects.filter(standard=self).count()
 
     class Meta:
         ordering = ['name']
@@ -27,41 +27,24 @@ class Control(models.Model):
         (MANAGEMENT, 'Management'),
     )
     ordering = models.IntegerField()
-    standard = models.ForeignKey(Standard, on_delete=models.CASCADE, blank=True, null=True)
+    standard = models.ForeignKey(Standard, on_delete=models.CASCADE)
     area = models.CharField(max_length=1, choices=AREA_CHOICES, default=MANAGEMENT)
-    domain = models.CharField(max_length=75)
-    process_id = models.CharField(max_length=15)
+    domain = models.CharField(max_length=75, blank=True)
+    process_id = models.CharField(max_length=15, blank=True)
     process_name = models.CharField(max_length=200, blank=True)
-    process_description = models.CharField(max_length=200, blank=True)
-    process_purpose = models.CharField(max_length=200, blank=True)
-    practice_id = models.CharField(max_length=15) # code
-    practice_name = models.CharField(max_length=100) # code_text
-    practice_governance  = models.CharField(max_length=200, blank=True) # code_text
-    activity_id = models.CharField(max_length=15, blank=True) # code, blank=True should be removed
-    activity = models.TextField() # text
-    activity_help = models.TextField
+    process_description = models.TextField(blank=True)
+    process_purpose = models.TextField(blank=True)
+    practice_id = models.CharField(max_length=15, blank=True)
+    practice_name = models.CharField(max_length=100, blank=True)
+    practice_governance  = models.TextField(blank=True) # code_text
+    activity_id = models.CharField(max_length=15)
+    activity = models.TextField(blank=True)
+    activity_help = models.TextField(blank=True)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.activity_id
-
-    class Meta:
-        ordering = ['standard', 'ordering']
-
-
-class Question(models.Model):
-    standard = models.ForeignKey(Standard, on_delete=models.CASCADE)
-    ordering = models.IntegerField()
-    code = models.CharField(max_length=15)
-    code_text = models.TextField()
-    text = models.TextField()
-    description = models.TextField()
-    created = models.DateTimeField(auto_now=True)
-    updated = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.code
 
     class Meta:
         ordering = ['standard', 'ordering']
@@ -96,19 +79,19 @@ def selection_changed(sender, **kwargs):
     pk_set = kwargs.pop('pk_set', None)
     if action == "pre_add":
         for pk in pk_set:
-            selectionquestions = []
-            for question in Question.objects.filter(standard=pk):
-                selectionquestions.append(SelectionQuestion(selection=instance, question=question, response='A'))
+            selection_controls = []
+            for control in Control.objects.filter(standard=pk):
+                selection_controls.append(SelectionControl(selection=instance, control=control, response='A'))
 
-            SelectionQuestion.objects.bulk_create(selectionquestions)
+            SelectionControl.objects.bulk_create(selection_controls)
 
     if action == "pre_remove":
-        SelectionQuestion.objects.filter(selection=instance, question__standard__in=pk_set).delete()
+        SelectionControl.objects.filter(selection=instance, control__standard__in=pk_set).delete()
 
 m2m_changed.connect(selection_changed, sender=Selection.standards.through)
 
 
-class SelectionQuestion(models.Model):
+class SelectionControl(models.Model):
     ACCEPT = 'A'
     MITIGATE = 'M'
     TRANSFER = 'T'
@@ -121,10 +104,45 @@ class SelectionQuestion(models.Model):
     )
 
     selection = models.ForeignKey(Selection, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    control = models.ForeignKey(Control, on_delete=models.CASCADE)
     response = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=ACCEPT)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('selection', 'question')
+        unique_together = ('selection', 'control')
+
+
+class RiskMap(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    is_template = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
+class Impact(models.Model):
+    riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
+    rating = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(0)])
+    descriptor = models.CharField(max_length=30, unique=True)
+    definition = models.TextField(blank=False)
+
+    def __str__(self):
+        return self.descriptor
+
+    class Meta:
+        ordering = ['rating']
+
+
+class Likelyhood(models.Model):
+    riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
+    rating = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(0)])
+    descriptor = models.CharField(max_length=30, unique=True)
+    definition = models.TextField(blank=False)
+
+    def __str__(self):
+        return self.descriptor
+
+    class Meta:
+        ordering = ['rating']
+

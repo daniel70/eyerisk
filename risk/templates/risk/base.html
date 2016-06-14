@@ -41,25 +41,26 @@
               </button>
               <a class="navbar-brand" href="#">EYE Risk</a>
             </div>
+            {% with request.resolver_match.url_name as url_name %}
             <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
+                <li class="{% if url_name == 'risk-home' %}active{% endif %}"><a href="/">HOME</a></li>
                 <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">risk<span class="caret"></span></a>
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">RISK<span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Documents</a></li>
-                    <li><a href="#">Questions</a></li>
-                    <li><a href="#">Selections</a></li>
+                    <li><a href="#">CONTROLS</a></li>
+                    <li><a href="#">SELECTIONS</a></li>
                   </ul>
                 </li>
-                <li><a href="#">Risk</a></li>
+                <li class="{% if url_name == 'selection-list' %}active{% endif %}"><a href="#">RISK</a></li>
               </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/admin">Admin</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    <li><a href="/admin">ADMIN</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ request.user.username|upper }}</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
               </ul>
             </div>
+            {% endwith %}
           </div>
         </nav>
         <!-- Add your site or application content here -->

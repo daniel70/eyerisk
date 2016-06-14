@@ -16,3 +16,6 @@
 
 - Het moet mogelijk zijn voor een klant om, naast de controls die door het systeem worden aangeleverd,
   zelf controls toe te voegen.
+
+- Welke rollen moeten worden gedefinieerd?
+- Wat is de opbouw van het begin scherm en RIKS scherm.

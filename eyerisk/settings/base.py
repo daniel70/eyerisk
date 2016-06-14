@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'risk.apps.RiskConfig',
     'bootstrapform',
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -114,3 +115,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# for modeltranslation
+gettext = lambda s: s
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('nl', gettext('Dutch')),
+)
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '::1',
+]
