@@ -20,6 +20,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('risk.urls')),
     url(r'^risk/', include('risk.urls')),
+    url(r'', include('two_factor.urls', 'two_factor')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
 ]

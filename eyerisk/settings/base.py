@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'risk.apps.RiskConfig',
     'bootstrapform',
     'modeltranslation',
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +55,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -127,3 +132,8 @@ INTERNAL_IPS = [
     '127.0.0.1',
     '::1',
 ]
+
+# for two-factor-auth
+from django.core.urlresolvers import reverse_lazy
+LOGIN_URL = reverse_lazy('two_factor:login')
+LOGIN_REDIRECT_URL = reverse_lazy('two_factor:profile')
