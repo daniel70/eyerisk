@@ -18,4 +18,13 @@
   zelf controls toe te voegen.
 
 - Welke rollen moeten worden gedefinieerd?
-- Wat is de opbouw van het begin scherm en RIKS scherm.
+- Wat is de opbouw van het begin scherm en RISK scherm.
+
+- packages die handig kunnen zijn:
+    - cookiecutter-django
+    - djangorestframework
+    - django-braces (CBV)
+    - py.test
+    - coverage.py
+    - factory-boy
+    - django-guardian (row level permission)

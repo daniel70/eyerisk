@@ -39,7 +39,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">EYE Risk</a>
+              <a class="navbar-brand" href="#">EYE RISK</a>
             </div>
             {% with request.resolver_match.url_name as url_name %}
             <div class="collapse navbar-collapse" id="myNavbar">
@@ -52,7 +52,7 @@
                     <li><a href="#">SELECTIONS</a></li>
                   </ul>
                 </li>
-                <li class="{% if url_name == 'selection-list' %}active{% endif %}"><a href="#">RISK</a></li>
+                <li class="{% if url_name == 'selection-list' %}active{% endif %}"><a href="{% url 'selection-list' %}">RISK</a></li>
               </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/admin">ADMIN</a></li>
