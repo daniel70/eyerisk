@@ -16,11 +16,15 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth.views import logout
 
 urlpatterns = [
     url(r'^', include('risk.urls')),
     url(r'^risk/', include('risk.urls')),
-    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'', include('two_factor.urls', 'two_factor')),
+
+    url(r'^account/logout/$', view=logout, name='logout'),
+
     url(r'^admin/', admin.site.urls),
 ]
 
