@@ -1,22 +1,20 @@
 {% extends "risk/base.html" %}
 {% load bootstrap %}
 {% block content %}
-<div class="container">
-    <form action="" method="post" role="form">{% csrf_token %}
-        <h3>Are you sure?</h3>
-        <p>Are you sure you want to delete the selection <b>"{{ object }}"</b>?</p>
-        {% if object.standards %}
-        <p>The following standards will also be deleted:</p>
-        <ul>
-            {% for doc in object.standards.all %}
-            <li>
-                {{ doc }}
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        <button type="submit" class="btn btn-danger">Yes, I'm sure</button>
-        <button type="submit" class="btn ">No, take me back</button>
-    </form>
-</div>
+<form action="" method="post" role="form">{% csrf_token %}
+    <h3>Are you sure?</h3>
+    <p>Are you sure you want to delete the selection <b>"{{ object }}"</b>?</p>
+    {% if object.standards %}
+    <p>The following standards will also be deleted:</p>
+    <ul>
+        {% for doc in object.standards.all %}
+        <li>
+            {{ doc }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <button type="submit" class="btn btn-danger">Yes, I'm sure</button>
+    <button type="submit" class="btn ">No, take me back</button>
+</form>
 {% endblock content %}

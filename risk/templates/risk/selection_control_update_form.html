@@ -2,8 +2,14 @@
 {% load bootstrap %}
 {% block content %}
 <form action="" method="post" role="form">{% csrf_token %}
-    <legend>SELECTIONS</legend>
-    {{ form|bootstrap }}
+    <legend>ASSESSMENT</legend>
+    <!--{% for sc in selection_controls %}-->
+        <!--{{ form.response }} {{ sc.control.domain }} - {{ sc.control.process_id }} - {{ sc.control.activity }}<br>-->
+    <!--{% endfor %}-->
+    {% for form in formset %}
+        {{ form.instance.control.domain }} -
+        {{ form|bootstrap }}
+    {% endfor %}
     <div class="form-group">
       <button type="submit" class="btn btn-primary">EDIT SELECTION</button>
     </div>

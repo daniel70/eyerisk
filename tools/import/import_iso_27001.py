@@ -9,6 +9,7 @@ import os
 current_version = 4
 previous_version = 3
 
+nu = dt.now()
 url = os.environ['DATABASE_URL']
 
 standard = {
@@ -101,19 +102,32 @@ def extract(soup, lang):
 extract(BeautifulSoup(open("iso_27001_en.html"), "html.parser"), "en")
 extract(BeautifulSoup(open("iso_27001_nl.html"), "html.parser"), "nl")
 
-sql = """INSERT INTO public.risk_control (standard_id, ordering, area, domain, domain_en, domain_nl,
-    process_id, process_name, process_name_en, process_name_nl, process_description, process_description_en, process_description_nl, process_purpose, process_purpose_en, process_purpose_nl,
-    practice_id, practice_name, practice_name_en, practice_name_nl, practice_governance, practice_governance_en, practice_governance_nl,
-    activity_id, activity, activity_en, activity_nl, activity_help, activity_help_en, activity_help_nl,
-    created, updated) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+##sql = """INSERT INTO public.risk_control (standard_id, ordering, area, domain, domain_en, domain_nl,
+##    process_id, process_name, process_name_en, process_name_nl, process_description, process_description_en, process_description_nl, process_purpose, process_purpose_en, process_purpose_nl,
+##    practice_id, practice_name, practice_name_en, practice_name_nl, practice_governance, practice_governance_en, practice_governance_nl,
+##    activity_id, activity, activity_en, activity_nl, activity_help, activity_help_en, activity_help_nl,
+##    created, updated) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+
+sql_domain = """INSERT INTO public.risk_controldomain (standard_id, ordering, area, domain, domain_en, domain_nl) VALUES (%s,%s,%s,%s,%s,%s) returning id"""
+sql_process = """INSERT INTO public.risk_controlprocess (controldomain_id, ordering, process_id, process_name, process_name_en, process_name_nl,
+    process_description, process_description_en, process_description_nl, process_purpose, process_purpose_en, process_purpose_nl)
+    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) returning id"""
+sql_practice = """INSERT INTO public.risk_controlpractice (controlprocess_id, ordering, practice_id, practice_name, practice_name_en, practice_name_nl,
+    practice_governance, practice_governance_en, practice_governance_nl) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) returning id"""
+sql_activity = """INSERT INTO public.risk_controlactivity (controlpractice_id, ordering, activity_id, activity, activity_en, activity_nl,
+    activity_help, activity_help_en, activity_help_nl, created, updated) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) returning id"""
+
+domain_ids = {}
+process_ids = {}
+practice_ids = {}
 
 ordering = 0
 with psycopg2.connect(url) as conn:
     c = conn.cursor()
     # delete current entries
-    c.execute("DELETE FROM public.risk_control WHERE standard_id = %s", (current_version,))
+    c.execute("DELETE FROM public.risk_controldomain WHERE standard_id = %s", (current_version,))
     conn.commit()
-    c.execute("DELETE FROM public.risk_control WHERE standard_id = %s", (previous_version,))
+    c.execute("DELETE FROM public.risk_controldomain WHERE standard_id = %s", (previous_version,))
     conn.commit()
     for k, en_practice in practices.items():
         if k.lang == "nl":
@@ -127,40 +141,64 @@ with psycopg2.connect(url) as conn:
         en_domain = domains[ident(domain_id, "en")]
         nl_domain = domains[ident(domain_id, "nl")]
 
-        fields = [
-            standard[en_practice.source],
-            ordering,
-            'M',
-            en_domain.text,
-            en_domain.text,
-            nl_domain.text,
-            en_process.id,
-            en_process.name,
-            en_process.name,
-            nl_process.name,
-            '', #process_description is niet aanwezig
-            '',
-            '',
-            en_process.purpose,
-            en_process.purpose,
-            nl_process.purpose,
-            en_practice.id,
-            en_practice.name,
-            en_practice.name,
-            nl_practice.name,
-            en_practice.control, # governance
-            en_practice.control,
-            nl_practice.control,
-            1, # activity_id
-            en_practice.implementation, # activity
-            en_practice.implementation,
-            nl_practice.implementation,
-            en_practice.information, # activity_help
-            en_practice.information,
-            nl_practice.information,
-            dt.now(),
-            dt.now(),
-        ]
-        c.execute(sql, fields)
+        if not en_domain.text in domain_ids:
+            c.execute(sql_domain, (standard[en_practice.source], len(domain_ids)+1, 'M', en_domain.text, en_domain.text, nl_domain.text))
+            id = c.fetchone()[0]
+            conn.commit()
+            domain_ids[en_domain.text] = id
+
+        if not en_process.id in process_ids:
+            c.execute(sql_process, (domain_ids[en_domain.text], len(process_ids)+1, en_process.id, en_process.name, en_process.name, nl_process.name, '', '', '', en_process.purpose, en_process.purpose, nl_process.purpose))
+            id = c.fetchone()[0]
+            conn.commit()
+            process_ids[en_process.id] = id
+
+        if not en_practice.id in practice_ids:
+            c.execute(sql_practice, (process_ids[en_process.id], len(practice_ids)+1, en_practice.id, en_practice.name, en_practice.name, nl_practice.name, en_practice.control, en_practice.control, nl_practice.control))
+            id = c.fetchone()[0]
+            conn.commit()
+            practice_ids[en_practice.id] = id
+
+        c.execute(sql_activity, (practice_ids[en_practice.id], ordering, 1, en_practice.implementation, en_practice.implementation, nl_practice.implementation, en_practice.information, en_practice.information, nl_practice.information, nu, nu))
+
+
+
+
+##        
+##        fields = [
+##            standard[en_practice.source],
+##            ordering,
+##            'M',
+##            en_domain.text,
+##            en_domain.text,
+##            nl_domain.text,
+##            en_process.id,
+##            en_process.name,
+##            en_process.name,
+##            nl_process.name,
+##            '', #process_description is niet aanwezig
+##            '',
+##            '',
+##            en_process.purpose,
+##            en_process.purpose,
+##            nl_process.purpose,
+##            en_practice.id,
+##            en_practice.name,
+##            en_practice.name,
+##            nl_practice.name,
+##            en_practice.control, # governance
+##            en_practice.control,
+##            nl_practice.control,
+##            1, # activity_id
+##            en_practice.implementation, # activity
+##            en_practice.implementation,
+##            nl_practice.implementation,
+##            en_practice.information, # activity_help
+##            en_practice.information,
+##            nl_practice.information,
+##            dt.now(),
+##            dt.now(),
+##        ]
+##        c.execute(sql, fields)
                
 

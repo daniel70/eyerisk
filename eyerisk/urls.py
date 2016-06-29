@@ -17,14 +17,15 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import logout
+from two_factor.urls import urlpatterns as tf_urls
+from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
+
 
 urlpatterns = [
     url(r'^', include('risk.urls')),
     url(r'^risk/', include('risk.urls')),
-    url(r'', include('two_factor.urls', 'two_factor')),
-
+    url(r'', include(tf_urls + tf_twilio_urls, 'two_factor')),
     url(r'^account/logout/$', view=logout, name='logout'),
-
     url(r'^admin/', admin.site.urls),
 ]
 

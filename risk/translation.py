@@ -1,9 +1,24 @@
 from modeltranslation.translator import translator, TranslationOptions
-from .models import Control
+from .models import ControlDomain, ControlProcess, ControlPractice, ControlActivity
 
 
-class ControlTranslationOptions(TranslationOptions):
-    fields = ('domain', 'process_name', 'process_description', 'process_purpose', 'practice_name',
-              'practice_governance', 'activity', 'activity_help')
+class ControlDomainTranslationOptions(TranslationOptions):
+    fields = ('domain', )
 
-translator.register(Control, ControlTranslationOptions)
+
+class ControlProcessTranslationOptions(TranslationOptions):
+    fields = ('process_name', 'process_description', 'process_purpose')
+
+
+class ControlPracticeTranslationOptions(TranslationOptions):
+    fields = ('practice_name', 'practice_governance')
+
+
+class ControlActivityTranslationOptions(TranslationOptions):
+    fields = ('activity', 'activity_help')
+
+
+translator.register(ControlDomain, ControlDomainTranslationOptions)
+translator.register(ControlProcess, ControlProcessTranslationOptions)
+translator.register(ControlPractice, ControlPracticeTranslationOptions)
+translator.register(ControlActivity, ControlActivityTranslationOptions)

@@ -1,44 +1,46 @@
 {% extends "risk/base.html" %}
 
 {% block content %}
-
-<div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    <!--edit -->
-                </th>
-                <th>
-                    <!--delete -->
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if not selection_list %}
-            <tr><td colspan="3">No selections yet, go ahead and create one!</td></tr>
-            {% endif %}
-            {% for selection in selection_list %}
-            <tr>
-                <td>
-                    {{ selection }}
-                </td>
-                <td>
-                    <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span> change</a>
-                </td>
-                <td>
-                    <a href="{% url 'selection-delete' pk=selection.pk %}"><span class="glyphicon glyphicon-trash"></span> delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="well well-sm text-right">
-        <a class="btn btn-primary" role="button" href="{% url 'selection-add' %}">ADD SELECTION</a>
-    </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                <!--edit -->
+            </th>
+            <th>
+                <!--assess -->
+            </th>
+            <th>
+                <!--delete -->
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if not selection_list %}
+        <tr><td colspan="3">No selections yet, go ahead and create one!</td></tr>
+        {% endif %}
+        {% for selection in selection_list %}
+        <tr>
+            <td>
+                {{ selection }}
+            </td>
+            <td>
+                <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span> change</a>
+            </td>
+            <td>
+                <a href="{% url 'selection-assess' selection_id=selection.pk %}"><span class="glyphicon glyphicon-eye-open"></span> assess</a>
+            </td>
+            <td>
+                <a href="{% url 'selection-delete' pk=selection.pk %}"><span class="glyphicon glyphicon-trash"></span> delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="well well-sm text-right">
+    <a class="btn btn-primary" role="button" href="{% url 'selection-add' %}">ADD SELECTION</a>
 </div>
-
 {% endblock content %}

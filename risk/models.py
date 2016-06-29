@@ -2,6 +2,27 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import m2m_changed
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import User
+from django.conf import settings
+
+
+class Company(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name', ]
+        verbose_name_plural = 'companies'
+
+
+class Employee(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
 
 class Standard(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -13,30 +34,65 @@ class Standard(models.Model):
         return self.name
 
     def nr_of_controls(self):
-        return Control.objects.filter(standard=self).count()
+        return ControlActivity.objects.filter(controlpractice__controlprocess__controldomain__standard=self).count()
 
     class Meta:
         ordering = ['name']
 
 
-class Control(models.Model):
+class ControlDomain(models.Model):
     GOVERNANCE = 'G'
     MANAGEMENT = 'M'
     AREA_CHOICES = (
         (GOVERNANCE, 'Governance'),
         (MANAGEMENT, 'Management'),
     )
-    ordering = models.IntegerField()
     standard = models.ForeignKey(Standard, on_delete=models.CASCADE)
+    ordering = models.IntegerField()
     area = models.CharField(max_length=1, choices=AREA_CHOICES, default=MANAGEMENT)
     domain = models.CharField(max_length=75, blank=True)
+
+    def __str__(self):
+        return self.domain
+
+    class Meta:
+        ordering = ['standard', 'ordering']
+
+
+class ControlProcess(models.Model):
+    controldomain = models.ForeignKey(ControlDomain, on_delete=models.CASCADE)
+    ordering = models.IntegerField()
     process_id = models.CharField(max_length=15, blank=True)
     process_name = models.CharField(max_length=200, blank=True)
     process_description = models.TextField(blank=True)
     process_purpose = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.process_name
+
+    class Meta:
+        ordering = ['controldomain__standard', 'controldomain__ordering', 'ordering',]
+        verbose_name_plural = 'Control processes'
+
+
+class ControlPractice(models.Model):
+    controlprocess = models.ForeignKey(ControlProcess, on_delete=models.CASCADE)
+    ordering = models.IntegerField()
     practice_id = models.CharField(max_length=15, blank=True)
     practice_name = models.CharField(max_length=100, blank=True)
-    practice_governance  = models.TextField(blank=True) # code_text
+    practice_governance = models.TextField(blank=True) # code_text
+
+    def __str__(self):
+        return self.practice_name
+
+    class Meta:
+        ordering = ['controlprocess__controldomain__standard', 'controlprocess__controldomain__ordering',
+                    'controlprocess__ordering', 'ordering']
+
+
+class ControlActivity(models.Model):
+    controlpractice = models.ForeignKey(ControlPractice, on_delete=models.CASCADE)
+    ordering = models.IntegerField()
     activity_id = models.CharField(max_length=15)
     activity = models.TextField(blank=True)
     activity_help = models.TextField(blank=True)
@@ -44,14 +100,17 @@ class Control(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.activity_id
+        return self.activity
 
     class Meta:
-        ordering = ['standard', 'ordering']
+        ordering = ['controlpractice__controlprocess__controldomain__standard', 'controlpractice__controlprocess__controldomain__ordering',
+                    'controlpractice__controlprocess__ordering', 'controlpractice__ordering', 'ordering']
+        verbose_name_plural = 'Control activities'
 
 
 class Selection(models.Model):
     name = models.CharField(max_length=30, unique=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     standards = models.ManyToManyField(Standard, limit_choices_to={'is_active': True}, blank=True)
     # questions = also M2M???
     created = models.DateTimeField(auto_now=True)
@@ -80,18 +139,21 @@ def selection_changed(sender, **kwargs):
     if action == "pre_add":
         for pk in pk_set:
             selection_controls = []
-            for control in Control.objects.filter(standard=pk):
-                selection_controls.append(SelectionControl(selection=instance, control=control, response='A'))
+            for control in ControlActivity.objects.filter(controlpractice__controlprocess__controldomain__standard=pk):
+                selection_controls.append(SelectionControl(selection=instance, control=control, response='N'))
 
             SelectionControl.objects.bulk_create(selection_controls)
 
     if action == "pre_remove":
-        SelectionControl.objects.filter(selection=instance, control__standard__in=pk_set).delete()
+        SelectionControl.objects.filter(
+            selection=instance, control__controlpractice__controlprocess__controldomain__standard__in=pk_set
+        ).delete()
 
 m2m_changed.connect(selection_changed, sender=Selection.standards.through)
 
 
 class SelectionControl(models.Model):
+    NOTHING = 'N'  # no choice has been made yet
     ACCEPT = 'A'
     MITIGATE = 'M'
     TRANSFER = 'T'
@@ -104,7 +166,7 @@ class SelectionControl(models.Model):
     )
 
     selection = models.ForeignKey(Selection, on_delete=models.CASCADE)
-    control = models.ForeignKey(Control, on_delete=models.CASCADE)
+    control = models.ForeignKey(ControlActivity, on_delete=models.CASCADE)
     response = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=ACCEPT)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)

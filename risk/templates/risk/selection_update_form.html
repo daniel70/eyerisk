@@ -1,13 +1,11 @@
 {% extends "risk/base.html" %}
 {% load bootstrap %}
 {% block content %}
-<div class="container">
-    <form action="" method="post" role="form">{% csrf_token %}
-        <legend>SELECTIONS</legend>
-        {{ form|bootstrap }}
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">EDIT SELECTION</button>
-        </div>
-    </form>
-</div>
+<form action="" method="post" role="form">{% csrf_token %}
+    <legend>SELECTIONS</legend>
+    {{ form|bootstrap }}
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">EDIT SELECTION</button>
+    </div>
+</form>
 {% endblock content %}
