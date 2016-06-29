@@ -1,0 +1,10 @@
+{% extends "risk/base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <h1>Thank you for using EYE RISK application</h1>
+    <h2>We hope to see you again soon!</h2>
+    <h3><a href="{% url 'two_factor:login' %}" >Login again?</a></h3>
+</div>
+{% endblock %}

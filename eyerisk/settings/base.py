@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
-
+from django.core.urlresolvers import reverse_lazy
 import os
 import dj_database_url
 
@@ -18,6 +18,7 @@ try:
 except:
     pass
 
+gettext = lambda s: s
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,23 +32,23 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
-    'accounts.apps.AccountsConfig',
-    'risk.apps.RiskConfig',
-    'bootstrapform',
     'modeltranslation',
-    'django_otp',
-    'django_otp.plugins.otp_static',
-    'django_otp.plugins.otp_totp',
-    'two_factor',
+    'risk.apps.RiskConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'accounts.apps.AccountsConfig',
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
+    'bootstrapform',
 ]
+
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,7 +123,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # for modeltranslation
-gettext = lambda s: s
 LANGUAGES = (
     ('en', gettext('English')),
     ('nl', gettext('Dutch')),
@@ -133,7 +133,7 @@ INTERNAL_IPS = [
     '::1',
 ]
 
-# for two-factor-auth
-from django.core.urlresolvers import reverse_lazy
+# for 2FA
 LOGIN_URL = reverse_lazy('two_factor:login')
+LOGOUT_URL = reverse_lazy('logout')
 LOGIN_REDIRECT_URL = reverse_lazy('two_factor:profile')
