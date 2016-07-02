@@ -24,6 +24,7 @@ from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
 urlpatterns = [
     url(r'^', include('risk.urls')),
     url(r'^risk/', include('risk.urls')),
+    url(r'^api-auth/', include('rest_framework.urls')),
     url(r'', include(tf_urls + tf_twilio_urls, 'two_factor')),
     url(r'^account/logout/$', view=logout, name='logout'),
     url(r'^admin/', admin.site.urls),

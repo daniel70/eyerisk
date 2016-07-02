@@ -1,8 +1,39 @@
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Selection, SelectionControl
+from .models import Standard, Selection, SelectionControl, ControlDomain
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
+from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer
+from rest_framework import viewsets
+
+
+class StandardViewSet(viewsets.ModelViewSet):
+    queryset = Standard.objects.filter(is_active=True)
+    serializer_class = StandardSerializer
+
+
+class SelectionViewSet(viewsets.ModelViewSet):
+    queryset = Selection.objects.all()
+    serializer_class = SelectionSerializer
+
+    def get_queryset(self):
+        return Selection.objects.filter(company=self.request.user.employee.company)
+
+
+class SelectionControlViewSet(viewsets.ModelViewSet):
+    queryset = SelectionControl.objects.all()
+    serializer_class = SelectionControlSerializer
+
+    def get_queryset(self):
+        return SelectionControl.objects.filter(selection__company=self.request.user.employee.company)
+
+
+class ControlDomainViewSet(viewsets.ModelViewSet):
+    queryset = ControlDomain.objects.all()
+    serializer_class = ControlDomainSerializer
+
+
+
 
 
 class SelectionDetail(generic.DetailView):

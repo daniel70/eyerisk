@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'otp_yubikey',
     'two_factor',
     'bootstrapform',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [
