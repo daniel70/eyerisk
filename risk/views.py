@@ -1,11 +1,12 @@
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 from .models import Standard, Selection, SelectionControl, ControlDomain
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
 from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer
 from rest_framework import viewsets
-
+from collections import OrderedDict, defaultdict
 
 class StandardViewSet(viewsets.ModelViewSet):
     queryset = Standard.objects.filter(is_active=True)
@@ -88,4 +89,42 @@ class SelectionControlAssess(LoginRequiredMixin, generic.TemplateView):
         context['formset'] = SelectionControlFormSet(
             queryset=SelectionControl.objects.filter(selection=self.kwargs['selection_id'])
         )
+        return context
+
+
+class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
+    """
+    Given a selection, we load all the control domains, processes, practices and activities.
+    We also return all the currently selected activities.
+    Selection --> selectioncontrol_set
+    Selection --> standards.all() --> controldomain_set
+    """
+    template_name = 'risk/selection_control_react.html'
+
+    def get_context_data(self, **kwargs):
+        columns = ['id', 'selection_id', 'control_id']
+        context = super(SelectionControlView, self).get_context_data(**kwargs)
+        selection = get_object_or_404(Selection, pk = self.kwargs['pk'])
+        controls = SelectionControl.objects.filter(selection=selection).select_related(
+            'control__controlpractice__controlprocess__controldomain__standard'
+        )
+        tree = defaultdict()
+        for respone in controls:
+            # tree[control.control_id] = { 'activity': control.control.activity, 'response': control.response, }
+            # tree[respone.control.controlpractice.controlprocess.controldomain.standard.pk] = {
+            #     'name': respone.control.controlpractice.controlprocess.controldomain.standard.name,
+            #     'all': False,
+            #     [respone.control.controlpractice.controlprocess.controldomain.pk] = {
+            #
+            #     }
+            # }
+            pass
+
+
+
+        context['tree'] = tree
+        # context['selection'] = selection
+        # standards = selection.standards.all()
+        # context['standards'] = standards
+        # context['domains'] = ControlDomain.objects.filter(standard__in=standards)
         return context
