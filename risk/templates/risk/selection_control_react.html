@@ -1,29 +1,43 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>React Tutorial</title>
-    <!-- Not present in the tutorial. Just for basic styling. -->
-    <link rel="stylesheet" href="css/base.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.0/react.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.0/react-dom.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.16/browser.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
-  </head>
-  <body>
-    <h1>{{ selection.name }}</h1>
+{% extends "risk/base.html" %}
+{% load bootstrap %}
+{% block content %}
+  <h1>{{ selection.name }}</h1>
 
-    {{ tree }}
+  <div class="panel-group" id="responses" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
 
+      {% for standard in tree %}
+      <div class="panel-heading" role="tab" id="standardHeading{{ standard.id }}">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#responses" href="#collapseStandard{{ standard.id }}"
+             aria-expanded="true" aria-controls="collapseStandard{{ standard.id }}">
+            {{ standard.text }}
+          </a>
+        </h4>
+      </div>
 
+      <div id="collapseStandard{{ standard.id }}" class="panel-collapse collapse in" role="tabpanel"
+        aria-labelledby="standardHeading{{ standard.id }}">
+        <div class="panel-body">
 
-    <div id="content"></div>
-    <script type="text/babel" src="{% static 'risk/js/selection.js' %}"></script>
-    <script type="text/babel">
-      // To get started with this tutorial running your own code, simply remove
-      // the script tag loading scripts/example.js and start writing code here.
-    </script>
-  </body>
-</html>
+        {% for domain in standard.domains %}
+          <div id="{{ domain.id }}" data-level="domain">{{ domain.text}}</div>
+          {% for process in domain.processes %}
+            <div id="{{ process.id }}" data-level="process">{{ process.text }}</div>
+            {% for practice in process.practices %}
+              <div id="{{ practice.pk }}" data-level="practice">{{ practice.text }}</div>
+              {% for activity in practice.activities %}
+                <div id="{{ activity.id }}" data-level="activity">{{ activity.text }}</div>
+              {% endfor %}
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+
+{% endblock content %}
