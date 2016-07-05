@@ -105,26 +105,94 @@ class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
         columns = ['id', 'selection_id', 'control_id']
         context = super(SelectionControlView, self).get_context_data(**kwargs)
         selection = get_object_or_404(Selection, pk = self.kwargs['pk'])
+        context['selection'] = selection
+
         controls = SelectionControl.objects.filter(selection=selection).select_related(
             'control__controlpractice__controlprocess__controldomain__standard'
         )
-        tree = defaultdict()
-        for respone in controls:
-            # tree[control.control_id] = { 'activity': control.control.activity, 'response': control.response, }
-            # tree[respone.control.controlpractice.controlprocess.controldomain.standard.pk] = {
-            #     'name': respone.control.controlpractice.controlprocess.controldomain.standard.name,
-            #     'all': False,
-            #     [respone.control.controlpractice.controlprocess.controldomain.pk] = {
-            #
-            #     }
-            # }
-            pass
+        tree = []
 
+        standard_ids = []
+        domain_ids = []
+        process_ids = []
+        practice_ids = []
+
+        standard = {}
+        domain = {}
+        process = {}
+        practice = {}
+
+        for response in controls:
+
+            id = response.control.controlpractice.controlprocess.controldomain.standard.pk
+            if id not in standard_ids:
+                # we add the *old* standard to the dict and create a new one
+                if standard:
+                    tree.append(standard)
+                standard = {
+                    "id": id,
+                    "text": response.control.controlpractice.controlprocess.controldomain.standard.name,
+                    "all": False,
+                    "domains": []
+
+                }
+                standard_ids.append(id)
+
+            id = response.control.controlpractice.controlprocess.controldomain.pk
+            if id not in domain_ids:
+                if domain:
+                    standard['domains'].append(domain)
+                domain = {
+                    "id": id,
+                    "text": response.control.controlpractice.controlprocess.controldomain.domain,
+                    "all": False,
+                    "processes": []
+                }
+                domain_ids.append(id)
+
+            id = response.control.controlpractice.controlprocess.pk
+            if id not in process_ids:
+                if process:
+                    domain['processes'].append(process)
+                process = {
+                    "id": id,
+                    "text": response.control.controlpractice.controlprocess.process_name,
+                    "all": False,
+                    "practices": []
+                }
+                process_ids.append(id)
+
+            id = response.control.controlpractice.pk
+            if id not in practice_ids:
+                if practice:
+                    process['practices'].append(practice)
+                practice = {
+                    "id": id,
+                    "text": response.control.controlpractice.practice_name,
+                    "all": False,
+                    "activities": []
+                }
+                practice_ids.append(id)
+
+            practice['activities'].append(
+                {
+                    "id": response.control.pk,
+                    "text": response.control.activity,
+                    "response_id": response.pk,
+                    "value": response.response,
+                }
+            )
+
+        if practice:
+            process['practices'].append(practice)
+        if process:
+            domain['processes'].append(process)
+        if domain:
+            standard['domains'].append(domain)
+        if standard:
+            tree.append(standard)
 
 
         context['tree'] = tree
-        # context['selection'] = selection
-        # standards = selection.standards.all()
-        # context['standards'] = standards
-        # context['domains'] = ControlDomain.objects.filter(standard__in=standards)
+
         return context

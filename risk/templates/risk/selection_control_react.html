@@ -1,43 +1,47 @@
 {% extends "risk/base.html" %}
 {% load bootstrap %}
 {% block content %}
-  <h1>{{ selection.name }}</h1>
+  <h2>{{ selection.name }}</h2>
 
-  <div class="panel-group" id="responses" role="tablist" aria-multiselectable="true">
-    <div class="panel panel-default">
+  <div class="list-group list-group-root well">
+    {% for standard in tree %}
+    <a href="#lvl-1-{{ standard.id }}" class="list-group-item" data-toggle="collapse">
+      <i class="glyphicon glyphicon-chevron-right"></i>{{ standard.text }}
+    </a>
+    <div class="list-group collapse" id="lvl-1-{{ standard.id }}">
 
-      {% for standard in tree %}
-      <div class="panel-heading" role="tab" id="standardHeading{{ standard.id }}">
-        <h4 class="panel-title">
-          <a role="button" data-toggle="collapse" data-parent="#responses" href="#collapseStandard{{ standard.id }}"
-             aria-expanded="true" aria-controls="collapseStandard{{ standard.id }}">
-            {{ standard.text }}
+      {% for domain in standard.domains %}
+      <a href="#lvl-2-{{ domain.id }}" class="list-group-item" data-toggle="collapse">
+        <i class="glyphicon glyphicon-chevron-right"></i>{{ domain.text }}
+      </a>
+      <div class="list-group collapse" id="lvl-2-{{ domain.id }}">
+
+        {% for process in domain.processes %}
+        <a href="#lvl-3-{{ process.id }}" class="list-group-item" data-toggle="collapse">
+          <i class="glyphicon glyphicon-chevron-right"></i>{{ process.text }}
+        </a>
+        <div class="list-group collapse" id="lvl-3-{{ process.id }}">
+
+          {% for practice in process.practices %}
+          <a href="#lvl-4-{{ practice.id }}" class="list-group-item" data-toggle="collapse">
+            <i class="glyphicon glyphicon-chevron-right"></i>{{ practice.text }}
           </a>
-        </h4>
-      </div>
+          <div class="list-group collapse" id="lvl-4-{{ practice.id }}">
 
-      <div id="collapseStandard{{ standard.id }}" class="panel-collapse collapse in" role="tabpanel"
-        aria-labelledby="standardHeading{{ standard.id }}">
-        <div class="panel-body">
-
-        {% for domain in standard.domains %}
-          <div id="{{ domain.id }}" data-level="domain">{{ domain.text}}</div>
-          {% for process in domain.processes %}
-            <div id="{{ process.id }}" data-level="process">{{ process.text }}</div>
-            {% for practice in process.practices %}
-              <div id="{{ practice.pk }}" data-level="practice">{{ practice.text }}</div>
-              {% for activity in practice.activities %}
-                <div id="{{ activity.id }}" data-level="activity">{{ activity.text }}</div>
-              {% endfor %}
+            {% for activity in practice.activities %}
+              <div class="list-group-item {% if activity.value == 'M' %}list-group-item-success{% endif %}"
+                   id="lvl-5-{{ activity.id }}">
+                {{ activity.text }}
+              </div>
             {% endfor %}
+          </div>
           {% endfor %}
-        {% endfor %}
-
         </div>
+        {% endfor %}
       </div>
       {% endfor %}
-
     </div>
+    {% endfor %}
   </div>
 
 {% endblock content %}
