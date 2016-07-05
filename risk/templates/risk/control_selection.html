@@ -1,0 +1,87 @@
+{% extends "risk/base.html" %}
+{% load bootstrap %}
+{% block content %}
+  <h2>{{ selection.name }}</h2>
+
+    <div class="list-group list-group-root well">
+
+    {% for cs in control_selection %}
+        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.standard.pk %}
+        <a href="#lvl-1-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}"
+           class="list-group-item"
+           data-toggle="collapse"
+        >
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            {{ cs.control.controlpractice.controlprocess.controldomain.standard.name }}
+        </a>
+        <div class="list-group collapse"
+             id="lvl-1-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}"
+        >
+        {% endifchanged %}
+
+        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.pk %}
+        <a href="#lvl-2-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}"
+           class="list-group-item"
+           data-toggle="collapse"
+        >
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            {{ cs.control.controlpractice.controlprocess.controldomain.domain }}
+        </a>
+        <div class="list-group collapse"
+             id="lvl-2-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}"
+        >
+        {% endifchanged %}
+
+
+
+
+
+        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.pk %}</div>{% endifchanged %}
+        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.standard.pk %}</div>{% endifchanged %}
+
+    {% endfor %}
+
+    </div>
+
+  <div class="list-group list-group-root well">
+    {% for standard in tree %}
+    <a href="#lvl-1-{{ standard.id }}" class="list-group-item" data-toggle="collapse">
+      <i class="glyphicon glyphicon-chevron-right"></i>{{ standard.text }}
+    </a>
+    <div class="list-group collapse" id="lvl-1-{{ standard.id }}">
+
+      {% for domain in standard.domains %}
+      <a href="#lvl-2-{{ domain.id }}" class="list-group-item" data-toggle="collapse">
+        <i class="glyphicon glyphicon-chevron-right"></i>{{ domain.text }}
+      </a>
+      <div class="list-group collapse" id="lvl-2-{{ domain.id }}">
+
+        {% for process in domain.processes %}
+        <a href="#lvl-3-{{ process.id }}" class="list-group-item" data-toggle="collapse">
+          <i class="glyphicon glyphicon-chevron-right"></i>{{ process.text }}
+        </a>
+        <div class="list-group collapse" id="lvl-3-{{ process.id }}">
+
+          {% for practice in process.practices %}
+          <a href="#lvl-4-{{ practice.id }}" class="list-group-item" data-toggle="collapse">
+            <i class="glyphicon glyphicon-chevron-right"></i>{{ practice.text }}
+          </a>
+          <div class="list-group collapse" id="lvl-4-{{ practice.id }}">
+
+            {% for activity in practice.activities %}
+              <div class="list-group-item {% if activity.value == 'M' %}list-group-item-success{% endif %}"
+                   id="lvl-5-{{ activity.id }}">
+                {{ activity.text }}
+              </div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+{% endblock content %}

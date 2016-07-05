@@ -91,6 +91,19 @@ class SelectionControlAssess(LoginRequiredMixin, generic.TemplateView):
         )
         return context
 
+class ControlSelectionView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'risk/control_selection.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ControlSelectionView, self).get_context_data(**kwargs)
+        selection = get_object_or_404(Selection, pk=self.kwargs['pk'])
+        context['selection'] = selection
+        context['control_selection'] = SelectionControl.objects.filter(selection=selection).select_related(
+            'control__controlpractice__controlprocess__controldomain__standard'
+        )
+        return context
+
+
 
 class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
     """
