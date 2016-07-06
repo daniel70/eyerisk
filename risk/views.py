@@ -100,6 +100,12 @@ class ControlSelectionView(LoginRequiredMixin, generic.TemplateView):
         context['selection'] = selection
         context['control_selection'] = SelectionControl.objects.filter(selection=selection).select_related(
             'control__controlpractice__controlprocess__controldomain__standard'
+        ).order_by(
+            'control__controlpractice__controlprocess__controldomain__standard__id',
+            'control__controlpractice__controlprocess__controldomain__ordering',
+            'control__controlpractice__controlprocess__ordering',
+            'control__controlpractice__ordering',
+            'control__ordering',
         )
         return context
 
