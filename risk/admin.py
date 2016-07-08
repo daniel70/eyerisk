@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Impact, Likelyhood, RiskMap, Employee, Company
+    Selection, Impact, Likelyhood, RiskMap, Employee, Company, Scenario, ScenarioCategory
 
 
 class EmployeeInline(admin.StackedInline):
@@ -81,6 +81,14 @@ class ImpactAdmin(admin.ModelAdmin):
 class LikelyhoodAdmin(admin.ModelAdmin):
     list_display = ('rating', 'descriptor')
 
+
+class ScenarioCategoryAdmin(admin.ModelAdmin):
+    list_display = ('nr', 'name')
+
+class ScenarioAdmin(admin.ModelAdmin):
+    list_display = ('reference', 'title')
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
@@ -94,6 +102,8 @@ admin.site.register(Selection)
 admin.site.register(RiskMap)
 admin.site.register(Impact, ImpactAdmin)
 admin.site.register(Likelyhood, LikelyhoodAdmin)
+admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
+admin.site.register(Scenario, ScenarioAdmin)
 
 admin.site.site_title = "EYERISK Administration"
 admin.site.site_header = "EYERISK Administration"

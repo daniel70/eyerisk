@@ -208,3 +208,49 @@ class Likelyhood(models.Model):
     class Meta:
         ordering = ['rating']
 
+
+class ScenarioCategory(models.Model):
+    nr = models.CharField(max_length=4, primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        ordering = ['nr']
+        verbose_name_plural = 'scenario categories'
+
+
+class Scenario(models.Model):
+    NOT_AVAILABLE = 'N/A'
+    PRIMARY = 'P'
+    SECONDARY = 'S'
+    RISK_TYPE_CHOICES = (
+        (NOT_AVAILABLE, 'Not Available'),
+        (PRIMARY, 'Primary'),
+        (SECONDARY, 'Secondary'),
+    )
+    reference = models.CharField(max_length=4, primary_key=True)
+    category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    risk_scenario = models.TextField(blank=False)
+    threat_type = models.TextField(blank=False)
+    actor = models.TextField(blank=False)
+    event = models.TextField(blank=False)
+    cause = models.TextField(blank=False)
+    effect = models.TextField(blank=False)
+    time = models.TextField(blank=False)
+    it_benefit = models.CharField(max_length=3, choices=RISK_TYPE_CHOICES, default=NOT_AVAILABLE)
+    it_programme = models.CharField(max_length=3, choices=RISK_TYPE_CHOICES, default=NOT_AVAILABLE)
+    it_operations = models.CharField(max_length=3, choices=RISK_TYPE_CHOICES, default=NOT_AVAILABLE)
+    avoidance = models.TextField()
+    acceptance = models.TextField()
+    transfer = models.TextField()
+    mitigation = models.TextField()
+    negative = models.TextField(blank=True)
+    positive = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['reference']

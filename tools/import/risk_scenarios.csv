@@ -1,0 +1,479 @@
+Title,Category,Reference,Risk_scenario,Threat_type,Actor,Event,Asset/Resource(Cause),Asset/Resource(Effect),Time,IT_benefit/value_enablement,IT_programme_and_project_delivery,IT_operations_and_service_delivery,RiskAvoidance,RiskAcceptance,RiskSharing/Transfer,RiskMitigation
+"Selected programs are not 
+optimizing business benefits ","01 Portfolio establishment and 
+maintenance",0101,The individual accountable for the selection of programs (chief executive officer [CEO]) made a questionable decision when selecting programs to fund. The decision was driven by unclear and biased information that was provided by one of the key stakeholders and the internal and external auditors who put a focus on fostering security controls and formalizing processes rather than supporting business growth. ,"The nature of the event is a failure in the decision-making 
+process to take into account all stakeholder requirements 
+and the ineffective prioritization of these requirements.","The actor who generates the threat that exploits a vulnerability is
+internal—the CEO.","The event is the ineffective execution of the
+program selection process.","The resource that leads to the business impact is the
+program selection process.",The resources that are affected are various business processes.,"The duration of the event is extended lack of supporting business growth. The timing of occurrence is noncritical. 
+The event cannot immediately be detected, and, therefore, detection is slow. The consequence is delayed because
+the selected programs will be implemented over a longer time span.",P,P,S,N/A,The CEO is aware of the misalignment and accepts the impacts.,"The enterprise request third-party service providers to reevaluate contracts and adjust timelines and resources without
+additional cost.",Reprioritization of ongoing projects to optimize business benefit.
+,"01 Portfolio establishment and 
+maintenance",0102,,,,,,,,,,,,,,
+Incompatibility of business systems,"01 Portfolio establishment and 
+maintenance",0103,"In a hospital, the chief of the radiology department decided to purchase a particular x-ray system from a vendor without consulting other departments or IT. The department chiefs can decide on necessary equipment/programs and frequently make these decisions without considering the enterprise architecture (EA). As the new system interacts with other systems in the enterprise (e.g., patient records, medication), automated information exchange cannot be performed to keep the patient records up to date.",The nature of the event is a failure in the processes BAI03 Manage solutions identification and build and APO03 Manage enterprise architecture.,The actor who generates the threat that exploits a vulnerability is internal—the chief of the radiology department (business process owner).,"The event is an ineffective design and, respectively, an ineffective execution of the processes BAI03 Manage solutions identification and build and APO03 Manage enterprise architecture.",The resources that lead to the business impact are the processes BAI03 Manage solutions identification and build and APO03 Manage enterprise architecture and the organizational structures because the chief of the department does not consider information as a resource caused by the lack of a decision-making model.,"The asset affected is information. The procured system potentially will be incompatible with
+other hospital systems, and, therefore, unable to share information with other systems.
+Patient records may not be up to date (accuracy of information completeness and lack of
+consistent representation).",The duration of the event is extended inconsistency in the presentation of patient records. The timing of occurrence is noncritical. Detection will be instant because the business will recognize immediately the lack of consistent representation. The consequence is delayed because the event needs proper analysis and changes in the system to make it compliant with the existing systems/architecture.,P,P,S,N/A,"The CEO and the chief of radiology accept the unaligned system and
+the additional resources required to update incompatible systems.",N/A,"Clarification on decision-making rights for purchasing system, creation
+of (automated) interfaces and fostering enterprise architecture principles (e.g., minimum standards for system interoperability)."
+Unaligned Culture,"01 Portfolio establishment and 
+maintenance",0104,"In an industrial enterprise, the key IT resources are being used to operate and maintain the financial reporting system; there is
+no focus on the maintenance of production planning and production systems, which results in a split in the culture of the IT
+staff. One part of the department is focused on the financial reporting system, and is seen as the beneficial and finance/business focus part; the other part is seen as the engineers. For the engineering part of the staff there are different career paths, a lack of motivation and disengagement, leading to lower productivity and innovation.",The nature of the event is a failure in prioritization.,"The actor that generates the threat that exploits a vulnerability is
+internal—the function that is responsible for the assignment of IT
+resources is the chief financial officer (CFO) function. The CFO puts
+the financial reporting system at the center of attention. A secondary
+internal actor is the Human Resources (HR) department, which does
+not support staff motivation.","The event is ineffective execution of the APO07
+Manage human resources process.","The resource that leads to the business impact is the APO07 Manage human
+resources process because HR management cannot demonstrate to the
+engineers the value that they contribute and because there is a lack of
+integration of culture and processes.","The resources that are affected are people and skills because the enterprise is losing
+knowledge and staff.","The duration of the event is extended because the staff is demotivated. The timing of occurrence is noncritical. 
+Because the lack of knowledge and the rise in fluctuation cannot be detected immediately, the detection is slow.
+The consequence is delayed because the lack of staff and knowledge will happen in the future.",P,P,S,N/A,N/A,N/A,Communicate the value that the engineers bring to the enterprise and provide individual rewards and motivation.
+Terminate failing projects,"02 Programme/projects life cycle
+management",0201,"A company decided to replace its existing enterprise resource planning (ERP) system and allocated a budget of EUR 5 million.
+The company planned a two-year project and a big-bang approach to replacement of the existing systems and processes. 
+The plan was based on the estimate prepared by a provider that became a key stakeholder throughout the project. After
+spending EUR 50 million and three years of customizing, the enterprise did a review on the project setup and decided to stop
+the initiative. The invested resources were lost. The lack of project risk management and benefit management was obvious.
+The project could have been stopped in its very early stages, but the enterprise did not apply good management practice in
+the project life cycle.","The nature of the event is a failure of the processes
+APO05 Manage portfolio and BAI01 Manage programmes
+and projects.","The actor that generates the threat that exploits a vulnerability is
+internal—the function that is accountable for the monitoring and 
+ontrol of projects, the Steering (Programs/Projects) Committee.","The event is an ineffective design and/or ineffective
+execution of the processes APO05 Manage portfolio
+and BAI01 Manage programmes and projects.","The resources that led to the business impact are the processes
+APO05 Manage portfolio and BAI01 Manage programmes and projects, which led to inappropriate decision making. Organizational structure can also be the resource that led to the business impact because of the lack of a
+decision-making model to be followed by the Steering (Programs/Projects) Committee.",The assets affected are unimproved business processes due to the stopped initiative.,"The duration of the event is extended because a long period of time passes before the project is stopped. The timing of occurrence is noncritical. The event is detected only after the project has been running for several years and, therefore, detection is slow. The consequence is delayed because a new project must be started to improve the business processes.",P,P,S,N/A," Accepting the fact that the enterprise continues without business
+operation improvement.","Share responsibility for the project failure with the provider who prepared the estimate, and request a refund for some of the cost of the project.","Stop the project (earlier) and applying an agile/staged approach to
+delivery processes and systems rather than a big-bang replacement."
+,"02 Programme/projects life cycle
+management",0202,,,,,,,,S,P,S,,,,
+,"02 Programme/projects life cycle
+management",0203,,,,,,,,S,P,,,,,
+Routine delays in IT projects,"02 Programme/projects life cycle
+management",0204,"The IT organization of an enterprise initiated an IT security management project (implementing an information security management system [ISMS] with the objective of obtaining a certificate) and planned a one-year time frame. After six months, the plan had to be rescheduled due to a number of missed deadlines and a high uncertainty of meeting the project time line. The budget is already fully consumed. The organization does not have a view of a final outcome and has uncertainty regarding required additional funds. The IT security manager is leading the project and puts more focus on technical issues than on managing the project and delivering the results. The IT security manager does not see the delay of implementing the ISMS or the overspending as a concern.
+The risk is the possibility of not obtaining the certification, which has a negative impact on the enterprise’s image and ability to meet compliance requirements. In addition, initial and ongoing costs for the ISMS and the time for successful delivery of the project results are unclear.",The nature of the event is a failure of the process BAI01 Manage programme and projects.,"The actor that generates the threat that exploits a vulnerability is
+internal—the function that is accountable for the monitoring and
+the control of projects, the Steering (Programmes/Projects) Committee.","The event is an ineffective design or/and ineffective
+execution of the process BAI01 Manage programme
+and projects.","The resources that lead to the business impacts are the process
+BAI01 Manage programme and projects and people and skills because
+the project manager focuses on project content rather than on managing
+the project.","The resource/asset that is affected is the process DSS05 Manage security services and the
+information because the security of information is in danger.","The duration of the event is extended because a long period of time passes before the project is on target. 
+The timing of occurrence is noncritical. The event is detected only after the project has been running for some
+time; therefore, detection is slow. The consequence is delayed because the project runs over planned implementation and budget.",P,P,S,N/A,"Accepting the fact that the enterprise continues without business operation improvement can be a possible response. However, the
+enterprise has to consider that accepting the fact that it continues without business operation improvement means that the enterprise also accepts the risk of reputational damage.",N/A,"Stop the project (earlier) and apply an agile/staged approach to delivery
+of processes and systems."
+"Excessive delays in an IT-enabled
+business initiative","02 Programme/projects life cycle
+management",0205,"The board of directors of a government-owned power, supply and distribution (whole cycle) enterprise decided to re-define the customer process (customer-facing connection, billing, etc.) and to renew the underlying information systems. A one-year program was planned, and first program results were delivered with a two-year delay, while still suffering from quality issues and a lack of interoperability with other enterprise systems (connection of new customers, measurement of client’s energy consumption, etc.).
+An external provider was hired to support the change of customer processes and the underlying technology, which was new for the enterprise. The enterprise staff was not convinced of the new system’s adequacy, particularly because the legacy system provided specific functionalities to the business users that were not considered in the initial program planning and had to be developed in parallel.
+The IT assets delivered by the program need to be corrected/amended to meet full functionality. Functional specifications were created, but developers deviated from those specifications without appropriate approval or feedback. The additional work and inefficiencies in service development caused delays on the deliveries, exceeding costs on IT and on the provider’s services, and lower service quality to the customers, e.g., from incomplete information for customer service and support staff. The delay of 200 percent and the excess of 100 percent of the project costs summarize the performance of the program delivery.",The nature of the event is a failure of the process BAI01 Manage programme and projects.,"The actor that generates the threat that exploits a vulnerability is
+internal—the function that is accountable for monitoring and control
+of projects, the Steering (Programs/Projects) Committee or, specifically,the customer chief executive officer (CEO) and the chief information officer (CIO) in charge of the project.","The event is an ineffective design or/and ineffective
+execution of the process BAI01 Manage programme and projects.","The resources that lead to the business impact are the processes
+BAI01 Manage programme and projects and BAI07 Manage change acceptance and transitioning by poor testing of deliverables. Another resource is people and skills, because the project manager focuses on project content rather than on managing the project. Another resource is IT infrastructure because the acquisition of IT assets did not work properly.","The resources that are affected are business processes such as customer-facing
+connection and billing.","The duration of the event is extended because a long period of time passes before the project is on target. The timing of occurrence is noncritical.
+The event is detected only after the project has been running for some time. Therefore, detection is moderate. The consequence is delayed because the project runs over planned implementation and budget.",P,P,S,N/A,"Accept that the enterprise continues without business operation
+improvement and budget overrun.","Share responsibility for the project failure with the provider who prepared the estimate, and request a refund for some of the cost of the project.","Use a proper project management office (PMO) and adequate processes to manage the program. Improved testing/quality assurance
+(QA) and application security in early phases of the program. Apply a stringent functional and security requirement identification and testing of the quality delivered."
+,"02 Programme/projects life cycle
+management",0206,,,,,,,,P,,S,,,,
+,03 IT investment decision making ,0301,,,,,,,,P,,S,,,,
+Niche software construction,03 IT investment decision making ,0302,"A specialized niche market company with many decades of experience and research offers state-of-the-art solutions that are commonly accepted in the market.
+Disregarding this fact, a client with an internal development department and staff, but without the necessary maturity in its processes for the software development life cycle (SDLC) and its Quality Assurance (QA) department, decides to build its own solution. The client does not consider the advantage of purchasing this software over developing the solution internally and is without a real understanding of business and compliance requirements.","The nature of the event is a failure of the process
+BAI03 Manage solutions identification and build, but also could be classified as accidental/error because an external solution was not considered.","The actors that generates the threat that exploits a vulnerability are
+internal—the Steering (Programme/Projects) Committee and the chief information officer (CIO).","The event can be classified as ineffective design
+and/or ineffective execution of the process BAI03 Manage solutions identification and build.","The asset/resource that leads to the business impact is the process
+BAI03 Manage solutions identification and build.","The affected resources/assets are business processes, information and applications because
+the internally developed solution does not fit the business and compliance requirements due to a lack of understanding.","The timing of occurrence is critical because competitors already use solutions that fulfil the compliance requirements.
+The duration of the event is extended because the internally developed solution must be amended to fit business and compliance requirements. The detection is slow because the internally developed solution is misaligned with business and compliance requirements, which is not detected before final acceptance tests or before the implementation is in production. The consequences are delayed because the internally developed solution must be improved or the external solution must be implemented.",P,,S,N/A,"The enterprise accepts that the costs derived from internal development are going to be higher due to the time needed to
+understand and develop the SDLC and QA processes and governance framework. The company also accepts the risk that its competitors may gain a competitive advantage by the early adoption of a package solution while the company designs and builds its own solution. The company also accepts the risk of penalties imposed by its regulators for non-compliance.",N/A,"Develop and maintain a standard approach for program and project
+management and for solution identification and build."
+Infrastructure platform upgrade,03 IT investment decision making ,0303,"A large enterprise needs to update its branches’ mission-critical software to enhance its functionality with new business functions that are needed to obtain higher revenues. The company knows in advance that this software update needs a critical upgrade on the branches’ IT infrastructures because the new software will not work with the current version.
+The components of the branches’ IT infrastructures are diverse and require many providers to build the complete architecture. After the request for proposal (RFP) is constructed, the company does not consider the different schedules that each provider needs to deliver the required hardware. When the procurement process is initiated, the company finds out that a specific component cannot be provided, which hinders the entire infrastructure implementation.","The nature of the event is a failure of the managemen
+processes BAI03 Manage solutions identification and build, BAI02 Manage requirements definition and APO03 Manage enterprise architecture and is a failure of the governance process EDM02 Ensure benefits delivery.","The actors that generate the threat that exploits a vulnerability are
+internal—overall, the Steering (Program/Projects) Committee and also the chief information officer (CIO) and the head architect.","The event can be classified as ineffective design
+and/or ineffective execution of the processes EDM02 Ensure benefits delivery, BAI03 Manage solutions identification and build, BAI02 Manage requirements definition and APO03 Manage enterprise architecture.","The asset/resource that leads to the business impact is the process BAI03
+Manage solutions identification and build.","The affected resources/assets are business processes, information, infrastructure and
+applications because the company cannot update its branches’ mission-critical systems, and people and enterprise because they must work with the out-of-date applications.","Because the company needs the new systems for its branches to create higher revenues, the timing of occurrence is critical. The duration of the event is extended because the infrastructure implementation is hindered. The detection is moderate because the event is detected during the procurement process. The consequences are delayed because the company has to continue its business while using the incorrect IT architecture, with accumulated high costs, over a time span of several years.",P,,P,N/A,"The enterprise accepts and tolerates the inflexible architecture, does not achieve higher revenues and loses
+business competitiveness.",N/A,"The enterprise considers alternative providers to deliver the required piece of hardware. Additional contracts will be considered, and
+the time losses and cost of opportunity will be accepted. The program of work is re-prioritized to ensure that the prerequisites are completed, to allow for success. The governance framework for the infrastructure upgrades process must be followed and department managers must be trained."
+Purchase of redundant software,03 IT investment decision making ,0304,"An enterprise purchases redundant software for a key business area. This software is a competing software to software that was purchased previously and is in production. The new software was purchased without reference to procurement because the purchase was within the person’s budgetary signature approval process and was for use within the department, for the duration.
+This particular purchase represented a lack of conformance with organizational processes and policies. The system was not considered in the enterprise architecture (EA) and, therefore, lacked interoperability with other systems and software, and its functionality overlapped with other business functions.
+The software was purchased by a key business user, and, because the procurement process was immature, the software was not included in the enterprise strategy for business continuity and disaster recovery planning.
+The new purchase required additional training for the department and investment and integration with existing systems.","The nature of the event is a failure of the processes
+APO04 Manage innovation, APO05 Manage portfolio, APO06 Manage budget and cost and BAI10 Manage configuration.","The actors that generate the threat that exploits a vulnerability are
+internal—overall, the Steering (Program/Projects) Committee, and also the key business user who purchased the software.","The event can be classified as ineffective design
+and/or ineffective execution of the processes APO04 Manage innovation, APO05 Manage portfolio, APO06 Manage budget and cost and BAI10 Manage configuration.","The assets/resources that lead to the business impact are mainly the
+processes APO04 Manage innovation and BAI10 Manage configuration.","The affected resources/assets are business processes, information, infrastructure and
+applications because the new software lacks interoperability with other systems, and people and enterprise because they must use workarounds.","The timing of occurrence is noncritical. The duration is extended, due to the cost associated with this inappropriate
+purchase and the overburden that the company had to experience to guarantee interoperability with existing systems. The detection is slow because the redundancy was not detected before the system was ready to use. The time lag is immediate because of the immature procurement process.",P,P,,N/A,N/A,N/A,"Train all department heads on a centralized software catalogue for the enterprise. Governance frameworks for the software
+procurement process must be improved to be mature and they must be followed. The department managers will be trained. All software purchases have to be added to the business continuity (BCP) and disaster recovery plan (DRP)."
+Human resources hiring policies,04 IT expertise and skills ,0401,"The Human Resources (HR) department has strict general regulations regarding the maximum age for internal staff recruitment. This particular issue is affecting technical areas that need to raise that limit to ensure that the right expertise and skills are present in new personnel, due to the technologies (new and old) that continue to be in use and are relied on in the enterprise architecture (EA).
+Currently, the enterprise is expecting that, in the next five years, 35 percent of its specialized professionals are going to retire. The minimum standard knowledge that is required is the base to start next-level internal training. Due to the complexity of the systems in production, the training process for new staff to get the necessary expertise to be able to run the daily operations historically has taken three years.","The nature of the event is a failure of the process
+APO07 Manage human resources, especially the management practices of maintaining adequate and appropriate staffing and maintaining the skills and competencies of personnel.","The actor that generates the threat that exploits a vulnerability is
+internal—the HR function.","The event is an ineffective design of the process
+APO07 Manage human resources.",The resource that leads to the business impact is the process APO07 Manage human resources.,"The resources that are affected are the IT processes in the technical area because of a lack of
+competent staff, and the IT architecture (information and applications) because it cannot be maintained and improved adequately due to the lack of expertise and skills.","The duration of the event is moderate because the policy can easily be changed. The timing of occurrence is 
+noncritical. The lack of skills and expertise will be detected in moderate time. The consequence can easily be delayed because the right staff has to be recruited, and this process can take quite a long time. ",P,P,P,N/A,"The enterprise accepts the risk that it may be unable to recruit the right skills and experience, which will limit the enterprise’s
+ability to design, build and deliver IT solutions to help deliver business goals. In addition, the enterprise may have to pay a premium for potential recruits with the required skills and experience.",HR and IT are to share their responsibilities for the risk that the enterprise is taking by being unable to hire the right personnel.,IT can outsource and use contractors to cover critical skills shortages.
+,04 IT expertise and skills ,0402,,,,,,,,P,P,P,,,,
+Ineffective leadership skills,04 IT expertise and skills ,0403,"The chief information officer (CIO) of a large enterprise has a strong technical operations background; however, he does not
+communicate regularly with other business unit managers. He lacks business acumen and, therefore, he does not communicate the business understanding to his staff, nor does he keep the necessary alignment required for IT governance.","The nature of the event is a failure of the process APO01
+Manage the IT management framework, particularly a failure of communication of management objectives and direction.","The actor that generates the threat that exploits a vulnerability is
+internal—the CIO.","The event is an ineffective execution of the process
+APO01 Manage the IT management framework, but can also eventually be an ineffective design of the organizational structure.",The assets/resources that lead to the business impact are the process APO01 Manage the IT management framework and also the organizational structure.,"The resources that are affected are business processes because the IT staff does not know
+about or does not understand the needs from the business. IT personnel are also affected as they are unsatisfied because they cannot provide the solution and services expected from them.","The duration of the event is extended because it is not expected that the CIO can or will change his behavior soon.
+The timing of occurrence is noncritical. The detection is moderate until the behavior of the CIO will be detected. The consequence is delayed because the CIO cannot be replaced or have his behavior changed immediately.",P,P,P,N/A,N/A,N/A,"Governance board and upper management (C-level) have to be aware of
+this situation and decide who is the person for the job. "
+Critical staff turnover ,04 IT expertise and skills ,0404,"A largely established software company with low personnel turnover did not take into account the necessary time to prepare
+new specialized human resources personnel for its impending retirement of a large proportion of its staff. This situation primarily affects the morale of the remaining staff, due to the necessary overwork to support current operations.","The nature of the event is a failure of the process APO07
+Manage human resources, especially the management practices to maintain adequate and appropriate staffing and maintain the skills and competencies of personnel.","The actor that generates the threat that exploits a vulnerability is
+internal—the human resources (HR) function.","The event is an ineffective design and/or ineffective
+execution of the process APO07 Manage human resources. The event is also an interruption of the development or/and maintenance of the software with which the company works. ","The resource that leads to the business impact is the process APO07
+Manage human resources. ","The resources that are affected are the development and maintenance processes for the
+software with which the company works.","The duration of the event is extended because new specialist staff is not easy to get. The timing of occurrence is
+critical because the company cannot fulfil customer wishes, but the competitors can. The time to detect lack of skills and expertise will be slow. The consequence can easily be delayed because the right staff has to be recruited, and this process can take quite some time. ",S,P,P,N/A,N/A,Contracting external staff.,"The enterprise considers a program to retain critical staff, while transitioning to an effective staff to build a model."
+,04 IT expertise and skills ,0405,,,,,,,,S,P,P,,,,
+,04 IT expertise and skills ,0406,,,,,,,,S,P,P,,,,
+,04 IT expertise and skills ,0407,,,,,,,,S,P,P,,,,
+Pandemic disaster,04 IT expertise and skills ,0408,"A new strain of avian flu (developed in a secret lab) has occurred at a certain enterprise’s main offices. The flu strain has
+infected a large number of employees of the enterprise. This has included a number of the board of directors and the majority of the key IT personnel. The business continuity program needs to be invoked immediately because governance and key IT services are disrupted due to the absence of decision makers and support staff, severely impacting business operations.","The nature of the event is the malicious act of developing
+the new strain of the avian flu and its release to the environment by the secret lab.","The actor that generates the threat that exploits the vulnerability 
+s the external secret lab.","The event is interruption of IT service and
+business processes.","The assets/resources that lead to the business impact are the people
+from the secret lab.","The assets/resources that are affected are the people and the organizational structure,
+specifically, the key staff/personnel of the main offices of the company and the business processes.","The duration of the event is extended lack of key personnel because the avian-flu-affected staff will not get well
+soon, if at all. The timing of occurrence is critical because it affects most of the board of directors and the C-level at the same time, meaning key personnel and their backup or deputies are not available. The detection of event can be classified as immediate because the flu-affected personnel do not show up at the offices. For the same reason, the time lag between event and consequence is immediate.",S,P,P,N/A,N/A,N/A,"The enterprise needs to update the pandemic disaster plan to guarantee
+chain of command and the physical site security policy."
+,04 IT expertise and skills ,0409,,,,,,,,S,P,P,,,,
+Inappropriate access rights,05 Staff operations,0501,"A business user builds up inappropriate access rights over time, from performing different roles within the enterprise. This
+results in the breakdown of segregation of duties, allowing the user to commit fraudulent actions. The business user sets up a new supplier, inputs a fictitious invoice and pays the invoice to an account that belongs to him.","The nature of the event is a failure of the process DSS06 
+Manage business process controls, especially the management practice manage roles, responsibilities, access privileges and levels of authority. ","The actor which generates that the threat exploits the vulnerability is
+internal, the business user. ","The event is an ineffective design and/or ineffective
+execution of the process DSS06 Manage business process controls, which leads to access controls invoking inadequate and ineffective segregation of duties.","The asset/resource that leads to the business impact is the process DSS06
+Manage business process controls.","The assets/resources that are affected are the organizational structures
+(segregation of duties). ","The timing of the event is extended because the business user can fraud the company over a long period of time until the fraud will be detected. The timing of occurrence is noncritical. The event is not easily detected. Usually it is just by accident that such a fraud is uncovered and, therefore, detection is slow. The consequences are delayed because the business user has to build up the different inappropriate access rights over time, until he/she can misuse them to fraud the company.",S,S,P,N/A,N/A,N/A,Frequent review and immediate removal of inappropraite access rights.
+,05 Staff operations,0502,,,,,,,,S,,P,,,,
+Backup process failure,05 Staff operations,0503,"The daily backup process fails to successfully back up all data files, and the failure goes undetected. An operational problem
+occurs, requiring the backup to be restored. Only then is it discovered that it is not possible to do so, requiring the last successful backup to be restored, which is more than one week old. This results in the loss of several days of processed transactions and the resulting management information. ","The nature of the event is a failure of the processes DSS01
+Manage operations and DSS04 Manage continuity. The management practice that fails is to manage backup arrangements.","The actor that generates the threat that exploits a vulnerability is
+internal—a failure of an internal backup process that is not detected by IT operational staff.","The event is an ineffective design and/or ineffective
+execution of the processes DSS01 Manage operations and DSS04 Manage continuity. Because it is a failure of an internal backup process, the system sends an alert about the failure, but the alert is not picked up by IT operational staff. ","The assets/resources that lead to the business impact are the processes DSS01 Manage operations and DSS04 Manage continuity and people and skills, due to the IT operational staff failure to pick up the data backup failure alert.","The assets/resources that are affected are on the business processes in which the processed
+transactions are lost and the management information that is also lost.","The duration of the event is extended because it takes quite some time to reprocess the business transactions.
+The timing of occurrence is noncritical at the time of the failure. Detection is immediate because it is as soon as the operational staff wants to restore the backup that they discover it is not possible to do so. The time lag between event and consequence is because the backup failure may not be detected until it is required for recovery from the backup.",S,,P,N/A,N/A,N/A,Periodically test backups.
+,05 Staff operations,0504,,,,,,,,S,,P,,,,
+,05 Staff operations,0505,,,,,,,,S,,P,,,,
+"Disclosure of client data to a
+competitor",05 Staff operations,0506,"An internal member of staff, who has authorized access to sales information, makes an unauthorized copy of commercially
+sensitive data. This sales representative downloads and copies the customer database to a USB drive, and then gives it to a competitor of the enterprise.","The nature of the event is a malicious action of an
+employee.","The actor that generates the threat that exploits the vulnerability is
+an internal member of staff, who has authorized access to sales information and makes an unauthorized copy of the information.","The event is theft and disclosure of commercial
+information. ","The resource that leads to the business impact is people, the sales representative.",The asset/resource that is affected is the sensitive business/commercial information.,"The duration of the event is likely to be extended because the disclosure of commercial data can continue for a 
+long period of time before it is detected. The timing of occurrence is noncritical. Because theft of data is usually only detected by accident, the event cannot be detected immediately and detection is classified as slow. The time lag between event and consequence is delayed, usually more and more customers will move to a competitor. ",S,,P,N/A,N/A,N/A,"Recruitement procedures, access controls and data loss prevention (DLP) 
+controls will be implemented and/or improved"
+,05 Staff operations,0507,,,,,,,,S,,P,,,,
+,05 Staff operations,0508,,,,,,,,P,S,P,,,,
+,05 Staff operations,0509,,,,,,,,P,S,P,,,,
+,05 Staff operations,0510,,,,,,,,P,S,P,,,,
+,06 Information ,0601,,,,,,,,S,,P,,,,
+Uncontrolled shutdown ,06 Information ,0602,"A company that relies heavily on its e-commerce sales system is not protected by an uninterruptable power supply (UPS), 
+backup generator or database management system (DBMS) transaction rollback facility. Following a power failure, the server running the e-commerce sales system does not perform a controlled shutdown, which results in the database tables becoming corrupted.","The nature of the event is a failure of the process DSS06
+Manage business process controls. It is the failure of the management practice to control the processing of information and the respective activity and to maintain the integrity of data during unexpected interruptions in business processing and confirm data integrity after processing failures. ","Not every type of threat requires an actor, e.g., failures of equipment
+or natural causes. This event is a clear failure of equipment (UPS) or the procedure ‘controlled shutdown’ and there is no actor for this event.","The event is an either an ineffective design or an
+ineffective execution of a process or operational procedure (system shutdown). However, the event can also be classified as destruction of the database. ",The asset that leads to the business impact is the infrastructure (power supply).,"The asset/resource that is affected is information, the corrupted database.","The duration of the event is extended because the database stays corrupted and has to be recovered from the
+backups. The time of occurrence of the event (power failure) is critical because, at that time, the equipment was not in a state to perform a controlled shutdown. The detection is immediate because the lack of integrity of the database is discovered immediately after the restart of the systems. The time lag between event and consequence is immediate because the database is corrupted directly by the event (uncontrolled shutdown).",S,S,P,N/A,N/A,N/A,"Maintain the integrity of data during unexpected interruptions in business processing, and confirm data integrity after processing
+failures. Installation of a UPS, backup generator and DBMS transaction rollback facility."
+,06 Information ,0603,,,,,,,,S,S,P,,,,
+,06 Information ,0604,,,,,,,,S,S,P,,,,
+,06 Information ,0605,,,,,,,,S,S,P,,,,
+,06 Information ,0606,,,,,,,,P,S,P,,,,
+Modification of client data,06 Information ,0607,"In an enterprise with poor access rights management procedures, a sales manager is given database administration (DBA) rights
+in error. This privileged level of access is then used for unauthorized modification of sales data, which results in the misrepresentation of sales activity and inflates the sales manager’s sales target bonus. The data modification is not detected, the additional payments of the sales bonuses are issued and the fraudulent behavior goes undetected.",The nature of the event is a malicious and fraudulent act.,"The actor that generates the threat that exploits the vulnerability is
+internal—the sales manager (business user).","The event is an unauthorized modification of sales
+data that was allowed by the ineffective design and/or ineffective execution of the process DSS05 Manage security services, its management practice DSS05.04 Manage user identity and logical access, the process DSS06 Manage business process controls and its management practice DSS06.05 Ensure traceability of information events and accountabilities, which allowed the sales manager to inherit DBA access rights.","The assets/resources that lead to the business impact are the process DSS05
+Manage security services and its management practice DSS05.04 Manage user identity and logical access and the process DSS06 Manage business process controls and its management practice DSS06.05 Ensure traceability of information events and accountabilities, which allowed the sales manager to inherit DBA access.","The asset/resource that is affected is information, the sales data.","The duration of the event is extended because the modification of the sales data and the fraudulent behavior
+can go undetected for a long period of time before it is detected. Because the bonus was not yet calculated and paid out at the time of the modification of the sales data, the timing of occurrence is critical. Because such modifications of data and fraudulent actions are usually only detected by accident, the time for detection is classified as slow. For the same reason, the time between event and consequence is classified as delayed.",P,S,P,N/A,N/A,N/A,"The duration of the event is extended because the modification of the sales
+data and the fraudulent behavior can go undetected for a long period of time before it is detected. Because the bonus was not yet calculated and paid out at the time of the modification of the sales data, the timing of occurrence is critical. Because such modifications of data and fraudulent actions are usually only detected by accident, the time for detection is classified as slow. For the same reason, the time between event and consequence is classified as delayed. "
+Disclosure of patient data,06 Information ,0608,"A clerical assistant at an insurance company creates an email message that contains patient identifiable data, in plain text, that
+details medical conditions and sends it to the wrong email distribution list in error. The clerical assistant either does not realize his/her error, or realizes, but keeps quiet about the error. This results in inappropriate disclosure of patient identifiable information.",The nature of the event is accidental inappropriate disclosure of patient identifiable information.,"The actor that generates the threat that exploits the vulnerability is
+internal, a business user (the clerical assistant).",The event is disclosure of patient identifiable information.,"The asset/resource that leads to the business impact is people and skills because the clerical assistant makes the error. A blaming culture could also lead to non-disclosure of the error, which would apply to organizational structures. ",The resource that is affected is information (the patient data).,"Timing is critical. When a user realizes he/she has sent sensitive information to the wrong email address, it is
+essential that the user informs his/her supervisor, to allow the situation to be effectively managed. However, in the majority of enterprises, a blame culture exists, and, it is unlikely that the user will admit to the error. Therefore, the duration is likely to be extended, detection is likely to be slow and the time lag between event and consequence is delayed because it is likely that the error will not be detected for a long period of time.",P,S,P,N/A,N/A,N/A,"Data classification and security controls are defined, such as sensitive
+information is encrypted before email messages are sent."
+,06 Information ,0609,,,,,,,,P,S,P,,,,
+,06 Information ,0610,,,,,,,,P,S,P,,,,
+,06 Information ,0611,,,,,,,,P,S,P,,,,
+"Inability to implement mobile
+banking",07 Architecture,0701,"A mid-sized US bank is applying host systems for the core banking applications, in particular, for retail banking. The director for retail banking, a member of the board, requested that a mobile banking solution (application) be offered for the retail market and expected a return on investment (ROI) within two years. The core banking system, however, is not capable of handling the communications with a mobile application environment. The chief information officer (CIO) maintains a good relationship with the host provider and, in a defensive position on new systems, analyzed the requirements. The CIO
+came to the conclusion that the solution can be implemented, but only by using new middleware and communications systems. These additions were exceeding the forecasted budget and were new technologies to the bank. Therefore, the initiative was not deemed to be able to create an acceptable ROI and was not started.
+Competitors, however, currently provide a mobile solution to their customers and the bank’s customers are moving to those other banks.","The nature of the event is failure of the process APO03
+Manage enterprise architecture.","The actors that generate the threat that exploits a vulnerability are
+internal—the director for retail banking and the CIO.","The event is an ineffective design and/or ineffective
+execution of the process APO03 Manage enterprise architecture. ",The resources that lead to the business impact are the lack of an effective process APO03 Manage enterprise architecture and the IT infrastructure because the host system is inflexible and unable to meet the customer expectations. ,"The resource that is affected is the business process retail banking because it is not available
+for mobile devices.","The duration of the event is extended because the software application for retail banking on mobile devices cannot
+be delivered. The timing of the occurrence is critical because the competitors already provide mobile solutions to their customers. The event is detected during the study and before the project was started and, therefore, is moderate. The consequence is delayed and ongoing because the project cannot be executed.",P,P,P,N/A,"The board is accepting the inability to apply upcoming technology options. The board also accepts that the enterprise will lose
+business competitiveness because competitors are currently providing a similar service to their customers and therefore may lose market share.","The chief executive officer (CEO) can outsource the mobile banking infrastructure and transfer the risk through the
+outsourcing contract.","Apply architecture management and scenarios to amend the capabilities
+of the host and/or to replace the host system."
+"New product cannot be
+implemented",07 Architecture,0702,"The chief executive officer (CEO) of a large insurance company plans to issue eight new products per year to the market. 
+He does not consult the IT department. Product development starts the project and creates the eight new products. As they involve the IT department in the project, they find out that, based on the existing architecture and old legacy systems, IT is able to introduce the administration for only four new products per year. Therefore, at least half of the work of the product development team was wasted.","The nature of the event is failure of the process APO03
+Manage enterprise architecture. ","The actors that generate the threat that exploits a vulnerability are
+internal—the CEO and the product development team because they did not involve the IT department at the start of the project.","The event is an ineffective design or/and ineffective
+execution of the process APO03 Manage enterprise architecture.","The resources that lead to the business impact are the lack of an effective
+process APO03 Manage enterprise architecture and the IT infrastructure because the host system is unable to meet the customer expectations. ","The resource that is affected is the business process new products because the company
+cannot start to sell the new products.","The duration of the event is extended because only four of the new products can be started and the remaining
+four must be held until the following year. The timing of the occurrence is critical because the competitors currently offer new products. The event is not detected before the company wants to start with the new products and, therefore, is slow. The consequence is delayed and ongoing because the project cannot be executed. ",P,S,P,N/A,"The board is accepting the inability to implement new products as fast as expected, therefore, losing the opportunity to gain
+business advantage.",N/A,"Apply architecture management and scenarios to amend the capabilities
+of the host and/or to replace the host system. "
+Distribution of mobile devices,07 Architecture,0703,"To satisfy requirements of the business management (board members and directors), the chief information officer (CIO) distributed mobile devices
+(e.g., smartphones, tablets) so that management can easily have access to the enterprise applications and email from everywhere. The CIO did not develop a program to address all requirements for mobile devices by following the enterprise architecture good practices (e.g., The Open Group Architecture Framework [TOGAF]). Appropriate security policies and procedures were not developed. The devices are not equipped with security features (e.g., encryption of information and secure connection) to preserve the enterprise information in case of security breaches (e.g., stolen/lost devices, unauthorized access to the devices and their information). Before the devices were distributed, their management was not based on good practice (e.g., life-cycle management and baseline configuration).","The nature of the event is failure of the process APO03
+Manage enterprise architecture. ","The actors that generate the threat that exploits a vulnerability are
+internal—the CIO and the information security manager. ","The event is an ineffective design or/and ineffective
+execution of the process APO03 Manage enterprise architecture. ","The resources that lead to the business impact are the processes BAI09
+Manage assets, BAI10 Manage configuration and DSS05 Manage security services due to a lack of ensuring coverage of all capabilities, such as training, security, replacement and service desk. Another resource is people and skills because the CIO is trying to fulfil board requirements on short notice, and the information security officer is not stopping the initiative. Information is also a resource due to the lack of a policy to handle security of information on new technology. ","The resource that is affected is information, specifically, the security information on the
+mobile devices and in transport.","The duration of the event is extended because equipping the devices with appropriate security features requires
+some time. The timing of the occurrence is noncritical. The event is detected as the devices start being used and is moderate. The consequence is delayed and ongoing because the security weaknesses cannot be addressed immediately and need proper analysis. ",P,S,S,Do not distribute mobile devices until risk mitigation is in place.,The board accepts the lack of security.,"Mobile users are held liable for any
+damage occurred with the mobile device.","Define a policy to customize the mobile devices before distribution. Implement security features, monitor the devices, and maintain
+their security (remote deletion of lost/stolen devices etc.)."
+,07 Architecture,0704,,,,,,,,P,S,S,,,,
+,08 Infrastructure,0801,,,,,,,,,,,,,,
+"System not scalable to meet
+business growth",08 Infrastructure,0802,"A small offline trading enterprise operates an online shop, is increasing its customer base and invests heavily in marketing
+initiatives. All IT equipment is procured by shop personnel who do not have the appropriate technical skills to apply best practices and vendor usage recommendations. The IT infrastructure was stable and available in the past, but when the user base and usage of the system increase, the system availability significantly drops, compromising the service level needed for this vertical market. ","The nature of the event is in the inappropriate design of the
+infrastructure caused by accident/error.","The actor that generates the threat that exploits a vulnerability is
+internal—the shop owner (chief executive officer [CEO]).","The event is interruption caused by a significant drop of
+system availability and ineffective design of the infrastructure.","The resources that lead to the business impact are the process BAI04 Manage
+availability and capacity and the IT infrastructure servers that are not capable of meeting the rising demand.","The resources affected are business processes such as the sales process (online shop), which
+are often not available, and applications because the online shop is not regularly available.","The duration of the event is extended because as it needs a long period of time to upgrade or replace the
+infrastructure. The online shop is not regularly available, so business is missed. Therefore, the timing of occurrence is critical. Because the online shop is not available, the detection is instant. Because there is momentarily no business, the consequence is immediate.",P,S,P,"Not offering an online
+shop.",The shop owner accepts the lost business.,"Outsourcing of the IT service and
+agreed-on service level agreement (SLA) availability with appropriate penalties.","Outsourcing of the IT service and agreed-on SLA availability. Upgrade of
+the existing system to increase the IT capability."
+,08 Infrastructure,0803,,,,,,,,P,S,P,,,,
+Secondary utilities,08 Infrastructure,0804,"An particular enterprise is required by industry regulators to have dual data centers to support operations for its 24/7 mission-critical online systems. Both facilities were built with redundant technology infrastructure and connected using dual ring (redundant) optical fibers. When the request for proposal (RFP) was written, it did not contain the prerequisite that each communication ring should be offered by different providers. The communications provider that offered the service tried to reduce its installation costs by taking advantage of existing subway tunnels to deploy the fibers instead of building its own tunneling system as required by regulations.
+During a maintenance shift, local subway train system employees were repairing the rails and accidentally cut off the optical fiber, which caused an interruption in the service that was offered by the provider. This situation was detected immediately by the enterprise’s remote monitoring system and alerts were given to the communications provider, which missed its service level agreements (SLAs) and took more than three days to find the spot where the fiber was cut off.
+During that time, the data center operated in yellow alert mode with reduced service and no ability to balance transactions or maintain data replication between the two existing network attached storage (NAS). Because of the loss of communication, the enterprise invoked data backup procedures on portable storage media and established four synchronized points per day, which incurred additional service costs.","The nature of the event is an accidental failure of the IT
+infrastructure. Secondarily, it is also a failure of the procurement process. ","The actors that generate the threat that exploits the vulnerability are
+internal and external. The internal actor is the Steering (Program/Projects) Committee. The external actor is train system employees. ","The event is primarily a destruction of the IT infrastructure (network), which caused the interruption of the IT services. The event is also ineffective design and/or ineffective execution of the process BAI01 Manage programmes and projects, specifically, the management practices Maintain a standard approach for programme and project management and Manage project resources and work packages; and ineffective design
+and/or ineffective execution of the process BAI03 Manage solutions identification and build, specifically, the management practice Procure
+solution components.","The assets/resources that lead to the business impact are the processes BAI01
+Manage programmes and projects and BAI03 Manage solutions identification and build and the people from the train system. ","The assets/resources that are affected by the event are the physical and IT structure that
+was destroyed and the information and applications that are interrupted. ","The duration of the event is extended, because the provider missed its SLAs and took more than three days to find
+the spot where the fiber was cut off. The time of occurrence is critical because the company currently has no redundant communication lines. The event was detected immediately by the company’s remote monitoring system and alerts were given to the communications service provider. The time lag between event and consequences is also immediate because at the moment that the fiber was cut, there was no network access. ",P,S,P,N/A,N/A,N/A,"Ensure that the programs and projects are correctly defined, with specific
+requirements, including all environmental concerns."
+"Inappropriate segregation of
+networks",08 Infrastructure,0805,"The network of a telecommunications (telecom) company consists of two key networks: an office network dedicated to corporate processes and an operations network for the provision of telecom services. The networks are managed by separate IT departments with different baselines and procedures that are driven by different requirements. Telecom systems cannot, for technical reasons, be patched on short notice to maintain the service level. The company does not have a common incident and event management process in place that addresses both networks, which would ensure the handling and resolution of incidents in an appropriate length of time.
+Some users, due to their job description, need access to both networks. This access is realized with two network interface cards in the end-user computer. However, these computers are not adequately patched and are vulnerable to malicious code.
+A malware infection of one of those computers resulted in the infection of multiple computers in the operations network and, due to the lack of security, also in the office network.",The nature of the event lies in the inappropriate design of the network architecture caused by error.,"The actors that generate the threat that exploits the vulnerability are
+internal and external. The internal actor is the chief information officer (CIO), the information security officer, the network manager and the operations network manager. The external actors are the developers of malicious code.","The event is interruption caused by systems not available
+and ineffective design of the network architecture.","The resources that lead to the business impact are the process DSS05 Manage
+security services, with ineffective patch management and inadequate security incident procedures, and the IT infrastructure, with unpatched systems, inadequate segregation of networks and monitoring capabilities (e.g., intrusion prevention system [IPS]).","The resources affected are business processes, which cannot be operated because no IT services are available; the unavailable IT infrastructure; the accessibility of information; and the accessibility of applications.","The duration of the event is extended because a long period of time is required to upgrade or replace the network 
+infrastructure. The timing of occurrence is critical because business processes are regularly unavailable, which results in missed business. Because security events are not detected immediately, the detection is moderate. The consequence is immediate because there is momentarily no business.",P,S,P,N/A,N/A,"Outsourcing of patch management
+services.","Separate networks with proper mechanisms and apply an IPS. Define and apply a patch management process for both networks.
+Monitor network security."
+"Data center infrastructure
+not adapted to growing needs",08 Infrastructure,0806,"A data center is hosting operational, development and testing equipment. As the business demand grew, additional IT infrastructure was installed in the data center, but the data center infrastructure (e.g., the air-conditioning cooling capability) was not adapted to the growing needs.
+In peak times, the development and test systems had to be shut down due to overheating of the server room. Due to overheating, some servers had a hardware failure, some shut down independently and some air conditioning systems broke and had to be replaced.
+A proper plan to maintain the physical infrastructure was not in place, and corrective action was taken in an ad hoc manner, rather than being based on a sound business continuity plan (BCP).","The nature of the event is in the inappropriate design of the
+data center caused by accident/error.","The actor that generates the threat that exploits a vulnerability is
+internal—the head of operations.","The event is interruption, which is caused by a significant
+drop of system availability, and ineffective design of the data center.","The resources that lead to the business impact are the process BAI09
+Manage assets, e.g., ineffective management of infrastructure, the process BAI04 Manage availability and capacity and the physical infrastructure, due to the inadequate data center infrastructure.","The resources affected are processes such as development and testing, which cannot be
+executed; the IT infrastructure because hardware is broken due to overheating or being shut down; the physical infrastructure because of broken air-conditioning equipment; information because it is not available; and applications because testing and development environments are not available.","The duration of the event is extended because a long period of time is required to upgrade or replace the infrastructure. Business is missed because systems are not regularly available. Therefore, the timing of occurrence is critical. Because hardware failure and the system unavailability are immediate, the detection is instant. Because a long period of time is required to update or replace the infrastructure, the consequences are delayed.",,,P,"Shut down some
+servers.",The board accepts the risk that there may be service disruptions.,N/A,"Upgrade the infrastructure equipment to meet the technology needs.
+Replace servers with newer technologies and a lower footprint."
+,09 Software,0901,,,,,,,,P,,S,,,,
+,09 Software,0902,,,,,,,,P,,S,,,,
+,09 Software,0903,,,,,,,,P,,S,,,,
+,09 Software,0904,,,,,,,,P,,S,,,,
+,09 Software,0905,,,,,,,,P,,S,,,,
+,09 Software,0906,,,,,,,,P,,S,,,,
+,09 Software,0907,,,,,,,,P,,S,,,,
+High number of emergency changes,09 Software,0908,"Business users frequently require changes to live applications on short notice and IT staff (development and operations) use the well-defined emergency change process to fast-track these requests. Emergency changes do not require formal acceptance from business users and can be transitioned to
+the live environment immediately. Because the emergency change process does not require functional requirements and critical documentation to be updated, sometimes these changes are missed in upcoming releases.
+An analysis of changes showed that 40 percent of all changes were emergency changes that were deployed without being properly tested. These changes caused 80 percent of the incidents recorded.","The nature of the event is a failure of the process BAI06
+Manage changes.","The actors that generate the threat that exploits a vulnerability are
+internal—the IT developers, the IT operations function and the business owners.","The event is unauthorized and untested modification
+of applications.","The resources that lead to the business impact are the ineffective process BAI06
+Manage changes, a lack of people and skills to perform quality assurance and a lack of people and skills in the business staff who should be involved in development and testing. Another asset that causes the business impacts are the applications because a lack of quality is causing errors and requiring quick fixes and/or a lack of functionality is requiring amendments.","The resources and assets affected are business processes because erroneous applications
+cause IT service interruptions, which cause process interruptions. Information is also affected because as it can be unduly changed or is inconsistent due to untested and erroneous applications. The lack of change records and/or audit trails makes the effect on information even worse. Applications are affected because they are changed without being duly tested.","The duration of the event is extended because a long period of time is required to change the related processes
+and because the event is also a cultural issue. The timing of occurrence can be critical because systems and applications are not available for doing business. The detection is moderate because the malfunctions caused by emergency changes are usually detected shortly after implementation. Because systems and applications can be interrupted at the moment, an emergency change is put into production and the time lag between event and consequence is immediate.",P,,S,N/A,"Only the business owners experiencing quality and/or availability
+issues can approve emergency changes.",N/A,"Define and apply a sound change management and approval process. Update access control for developers to the live environment.
+Require, for emergency changes, a thorough test and documentation after deployment to the live environment to make emergency changes more complex than regular changes. Require a formal test and approval by the business after deployment to the live environment to ensure that the emergency change addressed the issue and the change was needed on short notice."
+,09 Software,0909,,,,,,,,P,,S,,,,
+"Unauthorized changes to
+applications",09 Software,0910,"Due to an undetected failure in the production deployment process controls, IT developers have the opportunity to alter applications and deploy changes to the live environment without approval of the business owner or IT operations staff (lack of a four-eyes principle). To keep up with the market, with a particular product, there was significant business pressure to deploy new functionality before it was properly tested by Quality Assurance (QA).
+The developers, who are confident in their work, agreed to apply changes to the system without proper end-user testing and, often, without informing the end users of a new functionality. This practice results in added capabilities that are not used and late detection of errors in the changes and leads to incorrect information, service disruption and incidents that result in business losses.","The nature of the event is failure of the process BAI06
+Manage changes.","The actors that generate the threat that exploits a vulnerability are
+internal—the IT developers.",The event is unauthorized modification of applications.,"The resources that lead to the business impact are the ineffective processes
+BAI 06 Manage changes, BAI07 Manage change acceptance and transitioning, and DSS06 Manage business process controls and people and skills, such as the developers who are applying changes without authorization, the lack of sufficient staff to perform development QA and the lack of business users who are involved in development and testing.","The resources affected are business processes caused by new and unplanned/untested
+alterations of functionality, applications caused by changed functionality without adequate testing and acceptance and information that is unduly changed due to malfunction of applications.","The duration of the event is extended because a long period of time is needed to change the related processes. The timing of occurrence is
+noncritical. The detection is slow because malfunctions cannot always be detected immediately. Because a long period of time is needed to change the related process and update the infrastructure, the consequences are delayed.",P,,S,"Remove access rights
+to the live environment for developers.","Board approval of the risk. The chief information officer (CIO) or developers should not be able to accept the significant exposure of
+developers having access to the live environment and the lack of a change process.",N/A,"Define and apply a sound change management and approval process.
+Update access control for developers to the live environment."
+"Unmanaged development and
+testing methodologies",09 Software,0911,"An IT organization’s software development department does not maintain a common standard for software development
+(e.g., development framework, implementation standards) and testing methodologies (e.g., testing types and minimum requirements). This practice leads to differing approaches for various development initiatives because the application of methodologies is left to the discretion of individuals. Testing methodologies (e.g., white box testing, volume testing and socialization testing) are applied based on the availability of technology (testing environment), but are not driven by the type of implementation. The lack of standards leads to deficiencies in the quality of the developed software, which causes numerous incidents. The effort to adopt existing testing approaches is high because there is low re-use of testing methodologies. The teams frequently start from the beginning when defining a test plan, which leads to a lack of resources for actual testing because effort is bound to planning rather than to test execution.","The nature of the event is a failure of the processes
+APO11 Manage quality and BAI07 Manage change acceptance and transitioning.","The actors that generate the threat that exploits a vulnerability are
+internal—the IT developers and the quality assurance (QA) (testing) function.",The event is unauthorized modification of applications.,"The resources that lead to the business impact are the ineffective processes
+APO11 Manage quality and BAI07 Manage change acceptance because consistent testing approaches are absent. The resource IT Infrastructure also leads to business impact because there is a lack of test environments, e.g., for parallel testing.","The resources affected are business processes because the inefficient QA and testing
+processes lead to unstable applications and inconsistent data and information. Other resources that are affected are people and skills due to the ineffective use of testing staff.","The duration of the event is extended because a long period of time is required to change the related processes
+and the IT infrastructure. The timing of occurrence is noncritical. The detection is slow because malfunctions cannot always be detected immediately. Because a long period of time is required for changing the related processes and for updating the IT infrastructure, the consequences are delayed.",P,,S,N/A,"Accept the lack of QA by the chief information officer (CIO) and the
+business owners.",N/A,Apply professional and current testing approaches (in-house or outsourced). 
+,09 Software,0912,,,,,,,,P,,S,,,,
+Business failing to be accountable ,10 Business ownership of IT ,1001,"A large global financial enterprise has a strategy of growing the business with expansion into new business domains.
+The business is constantly changing its priorities with little or no communication with the IT organization. This practice leads to constant change in the requirements for the technology under development and frequent escalations from business management to the head of development. A situation of the business and IT constantly blaming each other exists, with the business not accepting any culpability in the process and blaming IT. The chief executive officer (CEO) advised the chief information officer (CIO) that one of the business leaders had presented to the board a plan to immediately outsource all of IT. The CEO requested that the CIO and the business work together to resolve the business challenges and to deliver the business. ","The nature of the event is a failure of the process BAI01
+Manage programmes and projects.","The actors that generate the threat that exploits a vulnerability are
+internal—Steering (Program/Projects) Committee, business executive and business process owners, CIO and head of development.","The event is an ineffective design and/or ineffective
+execution of the process BAI01 Manage programmes and projects.","The resource that leads to the business impact is the process BAI01 Manage
+programmes and projects. The organizational structure also leads to some business impact because of a blaming culture that is caused by the business and by the IT people.","The resources that are affected are the business processes because new applications do not
+fulfill the requirements and, therefore, business is not satisfied with the results. The entire enterprise is affected because discord exists on the side of the business people and on the side of the IT staff.","The duration of the event is extended because it is not easy to change the culture and it cannot be done quickly.
+The timing of occurrence is critical because the enterprise is currently in a phase of growing the business with expansion into new business domains. As an increasing number of disputes between business and IT surface, the detection can be classified as moderate. The consequences will last for a long period of time because the situation (culture) cannot be improved easily and quickly, and, therefore, consequences are delayed.",P,P,S,N/A,N/A,"Implement a governance process to manage and prioritize the business demand. Transfer risk from business and IT to a
+governance body like the Steering (Program/Project) Committee.","Develop a process to work with the business areas through the system development life cycle (SDLC), incorporating requirements
+and organizational alignment to business requirements. Communicate with the business about the financial aspects of existing technology, including return on investment (ROI) and total cost of ownership (TCO), and the potential impacts of the future technologies."
+,10 Business ownership of IT ,1002,,,,,,,,P,S,S,,,,
+Cloud service provider ,10 Business ownership of IT ,1003,"A company decides to move its cloud services to a foreign country where the costs are lower than local providers, without doing appropriate due diligence concerning the third parties that can provide the service. The business decides to outsource to cloud without counsel from IT in their areas of competence. Even though the company has an IT governance framework in place, it was ignored and IT was not consulted. Therefore, implied security, data privacy and compliance were not considered.
+The cross-border data, security, privacy and potential compliance issues are: • Personally identifiable information (PII) and various global data privacy laws • Sensitive personal information (SPI)
+• Cloud provider policies and procedures
+• Data leakage
+A process for reviewing the third-party compliance requirements is non-existent, and the decision was imposed on IT. When the service is in place, the company detects data leakage in critical information and unknown areas of data.
+Due to this severe issue, the impact to business reputation is severely damaged and will potentially drive the company out of business by losing future service contracts.","The nature of the event is a failure (ignorance) of the governance
+process EDM01 Ensure governance framework setting and maintenance. The consequence was non-compliance with rules and regulations.","The actors that generate the threat that exploits a vulnerability are
+internal—the business executives that decided to outsource without involving IT.","The event is an ineffective execution of the governance
+process EDM01 Ensure governance framework setting and maintenance and an ineffective design of the management process MEA03 Monitor, evaluate and assess compliance with external requirements, which lead to a breach of rules and regulations. The event can also be classified as disclosure because data leakage in critical information was detected.","The resources/assets that lead to the business impact are the processes
+EDM01 Ensure governance framework setting and maintenance and MEA03 Monitor, evaluate and assess compliance with external requirements and the people and skills, with business executives ignoring the governance process.","The resource/asset that was mainly affected is critical information due to data leakage.
+But also the entire enterprise (organizational structures and people) is affected because its reputation is severely damaged, which can drive the company out of business. ","The duration of the events is extended because a long period of time is required to correct the situation, if ever.
+Because the company can be driven out of business, the timing of occurrence is critical. The event was detected as soon as IT was involved and the noncompliance was recognized, therefore, detection can be classified as moderate. The time lag between event and consequence is delayed because it can potentially drive the company out of business.",P,S,S,"Not engaging with
+third parties.","If the contract has been executed (without IT review), the company
+has to accept that it is not going to be able to recover assets.",N/A,"The process for selection of third parties will be reviewed to include all
+technical and non-technical requirements. "
+Ineffective service level agreements,10 Business ownership of IT ,1004,"A business misses the majority of the service level agreements (SLAs) for its clients, which results in charge-back costs to the
+company revenue stream. A review of the company’s SLAs found that they were written with an advantage to the client and not written to protect or aim to protect the company. The company must have their legal department counsel review and rewrite all of the company’s SLA contracts in cooperation with the IT department. After the SLAs are reviewed, the legal department must examine the language in the SLAs in detail to determine the frequency and timing of changes with each client.","The nature of the event is a failure of the process APO09
+Manage service agreements.","The actors that generate the threat that exploits a vulnerability are
+internal—the business part that is responsible for the managed service accounts.","The event is ineffective design and/or ineffective
+execution of the process APO09 Manage service agreements.","The assets/resources that lead to the business impact are all assets and resources,
+e.g., people and skills, infrastructure (facilities), IT infrastructure, information and applications that enable services to be provided to clients.",The assets/resources that are affected are the services (processes) that are provided to clients. ,"The duration of the event is extended because a long period of time is required to review and rewrite all of
+the company’s SLA contracts. Because the company encounters charge-back costs to the company revenue stream, the timing of occurrence is critical. The event was detected as soon as clients complained and, therefore, is classified as instant. The time lag between event and consequence is immediate because the penalties (charge-back costs) are due immediately after nonfulfillment of the service levels.",,,P,N/A,N/A,N/A,"To reduce customer escalation and to process improvements and governances, the company needs accountability for the missed
+SLAs, metrics improvement and dashboard, and automated prevention and alerts. Renegotiate contracts."
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+Virus Infection,15 Malware,1502,"External hackers with the motivation to cause business disruption use viruses to attack a company’s IT systems. 
+The detection of the event is immediate because the information is lost at the time of the virus infection. For the same reason, 
+the time lag between event and consequence is immediate.The enterprise is infected with a virus that has a malicious payload that causes certain types of files to be deleted. In some cases, the virus was designed to delete the entire drive contents. 
+Through the attack of the enterprise’s IT infrastructure, information is destroyed, preventing timely business decisions.",The nature of the event is a malicious infection with a virus.,"The actors that generate the threat that exploits the vulnerability are 
+external hackers with the motivation to cause business disruption.","The event results in destruction of information and
+interruption of business processes.","The asset/resource that leads to the business impact are people, specifically, 
+the hackers that attack the systems with the virus.","The assets/resources that are affected by the event are different business processes that are 
+interrupted and information that is destroyed.","The duration of the event is extended because the attack of the enterprise’s IT infrastructure destroys information. 
+The timing of occurrence is critical because it prevents timely business decisions. The detection of the event is 
+immediate because the information is lost at the time of the virus infection. 
+For the same reason, the time lag between event and consequence is immediate.  ",N/A,N/A,P,N/A,"The board makes the decision that no one would be interested 
+in attacking the enterprise—“it won’t happen to us.”",Take out business disruption insurance.,"Install an antivirus solution on all relative IT infrastructure assets and keep
+definitions up to date. Implement an awareness program."
+Employee termination and theft,15 Malware,1503,"An employee has been notified that, due to company budget restrictions, he is going to be laid off in the next 30 days. 
+This person considers himself to be a critical asset to the company, and after he is notified, as revenge, he starts to copy 
+enterprise core data and email them to competitors.
+After securing these data on his own media device, he designs a time bomb and puts it into production systems to change s
+ystems logic that supports critical business functions (90 days after he is gone from the company) that will result in 
+great losses to the company.
+Because this employee is very close to the company’s chief information security officer (CISO), who 
+is going to retire from the company, the CISO agrees to help this employee alter the company’s security controls.",The nature of the event is malicious.,"The actor that generates the threat that exploits a vulnerability is 
+internal—the employee who was laid off.","The event is disclosure of company data and 
+unauthorized modification of the systems logic 
+by the time bomb.","The asset/resource that leads to the business impact is people 
+(the employee who was laid off). The ineffective design and ineffective 
+execution of the processes DSS05 Manage security services and 
+APO07 Manage human resources are also resources.","The resources that are affected are the business processes that are supported by the system 
+logic that was changed by the time-bomb and information, such as the core enterprise data 
+that were copied and sent to competitors.","The duration of the event is extended because it takes a long time to correct the affected system logic, the damage to reputation and the business due to the disclosed core enterprise data. Timing is critical because the CISO is going to retire. The detection is slow because the time bomb is not detected before it destroys the system logic. For the same reason, the time lag between the event and the consequence is delayed.",N/A,N/A,P,N/A,N/A,N/A,"The enterprise needs to update the human resources (HR) policy for employee termination, especially for critical employees,
+defining processes, including notification to the IT department. The IT department, after notification, should: – Verify and actively monitor employee’s activity log after employee is notified.
+– Build special reports to management on this activity log.
+– Limit data access to critical resources."
+Phishing ,15 Malware,1504,"A group of hackers send spam emails to a large number of users in an enterprise, purporting to be from the company, informing them that there has been a security issue with their company user account and requesting that they verify their logon credentials. These credentials will be captured by the malware and used at a later date to gain unauthorized access to company business systems. This information is then sold to a competitor.","The nature of the event is the malicious action by the hackers
+and the spam email that is received and accessed by 
+employees accidentally, and results in users being tricked into
+providing their log-on credentials, and hackers then using 
+these credentials to gain access to the enterprise’s business 
+systems and information.","The actors that generate the threat that exploits the vulnerability are the external hackers who are distributing the malware in the email. The internal employees are also actors by opening the email and acting on the request, providing their log-on credentials.","The event is theft and disclosure of data because credentials are used to gain access to the enterprise’s business systems and information, and sensitive commercial information is then sold to a competitor.","The asset/resource that lead to the business impact is people because they are the hackers, and also the employees who were tricked.","The asset/resource that is affected is the stolen and sensitive commercial 
+information, which is then sold to a competitor. ","When the credentials are used by the hackers to gain unauthorized access to the enterprise’s business systems, it is critical that the event be detected quickly because the company is planning a marketing action and competitors could get to market sooner. However, the duration may be extended because the stolen information can be used by the competitors over a longer period to gain clients from the attacked company. Detection is probably moderate and the time lag between event and consequence is delayed because there may be a delay from the time that the hackers gain log-on credentials, to the time they use them to gain unauthorized access.",N/A,N/A,P,N/A,N/A,"Use a hosted email service, which includes a spam filtering service.","Implement spam filters to identify and quarantine spam emails, and educate end-users. Implement intrusion detection systems (IDSs)
+to identify logon attempts coming from outside the enterprise."
+Network penetration,16 Logical attacks ,1602,"An enterprise has a public web site, through which a group of hackers takes down the enterprise’s business systems. 
+This is done by breaching the enterprise’s network perimeter and penetrating the network, and then introducing malware 
+that takes down the servers and results in a successful denial-of-service (DOS) attack, which denies users access to 
+applications. Normal business operations are disrupted. Sales cannot be processed over the company’s web site, causing 
+loss of revenue and reputational damage.","The nature of the event is a malicious DOS attack by 
+hackers, which takes down the servers, denying users 
+access to applications and information.","The actors that generate the threat that exploits the vulnerability 
+are the external hackers.","The event is interruption of IT services so that 
+users cannot access the applications and 
+information and, therefore, normal business 
+processes/ operations are interrupted and sales 
+cannot be processed over the company’s web site, 
+causing loss of revenue and reputational damage.","
+The asset/resource that leads to the business impact are people—the hackers.","The asset/resources that are affected are mainly the interrupted business operations. However, because access is denied to the enterprise’s IT infrastructure, information and applications are also affected.","Response to the DOS attack is critical to restore access to business systems quickly and so sales can be issued again. The duration is extended because it may take quite some time to restore the official web site. Detection of the event is immediate, and the time lag between the event and the consequence is also immediate.",N/A,N/A,P,N/A,"The board makes the decision that no one would be interested in attacking the enterprise, “it won’t happen to us.”",Take out business disruption insurance.,"Install and configure a firewall, server hardening and security patches that are kept up to date. Deploy and actively monitor an IDS.
+Have disaster recovery procedures in place to restore the web site, if required."
+Industrial espionage,16 Logical attacks ,1604,"A successful worldwide pharmaceutical company is subject to industrial espionage from advanced persistent threats (APTs) 
+by external hackers. A foreign government sponsored the hackers to gain research and development secrets to help 
+advance the pharmaceutical industry within its country. The IT infrastructure was penetrated by the use of APT techniques, 
+and sensitive product research and development information stolen and leaked out, allowing cheaper competing products 
+to be brought to market.","The nature of the event is malicious penetration of the IT 
+infrastructure by the use of APT techniques.",The actors that generate the threat that exploits the vulnerability are external hackers sponsored by an external foreign government.,"The event is theft and disclosure because the IT infrastructure was penetrated and sensitive product research and development information was stolen, allowing cheaper competing products to be brought to market.",The asset/resource that leads to the business impact are people—the hackers.,The assets/resources that are affected are the penetrated IT infrastructure and the sensitive product research and stolen development information.,"Response to the denial of service (DOS) attack is critical to restore access to business systems quickly and so sales can be issued again. The duration is extended because it may take quite some time to restore the official web site. Detection of the event is immediate and the time lag between the event and the consequence is also immediate.
+The duration of the event is extended because APTs usually remain undetected for quite some time. The timing of occurrence is critical because the company has a short period of time before issuing a new pharmaceutical product based on the sensitive research results. Because it may be a long period of time before this information leakage is detected, the classification for the detection is slow, and, for the same reason, the time lag between event and consequence is delayed.",N/A,N/A,P,N/A,"The board makes the decision that no one would be interested in 
+attacking the enterprise, “it won’t happen to us.”",N/A,"Install and appropriately configure firewalls, server hardening and ensure that security patches are installed in a timely manner.
+Deploy and actively monitor an intrusion detection system (IDS) solution."
+Hacktivism ,16 Logical attacks ,1606,"Hacktivism (the combination of hacking and activism) involves inserting or modifying code to promote political ideology—
+promoting political expression, freedom of speech, human rights, etc. An activist group hacks into a government’s web site 
+and changes the information on a web page to publicize the group’s political messages and cause public embarrassment to 
+the government.","The nature of the event is a malicious act by an activist group 
+that exploits vulnerabilities in the government’s IT 
+infrastructure and posts information on the government’s 
+official web site that provides a view that is contrary to 
+government policy, or to promote the group’s ideology.",The actor that generates the threat that exploits the vulnerability is an external activist.,The event is an interruption as the government’s infrastructure is attacked and information is modified on the web site.,The asset/resource that lead to the business impact people—the political activists.,The assets/resources that are affected are the government’s IT infrastructure that is attacked and the information changed on the web site.,The duration of the event is likely to be moderate because such changes to web sites are usually noticed shortly after the event and can be corrected by uploading the backup of the web site. The timing of occurrence is critical because visitors to the government web site usually need the provided information immediately. The time taken to detect the change is also moderate because such changes to web sites are usually reported quickly by the visitors of the web site. The time lag between the event and consequence is immediate because the web site is changed at the same time that the hack happens.,N/A,N/A,P,N/A,"The board makes the decision that no one would be interested in 
+attacking the enterprise, “it won’t happen to us.”",N/A,"Install and appropriately configure firewalls, server hardening and ensure that security patches are installed in a timely manner.
+Deploy and actively monitor an intrusion detection system (IDS) solution."
