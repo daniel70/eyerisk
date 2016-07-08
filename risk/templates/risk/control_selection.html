@@ -6,21 +6,52 @@
     <div class="list-group list-group-root well">
 
     {% for cs in control_selection %}
+
+        {% ifchanged cs.control.controlpractice.pk %}
+        {% if not forloop.first %}
+            </div>
+        {% endif %}
+        {% endifchanged %}
+
+        {% ifchanged cs.control.controlpractice.controlprocess.pk %}
+        {% if not forloop.first %}
+            </div>
+        {% endif %}
+        {% endifchanged %}
+
+        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.pk %}
+        {% if not forloop.first %}
+            </div>
+        {% endif %}
+        {% endifchanged %}
+
         {% ifchanged cs.control.controlpractice.controlprocess.controldomain.standard.pk %}
-        <a href="#lvl-1-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}"
+        {% if not forloop.first %}
+            </div>
+        {% endif %}
+        {% endifchanged %}
+
+        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.standard.pk %}
+        <a href="#lvl-1-{{ forloop.counter0 }}"
            class="list-group-item"
            data-toggle="collapse"
         >
+            <span class="badge">42</span>
             <i class="glyphicon glyphicon-chevron-right"></i>
             {{ cs.control.controlpractice.controlprocess.controldomain.standard.name }}
+<span class="btn-group btn-group-sm" role="group" aria-label="...">
+  <a role="button" class="btn btn-primary">A</a>
+  <a role="button" class="btn btn-success">M</a>
+  <a role="button" class="btn btn-info">T</a>
+</span>
         </a>
         <div class="list-group collapse"
-             id="lvl-1-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}"
+             id="lvl-1-{{ forloop.counter0 }}"
         >
         {% endifchanged %}
 
         {% ifchanged cs.control.controlpractice.controlprocess.controldomain.pk %}
-        <a href="#lvl-2-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}"
+        <a href="#lvl-2-{{ forloop.counter0 }}"
            class="list-group-item"
            data-toggle="collapse"
         >
@@ -28,56 +59,58 @@
             {{ cs.control.controlpractice.controlprocess.controldomain.domain }}
         </a>
         <div class="list-group collapse"
-             id="lvl-2-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}"
+             id="lvl-2-{{ forloop.counter0 }}"
         >
         {% endifchanged %}
 
-        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.pk %}</div>{% endifchanged %}
-        {% ifchanged cs.control.controlpractice.controlprocess.controldomain.standard.pk %}</div>{% endifchanged %}
-
-    {% endfor %}
-
-    </div>
-
-  <div class="list-group list-group-root well">
-    {% for standard in tree %}
-    <a href="#lvl-1-{{ standard.id }}" class="list-group-item" data-toggle="collapse">
-      <i class="glyphicon glyphicon-chevron-right"></i>{{ standard.text }}
-    </a>
-    <div class="list-group collapse" id="lvl-1-{{ standard.id }}">
-
-      {% for domain in standard.domains %}
-      <a href="#lvl-2-{{ domain.id }}" class="list-group-item" data-toggle="collapse">
-        <i class="glyphicon glyphicon-chevron-right"></i>{{ domain.text }}
-      </a>
-      <div class="list-group collapse" id="lvl-2-{{ domain.id }}">
-
-        {% for process in domain.processes %}
-        <a href="#lvl-3-{{ process.id }}" class="list-group-item" data-toggle="collapse">
-          <i class="glyphicon glyphicon-chevron-right"></i>{{ process.text }}
+        {% ifchanged cs.control.controlpractice.controlprocess.pk %}
+        <a href="#lvl-3-{{ forloop.counter0 }}"
+           class="list-group-item"
+           data-toggle="collapse"
+        >
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            {{ cs.control.controlpractice.controlprocess.process_name }}
         </a>
-        <div class="list-group collapse" id="lvl-3-{{ process.id }}">
+        <div class="list-group collapse"
+             id="lvl-3-{{ forloop.counter0 }}"
+        >
+        {% endifchanged %}
 
-          {% for practice in process.practices %}
-          <a href="#lvl-4-{{ practice.id }}" class="list-group-item" data-toggle="collapse">
-            <i class="glyphicon glyphicon-chevron-right"></i>{{ practice.text }}
-          </a>
-          <div class="list-group collapse" id="lvl-4-{{ practice.id }}">
+        {% ifchanged cs.control.controlpractice.pk %}
+        <a href="#lvl-4-{{ forloop.counter0 }}"
+           class="list-group-item"
+           data-toggle="collapse"
+        >
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            {{ cs.control.controlpractice.practice_name }}
+        </a>
+        <div class="list-group collapse"
+             id="lvl-4-{{ forloop.counter0 }}"
+        >
+        {% endifchanged %}
 
-            {% for activity in practice.activities %}
-              <div class="list-group-item {% if activity.value == 'M' %}list-group-item-success{% endif %}"
-                   id="lvl-5-{{ activity.id }}">
-                {{ activity.text }}
-              </div>
-            {% endfor %}
-          </div>
-          {% endfor %}
+        <div class="list-group-item" id="lvl-5-{{ forloop.counter0 }}">
+            {{ cs.control.activity }}
         </div>
-        {% endfor %}
-      </div>
-      {% endfor %}
-    </div>
     {% endfor %}
-  </div>
+    </div></div></div></div>
+<br><br><br>
 
+<ul class="list-group">
+  <li class="list-group-item">
+      <a href="#">Cras justo odio</a>
+
+        <span class="btn-group btn-group-sm" role="group" aria-label="...">
+          <a role="button" class="btn btn-default btn-primary">A</a>
+          <a role="button" class="btn btn-default btn-success">M</a>
+          <a role="button" class="btn btn-default btn-info">T</a>
+        </span>
+  </li>
+  <li class="list-group-item">Dapibus ac facilisis in</li>
+  <li class="list-group-item">Morbi leo risus</li>
+  <li class="list-group-item">Porta ac consectetur ac</li>
+  <li class="list-group-item">Vestibulum at eros</li>
+</ul>
+
+    </div>
 {% endblock content %}
