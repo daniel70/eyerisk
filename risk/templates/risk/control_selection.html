@@ -2,7 +2,7 @@
 {% load bootstrap %}
 {% block content %}
   <h2>{{ selection.name }}</h2>
-
+    <input type="hidden" id="csrftoken" value="{{ csrf_token }}" />
     <div class="list-group list-group-root well">
 
     {% for cs in control_selection %}
@@ -32,34 +32,38 @@
         {% endifchanged %}
 
         {% ifchanged cs.control.controlpractice.controlprocess.controldomain.standard.pk %}
-        <a href="#lvl-1-{{ forloop.counter0 }}"
+        <a href="#ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}"
            class="list-group-item"
            data-toggle="collapse"
         >
-            <span class="badge">42</span>
             <i class="glyphicon glyphicon-chevron-right"></i>
             {{ cs.control.controlpractice.controlprocess.controldomain.standard.name }}
-<span class="btn-group btn-group-sm" role="group" aria-label="...">
-  <a role="button" class="btn btn-primary">A</a>
-  <a role="button" class="btn btn-success">M</a>
-  <a role="button" class="btn btn-info">T</a>
-</span>
+            <span style="float: right" class="btn-group btn-group-xs" role="group" aria-label="...">
+              <button type="button" class="btn btn-primary">A</button>
+              <button type="button" class="btn btn-success">M</button>
+              <button type="button" class="btn btn-info">T</button>
+            </span>
         </a>
         <div class="list-group collapse"
-             id="lvl-1-{{ forloop.counter0 }}"
+             id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}"
         >
         {% endifchanged %}
 
         {% ifchanged cs.control.controlpractice.controlprocess.controldomain.pk %}
-        <a href="#lvl-2-{{ forloop.counter0 }}"
+        <a href="#ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}"
            class="list-group-item"
            data-toggle="collapse"
         >
             <i class="glyphicon glyphicon-chevron-right"></i>
             {{ cs.control.controlpractice.controlprocess.controldomain.domain }}
+            <span style="float: right" class="btn-group btn-group-xs" role="group" aria-label="...">
+              <button type="button" class="btn btn-primary">A</button>
+              <button type="button" class="btn btn-success">M</button>
+              <button type="button" class="btn btn-info">T</button>
+            </span>
         </a>
         <div class="list-group collapse"
-             id="lvl-2-{{ forloop.counter0 }}"
+             id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}"
         >
         {% endifchanged %}
 
@@ -93,24 +97,8 @@
             {{ cs.control.activity }}
         </div>
     {% endfor %}
-    </div></div></div></div>
-<br><br><br>
+    </div></div></div></div> <!-- close the divs start where opened -->
 
-<ul class="list-group">
-  <li class="list-group-item">
-      <a href="#">Cras justo odio</a>
-
-        <span class="btn-group btn-group-sm" role="group" aria-label="...">
-          <a role="button" class="btn btn-default btn-primary">A</a>
-          <a role="button" class="btn btn-default btn-success">M</a>
-          <a role="button" class="btn btn-default btn-info">T</a>
-        </span>
-  </li>
-  <li class="list-group-item">Dapibus ac facilisis in</li>
-  <li class="list-group-item">Morbi leo risus</li>
-  <li class="list-group-item">Porta ac consectetur ac</li>
-  <li class="list-group-item">Vestibulum at eros</li>
-</ul>
 
     </div>
 {% endblock content %}

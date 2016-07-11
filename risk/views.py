@@ -1,7 +1,10 @@
+import json
+
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from .models import Standard, Selection, SelectionControl, ControlDomain
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
 from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer
@@ -108,6 +111,36 @@ class ControlSelectionView(LoginRequiredMixin, generic.TemplateView):
             'control__ordering',
         )
         return context
+
+
+def control_selection(request, pk):
+    selection = get_object_or_404(Selection, pk=pk)
+    if request.is_ajax():
+        if request.method == "POST":
+            post_dict = request.POST.dict()
+
+
+        return HttpResponse("OK")
+
+
+    selected_controls = SelectionControl.objects.filter(selection=selection).select_related(
+        'control__controlpractice__controlprocess__controldomain__standard'
+    ).order_by(
+        'control__controlpractice__controlprocess__controldomain__standard__id',
+        'control__controlpractice__controlprocess__controldomain__ordering',
+        'control__controlpractice__controlprocess__ordering',
+        'control__controlpractice__ordering',
+        'control__ordering',
+    )
+
+    context = {
+        'selection': selection,
+        'control_selection': selected_controls,
+    }
+
+    return render(request, template_name='risk/control_selection.html', context=context)
+
+
 
 
 
