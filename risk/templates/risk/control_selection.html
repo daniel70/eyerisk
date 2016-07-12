@@ -50,7 +50,7 @@
         {% endifchanged %}
 
         {% ifchanged cs.control.controlpractice.controlprocess.controldomain.pk %}
-        <a href="#ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}"
+        <a href="#ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}"
            class="list-group-item"
            data-toggle="collapse"
         >
@@ -63,38 +63,57 @@
             </span>
         </a>
         <div class="list-group collapse"
-             id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}"
+             id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}"
         >
         {% endifchanged %}
 
         {% ifchanged cs.control.controlpractice.controlprocess.pk %}
-        <a href="#lvl-3-{{ forloop.counter0 }}"
+        <a href="#ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}"
            class="list-group-item"
            data-toggle="collapse"
         >
             <i class="glyphicon glyphicon-chevron-right"></i>
             {{ cs.control.controlpractice.controlprocess.process_name }}
+            <span style="float: right" class="btn-group btn-group-xs" role="group" aria-label="...">
+              <button type="button" class="btn btn-primary">A</button>
+              <button type="button" class="btn btn-success">M</button>
+              <button type="button" class="btn btn-info">T</button>
+            </span>
         </a>
         <div class="list-group collapse"
-             id="lvl-3-{{ forloop.counter0 }}"
+             id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}"
         >
         {% endifchanged %}
 
         {% ifchanged cs.control.controlpractice.pk %}
-        <a href="#lvl-4-{{ forloop.counter0 }}"
+        <a href="#ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}-{{ cs.control.controlpractice.pk }}"
            class="list-group-item"
            data-toggle="collapse"
         >
             <i class="glyphicon glyphicon-chevron-right"></i>
             {{ cs.control.controlpractice.practice_name }}
+            <span style="float: right" class="btn-group btn-group-xs" role="group" aria-label="..."
+                data-id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}-{{ cs.control.controlpractice.pk }}-{{ cs.control.pk }}"
+            >
+              <button type="button" class="btn btn-primary">A</button>
+              <button type="button" class="btn btn-success">M</button>
+              <button type="button" class="btn btn-info">T</button>
+            </span>
         </a>
         <div class="list-group collapse"
-             id="lvl-4-{{ forloop.counter0 }}"
+             id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}-{{ cs.control.controlpractice.pk }}"
         >
         {% endifchanged %}
 
-        <div class="list-group-item" id="lvl-5-{{ forloop.counter0 }}">
+        <div class="list-group-item" id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}-{{ cs.control.controlpractice.pk }}-{{ cs.control.pk }}">
             {{ cs.control.activity }}
+            <span style="float: right" class="btn-group btn-group-xs" role="group" aria-label="..."
+                data-id="ctrl-{{ cs.control.controlpractice.controlprocess.controldomain.standard.pk }}-{{ cs.control.controlpractice.controlprocess.controldomain.pk }}-{{ cs.control.controlpractice.controlprocess.pk }}-{{ cs.control.controlpractice.pk }}-{{ cs.control.pk }}"
+            >
+              <button type="button" class="btn btn-primary">A</button>
+              <button type="button" class="btn btn-success">M</button>
+              <button type="button" class="btn btn-info">T</button>
+            </span>
         </div>
     {% endfor %}
     </div></div></div></div> <!-- close the divs start where opened -->
