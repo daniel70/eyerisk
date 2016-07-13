@@ -15,8 +15,11 @@ with open("risk_scenarios.csv") as f, psycopg2.connect(url) as conn:
     c = conn.cursor()
     count = 0
     reader = csv.DictReader(f)
-    print(next(reader))
+    
     for line in reader:
+        # strip spaces and remove line feeds from all values
+        line = dict([k, v.replace('\n', ' ').strip()] for k, v in line.items())
+        
         if line['Title'].strip() == '':
             continue
 
@@ -48,6 +51,3 @@ with open("risk_scenarios.csv") as f, psycopg2.connect(url) as conn:
             ''
             )
         )
-
-
-        

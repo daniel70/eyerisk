@@ -28,3 +28,7 @@
     - coverage.py
     - factory-boy
     - django-guardian (row level permission)
+
+
+- alle control* tabellen worden in de locale (indexdb) database ingeladen wanneer de gebuiker een verbinding
+  maakt. Dit maakt veel queries eenvoudiger. Haal de SelectionControls op en match ze met de gegevens uit indexDB.

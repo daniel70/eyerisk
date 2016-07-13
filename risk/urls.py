@@ -2,7 +2,7 @@ import django.contrib.auth.urls
 from django.conf.urls import url, include
 from .views import SelectionDetail, SelectionList, SelectionCreate, SelectionUpdate, SelectionControlAssess, \
     SelectionDelete, StandardViewSet, SelectionViewSet, ControlDomainViewSet, SelectionControlViewSet, \
-    SelectionControlView, ControlSelectionView, control_selection
+    SelectionControlView, ControlSelectionView, control_selection, control_selection_react
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^selection/(?P<pk>\d+)/delete$', SelectionDelete.as_view(), name='selection-delete'),
     url(r'^selectioncontrol/(?P<pk>\d+)/$', SelectionControlView.as_view(), name='selection-control'),
     url(r'^controlselection/(?P<pk>\d+)/$', control_selection, name='control-selection'),
+    url(r'^controlselectionreact/(?P<pk>\d+)/$', control_selection_react, name='control-selection-react'),
     # url(r'^controlselection/(?P<pk>\d+)/$', ControlSelectionView.as_view(), name='control-selection'),
     url(r'^selectioncontrol/(?P<selection_id>\d+)/assess$', SelectionControlAssess.as_view(), name='selection-assess'),
 ]

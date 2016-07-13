@@ -115,12 +115,31 @@ class ControlSelectionView(LoginRequiredMixin, generic.TemplateView):
 
 def control_selection(request, pk):
     selection = get_object_or_404(Selection, pk=pk)
+
     if request.is_ajax():
         if request.method == "POST":
             post_dict = request.POST.dict()
+            print(post_dict)
+            if not post_dict['response'] in ['A', 'M', 'T']:
+                return HttpResponse(status=422)  #unprocessable entry
 
+        # update the database
+        controls = post_dict['controls'].split('-')
+        update = SelectionControl.objects.filter(selection=selection)
+        # first filter on standard
+        update = update.filter(control__controlpractice__controlprocess__controldomain__standard=controls.pop(0))
+        if controls: # second is domain filter
+            update = update.filter(control__controlpractice__controlprocess__controldomain=controls.pop(0))
+        if controls: # third is process filter
+            update = update.filter(control__controlpractice__controlprocess=controls.pop(0))
+        if controls: # fourth is practice filter
+            update = update.filter(control__controlpractice=controls.pop(0))
+        if controls: # fifth is control filter
+            update = update.filter(control=controls.pop(0))
 
-        return HttpResponse("OK")
+        affected = update.update(response=post_dict['response'])
+        print(affected, "row(s) affected")
+        return HttpResponse(json.dumps("OK"))
 
 
     selected_controls = SelectionControl.objects.filter(selection=selection).select_related(
@@ -139,9 +158,6 @@ def control_selection(request, pk):
     }
 
     return render(request, template_name='risk/control_selection.html', context=context)
-
-
-
 
 
 class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
@@ -244,7 +260,114 @@ class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
         if standard:
             tree.append(standard)
 
-
         context['tree'] = tree
 
         return context
+
+
+def control_selection_react(request, pk):
+    selection = get_object_or_404(Selection, pk=pk)
+
+    selected_controls = SelectionControl.objects.filter(selection=selection).select_related(
+        'control__controlpractice__controlprocess__controldomain__standard'
+    ).order_by(
+        'control__controlpractice__controlprocess__controldomain__standard__id',
+        'control__controlpractice__controlprocess__controldomain__ordering',
+        'control__controlpractice__controlprocess__ordering',
+        'control__controlpractice__ordering',
+        'control__ordering',
+    )
+
+    # controls = SelectionControl.objects.filter(selection=selection).select_related(
+    #     'control__controlpractice__controlprocess__controldomain__standard'
+    # )
+
+    tree = []
+
+    standard_ids = []
+    domain_ids = []
+    process_ids = []
+    practice_ids = []
+
+    standard = {}
+    domain = {}
+    process = {}
+    practice = {}
+
+    for response in selected_controls:
+
+        id = response.control.controlpractice.controlprocess.controldomain.standard.pk
+        if id not in standard_ids:
+            # we add the *old* standard to the dict and create a new one
+            if standard:
+                tree.append(standard)
+            standard = {
+                "id": id,
+                "text": response.control.controlpractice.controlprocess.controldomain.standard.name,
+                "all": False,
+                "domains": []
+
+            }
+            standard_ids.append(id)
+
+        id = response.control.controlpractice.controlprocess.controldomain.pk
+        if id not in domain_ids:
+            if domain:
+                standard['domains'].append(domain)
+            domain = {
+                "id": id,
+                "text": response.control.controlpractice.controlprocess.controldomain.domain,
+                "all": False,
+                "processes": []
+            }
+            domain_ids.append(id)
+
+        id = response.control.controlpractice.controlprocess.pk
+        if id not in process_ids:
+            if process:
+                domain['processes'].append(process)
+            process = {
+                "id": id,
+                "text": response.control.controlpractice.controlprocess.process_name,
+                "all": False,
+                "practices": []
+            }
+            process_ids.append(id)
+
+        id = response.control.controlpractice.pk
+        if id not in practice_ids:
+            if practice:
+                process['practices'].append(practice)
+            practice = {
+                "id": id,
+                "text": response.control.controlpractice.practice_name,
+                "all": False,
+                "activities": []
+            }
+            practice_ids.append(id)
+
+        practice['activities'].append(
+            {
+                "id": response.control.pk,
+                "text": response.control.activity,
+                "response_id": response.pk,
+                "value": response.response,
+            }
+        )
+
+    if practice:
+        process['practices'].append(practice)
+    if process:
+        domain['processes'].append(process)
+    if domain:
+        standard['domains'].append(domain)
+    if standard:
+        tree.append(standard)
+
+    context = {
+        'selection': selection,
+        'tree': json.dumps(tree),
+    }
+
+
+    return render(request, template_name='risk/control_selection_react.html', context=context)
