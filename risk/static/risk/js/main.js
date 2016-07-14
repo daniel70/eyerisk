@@ -4,7 +4,7 @@ $(function() {
       .toggleClass('glyphicon-chevron-right')
       .toggleClass('glyphicon-chevron-down');
   }),
-  $('button').on('click', function(event) {
+  $('snutton').on('click', function(event) {
     event.stopPropagation(); // stop bubble-up into anchor tag
     event.preventDefault();
 //    var controls = $(event.target).closest('a').attr('href'); // e.g. "#ctrl-2-1-43"
