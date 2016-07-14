@@ -37,9 +37,6 @@ class ControlDomainViewSet(viewsets.ModelViewSet):
     serializer_class = ControlDomainSerializer
 
 
-
-
-
 class SelectionDetail(generic.DetailView):
     template_name = 'risk/selection_detail.html'
     model = Selection
@@ -53,6 +50,7 @@ class SelectionList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Selection.objects.filter(company=self.request.user.employee.company)
 
+
 class SelectionCreate(LoginRequiredMixin, generic.CreateView):
     """
     When a Selection is created, we also need to associate SelectionDocuments
@@ -63,6 +61,7 @@ class SelectionCreate(LoginRequiredMixin, generic.CreateView):
     """
     template_name = 'risk/selection_create_form.html'
     form_class = SelectionForm  # will point to SelectionDocumentForm later
+    success_url = 'risk-home'
 
     def form_valid(self, form):
         form.instance.company = self.request.user.employee.company
@@ -93,6 +92,7 @@ class SelectionControlAssess(LoginRequiredMixin, generic.TemplateView):
             queryset=SelectionControl.objects.filter(selection=self.kwargs['selection_id'])
         )
         return context
+
 
 class ControlSelectionView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'risk/control_selection.html'
