@@ -8,28 +8,30 @@ class StandardSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'is_active')
 
 
-class SelectionSerializer(serializers.HyperlinkedModelSerializer):
-    standards = StandardSerializer(many=True, read_only=True)
+class SelectionSerializer(serializers.ModelSerializer):
+    # standards = StandardSerializer(many=True, read_only=True)
 
     class Meta:
         model = Selection
         fields = ('id', 'name', 'standards')
+        depth = 1
 
 
-class ControlDomainSerializer(serializers.HyperlinkedModelSerializer):
-    standard = StandardSerializer(many=False, read_only=True)
+class ControlDomainSerializer(serializers.ModelSerializer):
+    # standard = StandardSerializer(many=False, read_only=True)
 
     class Meta:
         model = ControlDomain
         fields = ('id', 'standard', 'ordering', 'area', 'domain')
 
 
-class ControlProcessSerializer(serializers.HyperlinkedModelSerializer):
-    controldomain = ControlDomainSerializer(many=False, read_only=True)
+class ControlProcessSerializer(serializers.ModelSerializer):
+    # controldomain = ControlDomainSerializer(many=False, read_only=True)
 
     class Meta:
         model = ControlProcess
         fields = ('id', 'controldomain', 'ordering', 'process_id', 'process_name', 'process_description', 'process_purpose')
+        # depth = 2
 
 
 class ControlPracticeSerializer(serializers.HyperlinkedModelSerializer):
@@ -48,9 +50,9 @@ class ControlActivitySerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'controlpractice', 'ordering', 'activity_id', 'activity', 'activity_help')
 
 
-class SelectionControlSerializer(serializers.HyperlinkedModelSerializer):
-    selection = SelectionSerializer(many=False, read_only=True)
-    control = ControlActivitySerializer(many=False, read_only=True)
+class SelectionControlSerializer(serializers.ModelSerializer):
+    # selection = SelectionSerializer(many=False, read_only=True)
+    # control = ControlActivitySerializer(many=False, read_only=True)
 
     class Meta:
         model = SelectionControl

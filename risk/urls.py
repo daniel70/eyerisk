@@ -1,18 +1,10 @@
 import django.contrib.auth.urls
 from django.conf.urls import url, include
 from .views import SelectionDetail, SelectionList, SelectionCreate, SelectionUpdate, SelectionControlAssess, \
-    SelectionDelete, StandardViewSet, SelectionViewSet, ControlDomainViewSet, SelectionControlViewSet, \
-    SelectionControlView, ControlSelectionView, control_selection, control_selection_react
-from rest_framework import routers
+    SelectionDelete, SelectionControlView, ControlSelectionView, control_selection, control_selection_react
 
-router = routers.DefaultRouter()
-router.register(r'standards', StandardViewSet)
-router.register(r'selections', SelectionViewSet)
-router.register(r'controldomains', ControlDomainViewSet)
-router.register(r'selectioncontrols', SelectionControlViewSet)
 
 urlpatterns = [
-    url(r'^api/', include(router.urls)),
     url(r'^$', SelectionList.as_view(), name='risk-home'),
     url(r'^selection/$', SelectionList.as_view(), name='selection-list'),
     url(r'^selection/(?P<pk>\d+)/$', SelectionDetail.as_view(), name='selection-detail'),

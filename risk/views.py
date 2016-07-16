@@ -1,18 +1,23 @@
 import json
 
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
-from .models import Standard, Selection, SelectionControl, ControlDomain
+
+from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
-from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer
+from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer, \
+    ControlProcessSerializer
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 from collections import OrderedDict, defaultdict
 
+
 class StandardViewSet(viewsets.ModelViewSet):
-    queryset = Standard.objects.filter(is_active=True)
+    queryset = Standard.objects.filter()
     serializer_class = StandardSerializer
 
 
@@ -23,6 +28,15 @@ class SelectionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Selection.objects.filter(company=self.request.user.employee.company)
 
+    @detail_route(methods=['get'], url_path='controls')
+    def get_selection(self, request, pk=None):
+        """
+        This function will be available at: /api/selection/{pk}/controls
+        It returns all the SelectionControls and all related information up to the Standard
+
+        """
+        return Response({"hello": "daniel"})
+
 
 class SelectionControlViewSet(viewsets.ModelViewSet):
     queryset = SelectionControl.objects.all()
@@ -32,9 +46,18 @@ class SelectionControlViewSet(viewsets.ModelViewSet):
         return SelectionControl.objects.filter(selection__company=self.request.user.employee.company)
 
 
+# class SelectionStandardViewSet(viewsets.ModelViewSet):
+#     queryset = SelectionStandard.objects.all()
+
+
 class ControlDomainViewSet(viewsets.ModelViewSet):
     queryset = ControlDomain.objects.all()
     serializer_class = ControlDomainSerializer
+
+
+class ControlProcessViewSet(viewsets.ModelViewSet):
+    queryset = ControlProcess.objects.all()
+    serializer_class = ControlProcessSerializer
 
 
 class SelectionDetail(generic.DetailView):
@@ -61,12 +84,14 @@ class SelectionCreate(LoginRequiredMixin, generic.CreateView):
     """
     template_name = 'risk/selection_create_form.html'
     form_class = SelectionForm  # will point to SelectionDocumentForm later
-    success_url = 'risk-home'
+    success_url = 'selection-edit'
 
     def form_valid(self, form):
         form.instance.company = self.request.user.employee.company
         return super(SelectionCreate, self).form_valid(form)
 
+    def get_success_url(self):
+        return reverse('selection-edit', args=(self.object.pk,))
 
 class SelectionUpdate(LoginRequiredMixin, generic.UpdateView):
     template_name = 'risk/selection_update_form.html'
