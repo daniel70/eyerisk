@@ -247,9 +247,26 @@ class Scenario(models.Model):
     mitigation = models.TextField()
     negative = models.TextField(blank=True)
     positive = models.TextField(blank=True)
+    process_enablers = models.ManyToManyField(ControlProcess, through='ProcessEnablers')
 
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ['reference']
+
+
+class ProcessEnablers(models.Model):
+    HIGH = 'H'
+    MEDIUM = 'M'
+    LOW = 'L'
+    EFFECTS = (
+        (HIGH, 'High'),
+        (MEDIUM, 'Medium'),
+        (LOW, 'Low'),
+    )
+    process = models.ForeignKey(ControlProcess, on_delete=models.CASCADE)
+    scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    freq_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
+    impact_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
+    is_essential_control = models.BooleanField(default=True)
