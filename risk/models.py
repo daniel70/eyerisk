@@ -83,7 +83,7 @@ class ControlPractice(models.Model):
     practice_governance = models.TextField(blank=True) # code_text
 
     def __str__(self):
-        return self.practice_name
+        return '{0}. {1}'.format(self.practice_id, self.practice_name)
 
     class Meta:
         ordering = ['controlprocess__controldomain__standard', 'controlprocess__controldomain__ordering',
@@ -247,7 +247,7 @@ class Scenario(models.Model):
     mitigation = models.TextField()
     negative = models.TextField(blank=True)
     positive = models.TextField(blank=True)
-    process_enabler = models.ManyToManyField(ControlProcess, through='ProcessEnabler')
+    process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
 
     def __str__(self):
         return self.title
@@ -265,7 +265,7 @@ class ProcessEnabler(models.Model):
         (MEDIUM, 'Medium'),
         (LOW, 'Low'),
     )
-    process = models.ForeignKey(ControlProcess, on_delete=models.CASCADE)
+    practice = models.ForeignKey(ControlPractice, on_delete=models.CASCADE)
     scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     freq_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
     impact_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
