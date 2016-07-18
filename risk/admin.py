@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Impact, Likelyhood, RiskMap, Employee, Company, Scenario, ScenarioCategory
+    Selection, Impact, Likelyhood, RiskMap, Employee, Company, Scenario, ScenarioCategory, ProcessEnabler
 
 
 class EmployeeInline(admin.StackedInline):
@@ -85,8 +85,15 @@ class LikelyhoodAdmin(admin.ModelAdmin):
 class ScenarioCategoryAdmin(admin.ModelAdmin):
     list_display = ('nr', 'name')
 
+
+class ProcessEnablerInline(admin.TabularInline):
+    model = ProcessEnabler
+    extra = 1
+
+
 class ScenarioAdmin(admin.ModelAdmin):
     list_display = ('reference', 'title')
+    inlines = (ProcessEnablerInline,)
 
 
 admin.site.unregister(User)

@@ -68,7 +68,7 @@ class ControlProcess(models.Model):
     process_purpose = models.TextField(blank=True)
 
     def __str__(self):
-        return self.process_name
+        return '{0}. {1}'.format(self.process_id, self.process_name)
 
     class Meta:
         ordering = ['controldomain__standard', 'controldomain__ordering', 'ordering',]
@@ -247,7 +247,7 @@ class Scenario(models.Model):
     mitigation = models.TextField()
     negative = models.TextField(blank=True)
     positive = models.TextField(blank=True)
-    process_enablers = models.ManyToManyField(ControlProcess, through='ProcessEnablers')
+    process_enabler = models.ManyToManyField(ControlProcess, through='ProcessEnabler')
 
     def __str__(self):
         return self.title
@@ -256,7 +256,7 @@ class Scenario(models.Model):
         ordering = ['reference']
 
 
-class ProcessEnablers(models.Model):
+class ProcessEnabler(models.Model):
     HIGH = 'H'
     MEDIUM = 'M'
     LOW = 'L'
