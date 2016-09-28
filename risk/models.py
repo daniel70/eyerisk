@@ -68,7 +68,7 @@ class ControlProcess(models.Model):
     process_purpose = models.TextField(blank=True)
 
     def __str__(self):
-        return self.process_name
+        return '{0}. {1}'.format(self.process_id, self.process_name)
 
     class Meta:
         ordering = ['controldomain__standard', 'controldomain__ordering', 'ordering',]
@@ -83,7 +83,7 @@ class ControlPractice(models.Model):
     practice_governance = models.TextField(blank=True) # code_text
 
     def __str__(self):
-        return self.practice_name
+        return '{0}. {1}'.format(self.practice_id, self.practice_name)
 
     class Meta:
         ordering = ['controlprocess__controldomain__standard', 'controlprocess__controldomain__ordering',
@@ -252,9 +252,26 @@ class Scenario(models.Model):
     mitigation = models.TextField()
     negative = models.TextField(blank=True)
     positive = models.TextField(blank=True)
+    process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
 
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ['reference']
+
+
+class ProcessEnabler(models.Model):
+    HIGH = 'H'
+    MEDIUM = 'M'
+    LOW = 'L'
+    EFFECTS = (
+        (HIGH, 'High'),
+        (MEDIUM, 'Medium'),
+        (LOW, 'Low'),
+    )
+    practice = models.ForeignKey(ControlPractice, on_delete=models.CASCADE)
+    scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    freq_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
+    impact_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
+    is_essential_control = models.BooleanField(default=True)
