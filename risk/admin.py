@@ -85,15 +85,15 @@ class LikelihoodAdmin(admin.ModelAdmin):
 class ScenarioCategoryAdmin(admin.ModelAdmin):
     list_display = ('nr', 'name')
 
-
-class ProcessEnablerInline(admin.TabularInline):
-    model = ProcessEnabler
-    extra = 1
+# TODO: solve merge problem, what is ProcessEnabler?
+# class ProcessEnablerInline(admin.TabularInline):
+#     model = ProcessEnabler
+#     extra = 1
 
 
 class ScenarioAdmin(admin.ModelAdmin):
     list_display = ('reference', 'title')
-    inlines = (ProcessEnablerInline,)
+#   inlines = (ProcessEnablerInline,)
 
 
 admin.site.unregister(User)
