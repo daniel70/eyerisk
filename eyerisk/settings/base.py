@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'two_factor',
     'bootstrapform',
     'rest_framework',
+    'crispy_forms',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -157,5 +158,17 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
+}
+
+EYERISK = {
+    # the min/max number of impacts and risks
+    # this will determine the number of columns and rows in the heat maps
+    'MINIMUM_IMPACTS': 3,
+    'MAXIMUM_IMPACTS': 9,
+    'MINIMUM_LIKELIHOOD': 3,
+    'MAXIMUM_LIKELIHOOD': 9,
 }

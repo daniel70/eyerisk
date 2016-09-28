@@ -1,6 +1,10 @@
 {% extends "risk/base.html" %}
 {% load bootstrap %}
 {% block content %}
+<div id="controlTree">
+    {{ data }}
+</div>
+
   <h2>{{ selection.name }}</h2>
     <input type="hidden" id="csrftoken" value="{{ csrf_token }}" />
     <div class="list-group list-group-root well">

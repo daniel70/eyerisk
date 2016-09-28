@@ -11,9 +11,16 @@ from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
 from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer, \
     ControlProcessSerializer
 from rest_framework import viewsets
+from rest_framework import generics
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from collections import OrderedDict, defaultdict
+
+
+
+class StandardListView(generics.ListAPIView):
+    queryset = Standard.objects.all()
+    serializer_class = StandardSerializer
 
 
 class StandardViewSet(viewsets.ModelViewSet):
@@ -93,6 +100,7 @@ class SelectionCreate(LoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         return reverse('selection-edit', args=(self.object.pk,))
 
+
 class SelectionUpdate(LoginRequiredMixin, generic.UpdateView):
     template_name = 'risk/selection_update_form.html'
     form_class = SelectionForm
@@ -165,7 +173,6 @@ def control_selection(request, pk):
         affected = update.update(response=post_dict['response'])
         print(affected, "row(s) affected")
         return HttpResponse(json.dumps("OK"))
-
 
     selected_controls = SelectionControl.objects.filter(selection=selection).select_related(
         'control__controlpractice__controlprocess__controldomain__standard'
@@ -393,6 +400,5 @@ def control_selection_react(request, pk):
         'selection': selection,
         'tree': json.dumps(tree),
     }
-
 
     return render(request, template_name='risk/control_selection_react.html', context=context)

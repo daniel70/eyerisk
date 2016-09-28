@@ -15,6 +15,6 @@
     </ul>
     {% endif %}
     <button type="submit" class="btn btn-danger">Yes, I'm sure</button>
-    <button type="submit" class="btn ">No, take me back</button>
+    <a href="{% url 'selection-list' %}" class="btn btn-default" role="button">No, take me back</a>
 </form>
 {% endblock content %}

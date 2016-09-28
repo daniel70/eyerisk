@@ -184,27 +184,32 @@ class RiskMap(models.Model):
 
 class Impact(models.Model):
     riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
-    rating = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(0)])
-    descriptor = models.CharField(max_length=30, unique=True)
+    rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_IMPACTS']),
+                                             MinValueValidator(settings.EYERISK['MINIMUM_IMPACTS'])])
+    descriptor = models.CharField(max_length=30)
     definition = models.TextField(blank=False)
 
     def __str__(self):
         return self.descriptor
 
     class Meta:
+        unique_together = ('riskmap', 'descriptor')
         ordering = ['rating']
 
 
-class Likelyhood(models.Model):
+class Likelihood(models.Model):
     riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
-    rating = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(0)])
-    descriptor = models.CharField(max_length=30, unique=True)
+    rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_LIKELIHOOD']),
+                                             MinValueValidator(settings.EYERISK['MINIMUM_LIKELIHOOD'])])
+    max_value = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
+    descriptor = models.CharField(max_length=30)
     definition = models.TextField(blank=False)
 
     def __str__(self):
         return self.descriptor
 
     class Meta:
+        unique_together = ('riskmap', 'descriptor')
         ordering = ['rating']
 
 

@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
@@ -23,7 +24,8 @@ from rest_framework import routers
 from risk import views as riskviews
 
 router = routers.DefaultRouter()
-router.register(r'standards', riskviews.StandardViewSet)
+router.register(r'standards', riskviews.StandardListView.as_view(), base_name='Standard')
+# router.register(r'standards', riskviews.StandardViewSet)
 router.register(r'selection', riskviews.SelectionViewSet)
 router.register(r'controldomains', riskviews.ControlDomainViewSet)
 router.register(r'controlprocess', riskviews.ControlProcessViewSet)

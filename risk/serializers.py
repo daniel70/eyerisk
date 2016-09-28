@@ -2,7 +2,7 @@ from .models import Standard, Selection, SelectionControl, ControlDomain, Contro
 from rest_framework import serializers
 
 
-class StandardSerializer(serializers.HyperlinkedModelSerializer):
+class StandardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Standard
         fields = ('id', 'name', 'is_active')
