@@ -32,3 +32,15 @@
 
 - alle control* tabellen worden in de locale (indexdb) database ingeladen wanneer de gebuiker een verbinding
   maakt. Dit maakt veel queries eenvoudiger. Haal de SelectionControls op en match ze met de gegevens uit indexDB.
+
+
+=========================================================================================
+Heatmaps
+=========================================================================================
+Deze worden gemaakt op drie niveau's
+
+Enterprise / Company Risk
+    ---> Risk Type (Operational...)
+        ---> Risk Category (Informatie Technology Risk...)
+
+De scenario's vallen onder de 'Risk Category'.

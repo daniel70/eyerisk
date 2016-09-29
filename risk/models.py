@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -17,6 +17,18 @@ class Company(models.Model):
     class Meta:
         ordering = ['name', ]
         verbose_name_plural = 'companies'
+
+
+def company_created(sender, instance, created, **kwargs):
+    """
+    When a Company is created, the COSO heatmap is copied into this company.
+    This heatmap consists of Likelihood and Risk tuples.
+    The template tables have an 'is_template' column that is True for templates.
+    """
+    if created:
+        print("Company {} was created.".format(instance))
+
+post_save.connect(company_created, sender=Company)
 
 
 class Employee(models.Model):
