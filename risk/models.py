@@ -185,44 +185,82 @@ class SelectionControl(models.Model):
     class Meta:
         unique_together = ('selection', 'control')
 
-
 class RiskMap(models.Model):
-    name = models.CharField(max_length=30, unique=True)
+    STRATEGIC = 'S'
+    FINANCIAL = 'F'
+    OPERATIONAL = 'O'
+    COMPLIANCE = 'C'
+    RISKTYPE_CHOICES = (
+        (STRATEGIC, 'Strategic'),
+        (FINANCIAL, 'Financial'),
+        (OPERATIONAL, 'Operational'),
+        (COMPLIANCE, 'Compliance'),
+    )
+
+    IMPACT = 'I'
+    LIKELIHOOD = 'L'
+    AXISTYPE_CHOICES = (
+        (IMPACT, 'Impact'),
+        (LIKELIHOOD, 'Likelihood'),
+    )
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
+    riskmap_id = models.IntegerField(auto_created=True)
+    parent_id = models.IntegerField(blank=True, null=True)
+    # parent_id = models.ForeignKey('self', to_field='riskmap_id', blank=True, null=True)
+    risk_type = models.CharField(max_length=1, choices=RISKTYPE_CHOICES, blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    axis_type = models.CharField(max_length=1, choices=AXISTYPE_CHOICES)
+    position = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_RISKMAP_RATINGS'])])
+    rating = models.IntegerField(validators=[MinValueValidator(0),])
+    descriptor = models.CharField(max_length=30)
+    definition = models.TextField(blank=False)
     is_template = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('company', 'riskmap_id', 'risk_type', 'position')
+        ordering = ('company', 'risk_type', 'name', 'axis_type', 'position')
 
     def __str__(self):
         return self.name
 
-
-class Impact(models.Model):
-    riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
-    rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_IMPACTS']),
-                                             MinValueValidator(settings.EYERISK['MINIMUM_IMPACTS'])])
-    descriptor = models.CharField(max_length=30)
-    definition = models.TextField(blank=False)
-
-    def __str__(self):
-        return self.descriptor
-
-    class Meta:
-        unique_together = ('riskmap', 'descriptor')
-        ordering = ['rating']
-
-
-class Likelihood(models.Model):
-    riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
-    rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_LIKELIHOOD']),
-                                             MinValueValidator(settings.EYERISK['MINIMUM_LIKELIHOOD'])])
-    max_value = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
-    descriptor = models.CharField(max_length=30)
-    definition = models.TextField(blank=False)
-
-    def __str__(self):
-        return self.descriptor
-
-    class Meta:
-        unique_together = ('riskmap', 'descriptor')
-        ordering = ['rating']
+# class RiskMap(models.Model):
+#     name = models.CharField(max_length=30, unique=True)
+#     is_template = models.BooleanField(default=False)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class Impact(models.Model):
+#     riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
+#     rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_IMPACTS']),
+#                                              MinValueValidator(settings.EYERISK['MINIMUM_IMPACTS'])])
+#     descriptor = models.CharField(max_length=30)
+#     definition = models.TextField(blank=False)
+#
+#     def __str__(self):
+#         return self.descriptor
+#
+#     class Meta:
+#         unique_together = ('riskmap', 'descriptor')
+#         ordering = ['rating']
+#
+#
+# class Likelihood(models.Model):
+#     riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
+#     rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_LIKELIHOOD']),
+#                                              MinValueValidator(settings.EYERISK['MINIMUM_LIKELIHOOD'])])
+#     max_value = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
+#     descriptor = models.CharField(max_length=30)
+#     definition = models.TextField(blank=False)
+#
+#     def __str__(self):
+#         return self.descriptor
+#
+#     class Meta:
+#         unique_together = ('riskmap', 'descriptor')
+#         ordering = ['rating']
 
 
 class ScenarioCategory(models.Model):

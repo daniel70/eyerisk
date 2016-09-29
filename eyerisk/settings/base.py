@@ -167,8 +167,6 @@ REST_FRAMEWORK = {
 EYERISK = {
     # the min/max number of impacts and risks
     # this will determine the number of columns and rows in the heat maps
-    'MINIMUM_IMPACTS': 3,
-    'MAXIMUM_IMPACTS': 9,
-    'MINIMUM_LIKELIHOOD': 3,
-    'MAXIMUM_LIKELIHOOD': 9,
+    'MINIMUM_RISKMAP_RATINGS': 3,
+    'MAXIMUM_RISKMAP_RATINGS': 9,
 }

@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Impact, Likelihood, RiskMap, Employee, Company, Scenario, ScenarioCategory
+    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap
 
 
 class EmployeeInline(admin.StackedInline):
@@ -74,14 +74,6 @@ class ControlActivityAdmin(TabbedTranslationAdmin):
     # )
 
 
-class ImpactAdmin(admin.ModelAdmin):
-    list_display = ('rating', 'descriptor')
-
-
-class LikelihoodAdmin(admin.ModelAdmin):
-    list_display = ('rating', 'descriptor')
-
-
 class ScenarioCategoryAdmin(admin.ModelAdmin):
     list_display = ('nr', 'name')
 
@@ -95,20 +87,25 @@ class ScenarioAdmin(admin.ModelAdmin):
     list_display = ('reference', 'title')
 #   inlines = (ProcessEnablerInline,)
 
+class RiskMapAdmin(admin.ModelAdmin):
+    list_display = ('company', 'riskmap_id', 'name', 'risk_type', 'axis_type', 'position', 'descriptor', 'is_template')
+    list_filter = (
+        ('is_template', admin.BooleanFieldListFilter),
+        ('company', admin.RelatedOnlyFieldListFilter),
+    )
+
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Company)
+admin.site.register(RiskMap, RiskMapAdmin)
 admin.site.register(Standard, StandardAdmin)
 admin.site.register(ControlDomain, ControlDomainAdmin)
 admin.site.register(ControlProcess, ControlProcessAdmin)
 admin.site.register(ControlPractice, ControlPracticeAdmin)
 admin.site.register(ControlActivity, ControlActivityAdmin)
 admin.site.register(Selection)
-admin.site.register(RiskMap)
-admin.site.register(Impact, ImpactAdmin)
-admin.site.register(Likelihood, LikelihoodAdmin)
 admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
 

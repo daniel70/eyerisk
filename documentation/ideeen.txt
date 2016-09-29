@@ -39,8 +39,42 @@ Heatmaps
 =========================================================================================
 Deze worden gemaakt op drie niveau's
 
-Enterprise / Company Risk
+Enterprise Risk
     ---> Risk Type (Operational...)
         ---> Risk Category (Informatie Technology Risk...)
 
 De scenario's vallen onder de 'Risk Category'.
+
+Op alle niveau's hebben we:
+- Impact (y-as)
+- Likelihood (x-as)
+minimaal 3 en maximaal 9 entries, alle niveau's hebben evenveel entries, default 5.
+
+Wanneer een nieuw bedrijf wordt aangemaakt dan wordt, automatisch, het COSO model gekopieerd voor de Enterprise.
+Deze risk map wordt vervolgens gekopieerd naar één het volgende niveau waarbij gekozen kan worden tussen:
+- Strategic
+- Financial
+- Operational
+- Compliance
+- Projects?
+
+Op dit niveau kan de risk map opnieuw worden aangepast maar het aantal rijen en kolommen blijft gelijk aan de risk map
+van de Enterprise, zodat een Roll-Up van de Risks mogelijk is.
+
+Op het derde niveau (Risk Category) kan opnieuw een risk map worden gemaakt, deze krijgt een door de gebruiker gedefinieerde naam.
+Standaard heeft deze risk map dezelfde waarden als de bovenliggende risk map (Risk Type).
+Deze risk map wordt gevuld a.d.h.v. Scenario's.
+
+RiskMap tabel:
+- id (row id)
+- compagny_id (nullable for template)
+- riskmap_id (for grouping of rows and columns per riskmap)
+- parent_id (nullable for level 1)
+- risk_type (nullable for level 1)
+- name (nullable for level 1 and 2)
+- axis_type ['impact', 'likelihood']
+- position (2 > pos > 10, readonly)
+- rating
+- descriptor
+- definition
+- is_template
