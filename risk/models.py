@@ -21,12 +21,18 @@ class Company(models.Model):
 
 def company_created(sender, instance, created, **kwargs):
     """
-    When a Company is created, the COSO heatmap is copied into this company.
-    This heatmap consists of Likelihood and Risk tuples.
-    The template tables have an 'is_template' column that is True for templates.
+    When a Company is created, the COSO risk map is copied into this company.
+    This risk map consists of Likelihood and Risk tuples.
+    The template records have an 'is_template' column that is True for templates.
     """
     if created:
-        print("Company {} was created.".format(instance))
+        max_riskmap_id = RiskMap.objects.latest('riskmap_id').riskmap_id
+        for rm in RiskMap.objects.filter(is_template=True):
+            rm.pk = None
+            rm.riskmap_id = max_riskmap_id + 1
+            rm.company = instance
+            rm.is_template = False
+            rm.save()
 
 post_save.connect(company_created, sender=Company)
 
@@ -218,7 +224,7 @@ class RiskMap(models.Model):
     is_template = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('company', 'riskmap_id', 'risk_type', 'position')
+        unique_together = ('company', 'riskmap_id', 'risk_type', 'axis_type', 'position')
         ordering = ('company', 'risk_type', 'name', 'axis_type', 'position')
 
     def __str__(self):
