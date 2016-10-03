@@ -48,7 +48,8 @@ De scenario's vallen onder de 'Risk Category'.
 Op alle niveau's hebben we:
 - Impact (y-as)
 - Likelihood (x-as)
-minimaal 3 en maximaal 9 entries, alle niveau's hebben evenveel entries, default 5.
+vervallen --> minimaal 3 en maximaal 9 entries, alle niveau's hebben evenveel entries, default 5.
+Na overleg is besloten dat er ALTIJD 5 niveau's per as zijn.
 
 Wanneer een nieuw bedrijf wordt aangemaakt dan wordt, automatisch, het COSO model gekopieerd voor de Enterprise.
 Deze risk map wordt vervolgens gekopieerd naar één het volgende niveau waarbij gekozen kan worden tussen:

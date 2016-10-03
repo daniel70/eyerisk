@@ -1,0 +1,43 @@
+{% extends "risk/base.html" %}
+{% load bootstrap %}
+{% block content %}
+<h1>Welcome to Risk Maps</h1>
+<hr>
+<p>Here we will show you how to use Risk Maps.<br>
+Please know that the Risk Maps that you create will be created.<br>
+</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="risk-hierarchy">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" class="btn btn-warning">ENTERPRISE</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-2">
+                    <a href="#" class="btn btn-info">CREATE STRATEGIC TYPE</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-2">
+                    <a href="#" class="btn btn-info">CREATE FINANCIAL TYPE</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-2">
+                    <a href="#" class="btn btn-info">CREATE OPERATIONAL TYPE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <form action="" method="post">
+            <input type="submit" value="Update Risk Map" />
+        </form>
+    </div>
+
+</div>
+
+{% endblock content %}

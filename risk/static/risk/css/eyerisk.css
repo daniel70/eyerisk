@@ -47,3 +47,10 @@
     margin-right: 5px;
 }
 /* end nested grouping */
+
+/* risk-hierarchy */
+.risk-hierarchy .row:not(:first-child) {
+    margin-top: 15px;
+}
+
+/* end risk-hierarchy */

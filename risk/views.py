@@ -17,6 +17,10 @@ from rest_framework.response import Response
 from collections import OrderedDict, defaultdict
 
 
+def riskmaps(request):
+    return render(request, template_name='risk/riskmaps.html')
+
+
 
 class StandardListView(generics.ListAPIView):
     queryset = Standard.objects.all()
