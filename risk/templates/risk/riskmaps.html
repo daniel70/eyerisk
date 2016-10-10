@@ -3,9 +3,6 @@
 {% block content %}
 <h1>Welcome to Risk Maps</h1>
 <hr>
-<p>Here we will show you how to use Risk Maps.<br>
-Please know that the Risk Maps that you create will be created.<br>
-</p>
 
 <div class="row">
     <div class="col-md-4">
@@ -39,5 +36,22 @@ Please know that the Risk Maps that you create will be created.<br>
     </div>
 
 </div>
+Hieronder dus<br>
+<div id="content"></div>
+<script type="text/babel">
+var RiskMapBox = React.createClass({
+    render: function () {
+        return (
+            <div className="riskmapBox">
+                Hello, world! I am a RiskMapBox
+            </div>
+        );
+    }
+});
 
+ReactDOM.render(
+    <RiskMapBox />,
+    document.getElementById('content')
+);
+</script>
 {% endblock content %}

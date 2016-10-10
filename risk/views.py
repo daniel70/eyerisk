@@ -1,12 +1,13 @@
 import json
 
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 
-from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess
+from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
 from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer, \
     ControlProcessSerializer
@@ -18,7 +19,9 @@ from collections import OrderedDict, defaultdict
 
 
 def riskmaps(request):
-    return render(request, template_name='risk/riskmaps.html')
+    maps = RiskMap.objects.filter(company=request.user.employee.company, is_template=False).values_list()
+    maps_json = json.dumps(list(maps), cls=DjangoJSONEncoder)
+    return render(request, template_name='risk/riskmaps.html', context={'riskmaps': maps_json})
 
 
 

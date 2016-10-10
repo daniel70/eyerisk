@@ -32,6 +32,7 @@ def company_created(sender, instance, created, **kwargs):
             rm.riskmap_id = max_riskmap_id + 1
             rm.company = instance
             rm.is_template = False
+            rm.name = 'Enterprise'
             rm.save()
 
 post_save.connect(company_created, sender=Company)
