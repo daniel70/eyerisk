@@ -9,69 +9,10 @@ from django.shortcuts import render, get_object_or_404
 
 from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
-from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer, \
-    ControlProcessSerializer
-from rest_framework import viewsets
-from rest_framework import generics
-from rest_framework.decorators import detail_route
-from rest_framework.response import Response
-from collections import OrderedDict, defaultdict
 
 
 def riskmaps(request):
-    maps = RiskMap.objects.filter(company=request.user.employee.company, is_template=False).values_list()
-    maps_json = json.dumps(list(maps), cls=DjangoJSONEncoder)
-    return render(request, template_name='risk/riskmaps.html', context={'riskmaps': maps_json})
-
-
-
-class StandardListView(generics.ListAPIView):
-    queryset = Standard.objects.all()
-    serializer_class = StandardSerializer
-
-
-class StandardViewSet(viewsets.ModelViewSet):
-    queryset = Standard.objects.filter()
-    serializer_class = StandardSerializer
-
-
-class SelectionViewSet(viewsets.ModelViewSet):
-    queryset = Selection.objects.all()
-    serializer_class = SelectionSerializer
-
-    def get_queryset(self):
-        return Selection.objects.filter(company=self.request.user.employee.company)
-
-    @detail_route(methods=['get'], url_path='controls')
-    def get_selection(self, request, pk=None):
-        """
-        This function will be available at: /api/selection/{pk}/controls
-        It returns all the SelectionControls and all related information up to the Standard
-
-        """
-        return Response({"hello": "daniel"})
-
-
-class SelectionControlViewSet(viewsets.ModelViewSet):
-    queryset = SelectionControl.objects.all()
-    serializer_class = SelectionControlSerializer
-
-    def get_queryset(self):
-        return SelectionControl.objects.filter(selection__company=self.request.user.employee.company)
-
-
-# class SelectionStandardViewSet(viewsets.ModelViewSet):
-#     queryset = SelectionStandard.objects.all()
-
-
-class ControlDomainViewSet(viewsets.ModelViewSet):
-    queryset = ControlDomain.objects.all()
-    serializer_class = ControlDomainSerializer
-
-
-class ControlProcessViewSet(viewsets.ModelViewSet):
-    queryset = ControlProcess.objects.all()
-    serializer_class = ControlProcessSerializer
+    return render(request, template_name='risk/riskmaps.html')
 
 
 class SelectionDetail(generic.DetailView):

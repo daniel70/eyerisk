@@ -33,6 +33,7 @@ def company_created(sender, instance, created, **kwargs):
             rm.company = instance
             rm.is_template = False
             rm.name = 'Enterprise'
+            rm.level = 1 #Enterprise level
             rm.save()
 
 post_save.connect(company_created, sender=Company)
@@ -197,6 +198,13 @@ class RiskMap(models.Model):
     FINANCIAL = 'F'
     OPERATIONAL = 'O'
     COMPLIANCE = 'C'
+    LEVEL_CHOICES = (
+        (0, 'TEMPLATE'),
+        (1, 'ENTERPRISE'),
+        (2, 'RISK TYPE'),
+        (3, 'RISK CATEGORY')
+    )
+
     RISKTYPE_CHOICES = (
         (STRATEGIC, 'Strategic'),
         (FINANCIAL, 'Financial'),
@@ -214,6 +222,7 @@ class RiskMap(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
     riskmap_id = models.IntegerField(auto_created=True)
     parent_id = models.IntegerField(blank=True, null=True)
+    level = models.IntegerField(choices=LEVEL_CHOICES)
     # parent_id = models.ForeignKey('self', to_field='riskmap_id', blank=True, null=True)
     risk_type = models.CharField(max_length=1, choices=RISKTYPE_CHOICES, blank=True, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)

@@ -1,4 +1,5 @@
 {% extends "risk/base.html" %}
+{% load staticfiles %}
 {% load bootstrap %}
 {% block content %}
 <h1>Welcome to Risk Maps</h1>
@@ -36,22 +37,9 @@
     </div>
 
 </div>
-Hieronder dus<br>
+<hr />
 <div id="content"></div>
-<script type="text/babel">
-var RiskMapBox = React.createClass({
-    render: function () {
-        return (
-            <div className="riskmapBox">
-                Hello, world! I am a RiskMapBox
-            </div>
-        );
-    }
-});
+<script src="{% static 'risk/js/riskmaps.js' %}" type="text/babel">
 
-ReactDOM.render(
-    <RiskMapBox />,
-    document.getElementById('content')
-);
 </script>
 {% endblock content %}

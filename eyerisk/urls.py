@@ -22,15 +22,18 @@ from two_factor.urls import urlpatterns as tf_urls
 from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
 from rest_framework import routers
 from risk import views as riskviews
+from risk import api
 
 router = routers.DefaultRouter()
-router.register(r'standards', riskviews.StandardListView.as_view(), base_name='Standard')
-# router.register(r'standards', riskviews.StandardViewSet)
-router.register(r'selection', riskviews.SelectionViewSet)
-router.register(r'controldomains', riskviews.ControlDomainViewSet)
-router.register(r'controlprocess', riskviews.ControlProcessViewSet)
-router.register(r'selectioncontrols', riskviews.SelectionControlViewSet)
-# router.register(r'selectionstandard', riskviews.SelectionStandardViewSet)
+router.register(r'riskmaps', api.RiskMapViewSet, base_name='RiskMap')
+
+# router.register(r'standards', api.StandardListView.as_view(), base_name='Standard')
+# router.register(r'standards', api.StandardViewSet)
+# router.register(r'selection', api.SelectionViewSet)
+# router.register(r'controldomains', api.ControlDomainViewSet)
+# router.register(r'controlprocess', api.ControlProcessViewSet)
+# router.register(r'selectioncontrols', api.SelectionControlViewSet)
+# router.register(r'selectionstandard', api.SelectionStandardViewSet)
 
 
 urlpatterns = [
