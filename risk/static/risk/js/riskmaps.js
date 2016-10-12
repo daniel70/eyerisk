@@ -19,9 +19,23 @@ var RiskMapBox = React.createClass({
         this.loadRiskMaps();
     },
     render: function () {
+        // we use the following array to pick the properties and from the objects
+        // and also the select unique entries based on the same array
+        var pickunique = ['riskmap_id', 'level', 'name'];
+        var nodes = _.uniqBy(_.map(this.state.data, _.partialRight(_.pick, pickunique)), pickunique);
         return (
-            <div className="riskmapBox">
-                <RiskMapList data={this.state.data} />
+            <div className="row">
+                <div className="col-md-4">
+                    <div className="riskmapBox">
+                        <h1>Risk maps</h1>
+                        <RiskMapList data={nodes} />
+                    </div>
+                </div>
+                <div className="col-md-8">
+                    <form action="" method="post">
+                        <input type="submit" value="Update Risk Map" />
+                    </form>
+                </div>
             </div>
         );
     }
@@ -31,7 +45,7 @@ var RiskMapList = React.createClass({
     render: function() {
         var riskmapNodes = this.props.data.map(function(riskmap) {
             return (
-                <div><textarea cols="70" rows="7">{riskmap.definition}</textarea></div>
+                <div>{riskmap.level} - {riskmap.name}</div>
             );
         });
         return (
