@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load bootstrap %}
 {% block content %}
-<h1>Welcome to Risk Maps</h1>
+<h1>Risk Maps</h1>
 <hr>
 
 <div class="row">
@@ -25,21 +25,290 @@
             </div>
             <div class="row">
                 <div class="col-md-10 col-md-offset-2">
-                    <a href="#" class="btn btn-info">CREATE OPERATIONAL TYPE</a>
+                    <a href="#" class="btn btn-primary">OPERATIONAL TYPE</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-4">
+                    <a href="#" class="btn btn-success">RISK ABC</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-4">
+                    <a href="#" class="btn btn-success">RISK DEF</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-4">
+                    <a href="#" class="btn btn-success">CREATE RISK CATEGORY</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-2">
+                    <a href="#" class="btn btn-info">CREATE COMPLIANCE TYPE</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-8">
         <form action="" method="post">
-            <input type="submit" value="Update Risk Map" />
+            <div class="row">
+                <div class="col-md-12">
+                    <b>IMPACT</b>
+                </div>
+                <!-- impact 1 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingY1">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingY1" placeholder="" value="1000000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionY1">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionY1" placeholder="" value="Incidental">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionY1">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionY1" placeholder="">
+- Financial loss up to €X million
+- Local media attention quickly remedied
+- Not reportable to regulator
+- No injuries to employees or third parties, such as customers or vendors
+- Isolated staff dissatisfaction
+                        </textarea>
+                    </div>
+                </div>
+                <!-- impact 2 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingY2">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingY2" placeholder="" value="10000000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionY2">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionY2" placeholder="" value="Minor">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionY2">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionY2" placeholder="">
+- Financial loss up of €X million up to €X million
+- Local reputational damage
+- Reportable incident to regulator, no follow up
+- No or minor injuries to employees or third parties, such as customers or vendors
+- General staff morale problems and increase in turnover
+                        </textarea>
+                    </div>
+                </div>
+                <!-- impact 3 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingY3">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingY3" placeholder="" value="100000000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionY3">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionY3" placeholder="" value="Moderate">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionY3">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionY3" placeholder="">
+- Financial loss of €X million up to €X million
+- National short-term negative media coverage
+- Report of breach to regulator with immediate correction to be  implemented
+- Out-patient medical treatment required for employees or third parties, such as customers or vendors
+- Widespread staff morale problems and high turnover
+                        </textarea>
+                    </div>
+                </div>
+                <!-- impact 4 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingY4">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingY4" placeholder="" value="1000000000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionY4">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionY4" placeholder="" value="Major">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionY4">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionY4" placeholder="">
+- Financial loss of €X million up to €X million
+- National long-term negative media coverage, significant loss of market share
+- Report to regulator requiring major project for corrective action
+- Limited in-patient care required for employees or third parties, such as customers or vendors
+- Some senior managers leave, high turnover of experienced staff, not perceived as employer of choice
+                        </textarea>
+                    </div>
+                </div>
+                <!-- impact 5 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingY5">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingY5" placeholder="" value="2000000000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionY5">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionY5" placeholder="" value="Extreme">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionY5">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionY5" placeholder="">
+- Financial loss of €X million or more
+- International long-term negative media coverage, game-changing loss of market share
+- Significant prosecution and fines, litigation including class actions, incarceration of leadership
+- Significant injuries or fatalities to employees or third parties, such as customers or vendors
+- Multiple senior leaders leave
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Likelihood</b>
+                </div>
+                <!-- likelihood 1 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingX1">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingX1" placeholder="" value="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionX1">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionX1" placeholder="" value="Rare">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionX1">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionX1" placeholder="">
+- Once in 100 years or less
+- <10% chance of occurrence over life of asset or project
+                        </textarea>
+                    </div>
+                </div>
+                <!-- likelihood 2 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingX2">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingX2" placeholder="" value="10">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionX2">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionX2" placeholder="" value="Unlikely">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionX2">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionX2" placeholder="">
+- Once in 50 years up to once in 100 years
+- 10% up to 35% chance of occurrence over life of asset or project
+                        </textarea>
+                    </div>
+                </div>
+                <!-- likelihood 3 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingX3">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingX3" placeholder="" value="25">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionX3">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionX3" placeholder="" value="Possible">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionX3">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionX3" placeholder="">
+- Once in 25 years up to once in 50 years
+- 35% up to 65% chance of occurrence over life of asset or project
+                        </textarea>
+                    </div>
+                </div>
+                <!-- likelihood 4 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingX4">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingX4" placeholder="" value="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionX4">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionX4" placeholder="" value="Probable">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionX4">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionX4" placeholder="">
+- Once in 2 years up to once in 25 years
+- 65% up to 90% change of occurrence over life of asset or project
+                        </textarea>
+                    </div>
+                </div>
+                <!-- likelihood 5 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtRatingX5">Rating</label>
+                        <input type="text" class="form-control" id="txtRatingX5" placeholder="" value="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDescriptionX5">Description</label>
+                        <input type="text" class="form-control" id="txtDescriptionX5" placeholder="" value="Almost certain">
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <label for="txtDefinitionX5">Definition</label>
+                        <textarea rows="5" class="form-control" id="txtDefinitionX5" placeholder="">
+- Once to once in 2 years or more
+- 90% or greater chance of occurrence over life of asset or project
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <input class="btn btn-primary" type="submit" value="Update Risk Map" />
+                </div>
+            </div>
         </form>
     </div>
 
 </div>
 <hr />
-<div id="content"></div>
-<script src="{% static 'risk/js/riskmaps.js' %}" type="text/babel">
-
-</script>
+<!--<div id="content"></div>-->
+<!--<script src="{% static 'risk/js/riskmaps.js' %}" type="text/babel"></script>-->
 {% endblock content %}
