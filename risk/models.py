@@ -280,8 +280,19 @@ class RiskMap(models.Model):
 
 
 class ScenarioCategory(models.Model):
+    THREAT_TYPE_CHOICES = (
+        ('Malicious', 'Malicious'),
+        ('Accidental', 'Accidental'),
+        ('Error', 'Error'),
+        ('Failure', 'Failure'),
+        ('Natural', 'Natural'),
+        ('External requirement', 'External requirement'),
+    )
+
     nr = models.CharField(max_length=4, primary_key=True)
     name = models.CharField(max_length=100, unique=True)
+    risk_scenario = models.TextField(blank=True)
+    threat_type = models.CharField(max_length=100, help_text="The nature of the event", blank=False)
 
     def __str__(self):
         return self.name

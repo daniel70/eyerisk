@@ -1,5 +1,6 @@
-from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory
-from .models import Selection, SelectionControl
+from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
+    MultipleChoiceField
+from .models import Selection, SelectionControl, ScenarioCategory
 
 
 class SelectionForm(ModelForm):
@@ -23,3 +24,14 @@ class SelectionControlForm(ModelForm):
 
 
 SelectionControlFormSet = modelformset_factory(SelectionControl, form=SelectionControlForm, extra=0, can_delete=False)
+
+
+class ScenarioCategoryForm(ModelForm):
+    threat_type = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=ScenarioCategory.THREAT_TYPE_CHOICES)
+
+    class Meta:
+        model = ScenarioCategory
+        fields = ('nr', 'name', 'risk_scenario')
+        widgets = {
+            'threat_type': CheckboxSelectMultiple(choices=ScenarioCategory.THREAT_TYPE_CHOICES)
+        }

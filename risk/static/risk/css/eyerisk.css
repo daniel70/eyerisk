@@ -56,4 +56,8 @@
 .riskmapBox .row:not(:first-child) {
     margin-top: 15px;
 }
+
+.eye-rm-row {
+    border-top: 1px dotted grey;
+}
 /* end risk-hierarchy */

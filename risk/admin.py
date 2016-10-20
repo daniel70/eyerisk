@@ -2,8 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
+
+from risk.forms import ScenarioCategoryForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap
+    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler
 
 
 class EmployeeInline(admin.StackedInline):
@@ -75,17 +77,19 @@ class ControlActivityAdmin(TabbedTranslationAdmin):
 
 
 class ScenarioCategoryAdmin(admin.ModelAdmin):
+    form = ScenarioCategoryForm
     list_display = ('nr', 'name')
 
 # TODO: solve merge problem, what is ProcessEnabler?
-# class ProcessEnablerInline(admin.TabularInline):
-#     model = ProcessEnabler
-#     extra = 1
+class ProcessEnablerInline(admin.TabularInline):
+    model = ProcessEnabler
+    extra = 1
 
 
 class ScenarioAdmin(admin.ModelAdmin):
     list_display = ('reference', 'title')
-#   inlines = (ProcessEnablerInline,)
+    inlines = (ProcessEnablerInline,)
+
 
 class RiskMapAdmin(admin.ModelAdmin):
     list_display = ('company', 'riskmap_id', 'name', 'risk_type', 'axis_type', 'position', 'descriptor', 'is_template')
