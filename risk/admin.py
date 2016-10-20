@@ -5,7 +5,7 @@ from modeltranslation.admin import TabbedTranslationAdmin
 
 from risk.forms import ScenarioCategoryForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler
+    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler, Enabler
 
 
 class EmployeeInline(admin.StackedInline):
@@ -76,19 +76,25 @@ class ControlActivityAdmin(TabbedTranslationAdmin):
     # )
 
 
-class ScenarioCategoryAdmin(admin.ModelAdmin):
-    form = ScenarioCategoryForm
-    list_display = ('nr', 'name')
+class EnablerInline(admin.TabularInline):
+    model = Enabler
+    extra = 1
 
-# TODO: solve merge problem, what is ProcessEnabler?
+
 class ProcessEnablerInline(admin.TabularInline):
     model = ProcessEnabler
     extra = 1
 
 
+class ScenarioCategoryAdmin(admin.ModelAdmin):
+    form = ScenarioCategoryForm
+    list_display = ('nr', 'name')
+    inlines = (EnablerInline, ProcessEnablerInline)
+
+
 class ScenarioAdmin(admin.ModelAdmin):
-    list_display = ('reference', 'title')
     inlines = (ProcessEnablerInline,)
+    list_display = ('reference', 'title')
 
 
 class RiskMapAdmin(admin.ModelAdmin):

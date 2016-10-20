@@ -240,65 +240,109 @@ class RiskMap(models.Model):
     def __str__(self):
         return self.name
 
-# class RiskMap(models.Model):
-#     name = models.CharField(max_length=30, unique=True)
-#     is_template = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return self.name
-#
-#
-# class Impact(models.Model):
-#     riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
-#     rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_IMPACTS']),
-#                                              MinValueValidator(settings.EYERISK['MINIMUM_IMPACTS'])])
-#     descriptor = models.CharField(max_length=30)
-#     definition = models.TextField(blank=False)
-#
-#     def __str__(self):
-#         return self.descriptor
-#
-#     class Meta:
-#         unique_together = ('riskmap', 'descriptor')
-#         ordering = ['rating']
-#
-#
-# class Likelihood(models.Model):
-#     riskmap = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
-#     rating = models.IntegerField(validators=[MaxValueValidator(settings.EYERISK['MAXIMUM_LIKELIHOOD']),
-#                                              MinValueValidator(settings.EYERISK['MINIMUM_LIKELIHOOD'])])
-#     max_value = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
-#     descriptor = models.CharField(max_length=30)
-#     definition = models.TextField(blank=False)
-#
-#     def __str__(self):
-#         return self.descriptor
-#
-#     class Meta:
-#         unique_together = ('riskmap', 'descriptor')
-#         ordering = ['rating']
-
 
 class ScenarioCategory(models.Model):
     THREAT_TYPE_CHOICES = (
-        ('Malicious', 'Malicious'),
-        ('Accidental', 'Accidental'),
-        ('Error', 'Error'),
-        ('Failure', 'Failure'),
-        ('Natural', 'Natural'),
-        ('External requirement', 'External requirement'),
+        (1, 'Malicious'),
+        (2, 'Accidental'),
+        (3, 'Error'),
+        (4, 'Failure'),
+        (5, 'Natural'),
+        (6, 'External requirement'),
+    )
+
+    actor_help = """
+    Who or what triggers the threat that exploits a vulnerability.
+    """
+
+    ACTOR_CHOICES = (
+        (1, 'Internal'),
+        (2, 'External'),
+        (3, 'Human'),
+        (4, 'Non-human'),
+    )
+
+    event_help = """
+    Something happened that was not supposed to happen,
+    something does not happen that was supposed to happen,
+    or a change in circumstances.
+    Events always have causes and usually have consequences.
+    A consequence is the outcome of an event and has an impact on objectives.
+    """
+
+    EVENT_CHOICES = (
+        (1, 'Disclosure'),
+        (2, 'Interruption'),
+        (3, 'Modification'),
+        (4, 'Theft'),
+        (5, 'Destruction'),
+        (6, 'Ineffective design'),
+        (7, 'Ineffective execution'),
+        (8, 'Rules and regulations'),
+        (9, 'Inappropriate use'),
+    )
+
+    asset_help = """
+    An asset is something of either tangible or intangible value
+    that is worth protecting, including people, systems,
+    infrastructure, finances and reputation.
+    """
+
+    resource_help = """
+    A resource is anything that helps to achieve a goal.
+    """
+
+    ASSET_RESOURCE_CHOICES = (
+        (1, 'Process'),
+        (2, 'People and Skills'),
+        (3, 'Organizational Structure'),
+        (4, 'Physical Infrastructure'),
+        (5, 'IT Infrastructure'),
+        (6, 'Information'),
+        (7, 'Applications'),
+    )
+
+    TIMING_CHOICES = (
+        (1, 'Non-Critical'),
+        (2, 'Critical'),
+    )
+
+    DURATION_CHOICES = (
+        (1, 'Short'),
+        (2, 'Moderate'),
+        (3, 'Extended'),
+    )
+
+    DETECTION_CHOICES = (
+        (1, 'Slow'),
+        (2, 'Moderate'),
+        (3, 'Instant'),
+    )
+
+    TIME_LAG_CHOICES = (
+        (1, 'Immediate'),
+        (2, 'Delayed'),
     )
 
     nr = models.CharField(max_length=4, primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     risk_scenario = models.TextField(blank=True)
-    threat_type = models.CharField(max_length=100, help_text="The nature of the event", blank=False)
+    threat_type = models.CharField(max_length=100, help_text="The nature of the event", blank=True)
+    actor = models.CharField(max_length=100, help_text=actor_help, blank=True)
+    event = models.CharField(max_length=100, help_text=event_help, blank=True)
+    asset = models.CharField(max_length=100, help_text=asset_help, blank=True)
+    resource = models.CharField(max_length=100, help_text=resource_help, blank=True)
+    timing = models.CharField(max_length=100, blank=True)
+    duration = models.CharField(max_length=100, blank=True)
+    detection = models.CharField(max_length=100, blank=True)
+    time_lag = models.CharField(max_length=100, blank=True)
 
-    def __str__(self):
-        return self.name
     class Meta:
         ordering = ['nr']
         verbose_name_plural = 'scenario categories'
+
+    def __str__(self):
+        return self.name
 
 
 class Scenario(models.Model):
@@ -338,6 +382,21 @@ class Scenario(models.Model):
         ordering = ['reference']
 
 
+class Enabler(models.Model):
+    ENABLER_CHOICES = (
+        (1, 'Principles, Policies and Frameworks Enabler'),
+        (2, 'Organisational Structures Enabler'),
+        (3, 'Culture, Ethics and Behaviour Enabler'),
+        (4, 'Information Enabler'),
+        (5, 'Services, Infrastructure and Applications Enabler'),
+        (6, 'People, Skills and Competencies Enabler'),
+    )
+    reference = models.CharField(max_length=50, blank=False)
+    contribution_to_response = models.TextField()
+
+    def __str__(self):
+        return self.reference
+
 class ProcessEnabler(models.Model):
     HIGH = 'H'
     MEDIUM = 'M'
@@ -352,3 +411,6 @@ class ProcessEnabler(models.Model):
     freq_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
     impact_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
     is_essential_control = models.BooleanField(default=True)
+
+# class ScenarioComponent(models.Model):
+#     group = models.CharField()
