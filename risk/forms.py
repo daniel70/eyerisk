@@ -26,18 +26,18 @@ class SelectionControlForm(ModelForm):
 SelectionControlFormSet = modelformset_factory(SelectionControl, form=SelectionControlForm, extra=0, can_delete=False)
 
 
-class ScenarioCategoryForm(ModelForm):
-    # threat_type = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=ScenarioCategory.THREAT_TYPE_CHOICES)
-
-    class Meta:
-        model = ScenarioCategory
-        fields = ('nr', 'name', 'risk_scenario', 'threat_type', 'actor', 'event', 'asset', 'resource')
-        widgets = {
-            'threat_type': CheckboxSelectMultiple(choices=ScenarioCategory.THREAT_TYPE_CHOICES),
-            'actor': CheckboxSelectMultiple(choices=ScenarioCategory.ACTOR_CHOICES),
-            'event': CheckboxSelectMultiple(choices=ScenarioCategory.EVENT_CHOICES),
-            'asset': CheckboxSelectMultiple(choices=ScenarioCategory.ASSET_RESOURCE_CHOICES),
-            'resource': CheckboxSelectMultiple(choices=ScenarioCategory.ASSET_RESOURCE_CHOICES),
-
-        }
-
+# class ScenarioCategoryForm(ModelForm):
+#     # threat_type = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=ScenarioCategory.THREAT_TYPE_CHOICES)
+#
+#     class Meta:
+#         model = ScenarioCategory
+#         fields = ('nr', 'name', 'risk_scenario', 'threat_type', 'actor', 'event', 'asset', 'resource')
+#         widgets = {
+#             'threat_type': CheckboxSelectMultiple(choices=ScenarioCategory.THREAT_TYPE_CHOICES),
+#             'actor': CheckboxSelectMultiple(choices=ScenarioCategory.ACTOR_CHOICES),
+#             'event': CheckboxSelectMultiple(choices=ScenarioCategory.EVENT_CHOICES),
+#             'asset': CheckboxSelectMultiple(choices=ScenarioCategory.ASSET_RESOURCE_CHOICES),
+#             'resource': CheckboxSelectMultiple(choices=ScenarioCategory.ASSET_RESOURCE_CHOICES),
+#
+#         }
+#

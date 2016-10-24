@@ -3,9 +3,9 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from risk.forms import ScenarioCategoryForm
+# from risk.forms import ScenarioCategoryForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler, Enabler
+    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler, Enabler, RiskType
 
 
 class EmployeeInline(admin.StackedInline):
@@ -76,6 +76,11 @@ class ControlActivityAdmin(TabbedTranslationAdmin):
     # )
 
 
+class RiskTypeInline(admin.TabularInline):
+    model = RiskType
+    extra = 1
+
+
 class EnablerInline(admin.TabularInline):
     model = Enabler
     extra = 1
@@ -87,13 +92,13 @@ class ProcessEnablerInline(admin.TabularInline):
 
 
 class ScenarioCategoryAdmin(admin.ModelAdmin):
-    form = ScenarioCategoryForm
+    # form = ScenarioCategoryForm
     list_display = ('nr', 'name')
-    inlines = (EnablerInline, ProcessEnablerInline)
+    inlines = (RiskTypeInline, EnablerInline, ProcessEnablerInline)
 
 
 class ScenarioAdmin(admin.ModelAdmin):
-    inlines = (ProcessEnablerInline,)
+    # inlines = (ProcessEnablerInline,)
     list_display = ('reference', 'title')
 
 

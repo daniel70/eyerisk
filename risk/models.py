@@ -327,15 +327,16 @@ class ScenarioCategory(models.Model):
     nr = models.CharField(max_length=4, primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     risk_scenario = models.TextField(blank=True)
-    threat_type = models.CharField(max_length=100, help_text="The nature of the event", blank=True)
-    actor = models.CharField(max_length=100, help_text=actor_help, blank=True)
-    event = models.CharField(max_length=100, help_text=event_help, blank=True)
-    asset = models.CharField(max_length=100, help_text=asset_help, blank=True)
-    resource = models.CharField(max_length=100, help_text=resource_help, blank=True)
-    timing = models.CharField(max_length=100, blank=True)
-    duration = models.CharField(max_length=100, blank=True)
-    detection = models.CharField(max_length=100, blank=True)
-    time_lag = models.CharField(max_length=100, blank=True)
+    # threat_type = models.CharField(max_length=100, help_text="The nature of the event", blank=True)
+    # actor = models.CharField(max_length=100, help_text=actor_help, blank=True)
+    # event = models.CharField(max_length=100, help_text=event_help, blank=True)
+    # asset = models.CharField(max_length=100, help_text=asset_help, blank=True)
+    # resource = models.CharField(max_length=100, help_text=resource_help, blank=True)
+    # timing = models.CharField(max_length=100, blank=True)
+    # duration = models.CharField(max_length=100, blank=True)
+    # detection = models.CharField(max_length=100, blank=True)
+    # time_lag = models.CharField(max_length=100, blank=True)
+    process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
 
     class Meta:
         ordering = ['nr']
@@ -373,7 +374,7 @@ class Scenario(models.Model):
     mitigation = models.TextField()
     negative = models.TextField(blank=True)
     positive = models.TextField(blank=True)
-    process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
+    # process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
 
     def __str__(self):
         return self.title
@@ -391,6 +392,8 @@ class Enabler(models.Model):
         (5, 'Services, Infrastructure and Applications Enabler'),
         (6, 'People, Skills and Competencies Enabler'),
     )
+    scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
+    type = models.IntegerField(choices=ENABLER_CHOICES)
     reference = models.CharField(max_length=50, blank=False)
     contribution_to_response = models.TextField()
 
@@ -406,11 +409,28 @@ class ProcessEnabler(models.Model):
         (MEDIUM, 'Medium'),
         (LOW, 'Low'),
     )
+    scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
     practice = models.ForeignKey(ControlPractice, on_delete=models.CASCADE)
-    scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
-    freq_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
-    impact_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
-    is_essential_control = models.BooleanField(default=True)
+    # scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    # freq_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
+    # impact_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
+    # is_essential_control = models.BooleanField(default=True)
 
 # class ScenarioComponent(models.Model):
 #     group = models.CharField()
+
+
+class RiskType(models.Model):
+    """
+    As part of the Risk Scenario Category the customer needs to fill out some risk types
+    They consist of a name and a choice between Primary of Secundary (menno fills this in).
+    The customer will add a Risk Description to this when the form is filled out.
+    """
+    RISK_TYPE_CHOICES = (
+        ('N', 'N/A'),
+        ('P', 'Primary'),
+        ('S', 'Secondary'),
+    )
+    scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
+    risk_type = models.CharField(max_length=100)
+    impact = models.CharField(max_length=1, choices=RISK_TYPE_CHOICES, default='N')
