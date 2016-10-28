@@ -1,30 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</head>
-<body>
-<div class="container scenario">
-    <h1>Stuff 'n shit</h1>
-
-    <form class="form">
+{% extends "risk/base.html" %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block content %}
+<form class="form scenario" method="post" action="">
+    {% csrf_token %}
+    <!--{{ form }}-->
     <div class="row scenario-title text-center">
         <div class="col-md-12">
-            Risk Scenario Category 2: Program/Project Life Cycle Management
+            Risk Scenario Category {{item.scenario_category.nr}}: {{item.scenario_category.name}}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <b>Risk Scenario</b><br>
-            Describe the risk/opportunity scenario, including a discussion of the
-            negative and positive impact of the scenario. The description clasifies
-            the threat/vulnerability type and includes the actors, events, assets and time issues.
+            {{item.scenario_category.risk_scenario}}
         </div>
     </div>
     <div class="row scenario-divider">
@@ -32,125 +21,152 @@
             Risk Scenario Components
         </div>
     </div>
+
+    {% with field=form.threat_type %}
     <div class="row">
         <div class="col-md-6">
-            <b>Threat Type</b><br>
-            <small>The nature of the event.</small>
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
         </div>
         <div class="col-md-6">
+            {% for choice in field %}
             <div class="checkbox">
-                <label>
-                    <input type="checkbox">Malicious
-                </label>
+                {{ choice }}
             </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Accidental
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Error
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Failure
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Natural
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">External requirement
-                </label>
-            </div>
+            {% endfor %}
         </div>
     </div>
+    {% endwith %}
+
+    {% with field=form.actor %}
     <div class="row">
         <div class="col-md-6">
-            <b>Actor</b><br>
-            <small>Who or what triggers the threat that exploits a vulnerability.</small>
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
         </div>
         <div class="col-md-6">
+            {% for choice in field %}
             <div class="checkbox">
-                <label>
-                    <input type="checkbox">Internal
-                </label>
+                {{ choice }}
             </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">External
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Human
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Non-human
-                </label>
-            </div>
+            {% endfor %}
         </div>
     </div>
+    {% endwith %}
+
+    {% with field=form.event %}
     <div class="row">
         <div class="col-md-6">
-            <b>Event</b><br>
-            <small>Something happens that was not supposed to happen, something does not happen that was supposed to happen, or a change in circumstances. Events always have causes and usually have consequences. A consequence is the outcome of an event and has an impact on objectives.</small>
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
         </div>
         <div class="col-md-6">
+            {% for choice in field %}
             <div class="checkbox">
-                <label>
-                    <input type="checkbox">Disclosure
-                </label>
+                {{ choice }}
             </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Interruption
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Modification
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Theft
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Destruction
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Ineffective design
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Ineffective execution
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Rules and regulations
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox">Inappropiate use
-                </label>
-            </div>
+            {% endfor %}
         </div>
     </div>
+    {% endwith %}
+
+    {% with field=form.asset %}
+    <div class="row">
+        <div class="col-md-6">
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
+        </div>
+        <div class="col-md-6">
+            {% for choice in field %}
+            <div class="checkbox">
+                {{ choice }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endwith %}
+
+    {% with field=form.resource %}
+    <div class="row">
+        <div class="col-md-6">
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
+        </div>
+        <div class="col-md-6">
+            {% for choice in field %}
+            <div class="checkbox">
+                {{ choice }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endwith %}
+
+    {% with field=form.timing %}
+    <div class="row">
+        <div class="col-md-6">
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
+        </div>
+        <div class="col-md-6">
+            {% for choice in field %}
+            <div class="checkbox">
+                {{ choice }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endwith %}
+
+    {% with field=form.duration %}
+    <div class="row">
+        <div class="col-md-6">
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
+        </div>
+        <div class="col-md-6">
+            {% for choice in field %}
+            <div class="checkbox">
+                {{ choice }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endwith %}
+
+    {% with field=form.detection %}
+    <div class="row">
+        <div class="col-md-6">
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
+        </div>
+        <div class="col-md-6">
+            {% for choice in field %}
+            <div class="checkbox">
+                {{ choice }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endwith %}
+
+    {% with field=form.time_lag %}
+    <div class="row">
+        <div class="col-md-6">
+            <b>{{ field.label_tag }}</b><br>
+            <small>{{ field.help_text }}</small>
+        </div>
+        <div class="col-md-6">
+            {% for choice in field %}
+            <div class="checkbox">
+                {{ choice }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endwith %}
+
+
     <div class="row scenario-divider">
         <div class="col-md-12">
             Risk Type<br>
@@ -343,9 +359,6 @@
             </div>
         </div>
     </div>
-    </form>
-</div>
-<br>
-<script type="text/javascript" src="bundle.js" charset="utf-8"></script>
-</body>
-</html>
+</form>
+<br/>
+{% endblock content %}

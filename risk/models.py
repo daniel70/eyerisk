@@ -242,6 +242,22 @@ class RiskMap(models.Model):
 
 
 class ScenarioCategory(models.Model):
+    nr = models.CharField(max_length=4, primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+    risk_scenario = models.TextField(blank=True)
+    process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
+
+    class Meta:
+        ordering = ['nr']
+        verbose_name_plural = 'scenario categories'
+
+    def __str__(self):
+        return self.name
+
+
+class ScenarioCategoryAnswer(models.Model):
+    threat_type_help = "The nature of the event"
+
     THREAT_TYPE_CHOICES = (
         (1, 'Malicious'),
         (2, 'Accidental'),
@@ -324,26 +340,20 @@ class ScenarioCategory(models.Model):
         (2, 'Delayed'),
     )
 
-    nr = models.CharField(max_length=4, primary_key=True)
-    name = models.CharField(max_length=100, unique=True)
-    risk_scenario = models.TextField(blank=True)
-    # threat_type = models.CharField(max_length=100, help_text="The nature of the event", blank=True)
-    # actor = models.CharField(max_length=100, help_text=actor_help, blank=True)
-    # event = models.CharField(max_length=100, help_text=event_help, blank=True)
-    # asset = models.CharField(max_length=100, help_text=asset_help, blank=True)
-    # resource = models.CharField(max_length=100, help_text=resource_help, blank=True)
-    # timing = models.CharField(max_length=100, blank=True)
-    # duration = models.CharField(max_length=100, blank=True)
-    # detection = models.CharField(max_length=100, blank=True)
-    # time_lag = models.CharField(max_length=100, blank=True)
-    process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
-
-    class Meta:
-        ordering = ['nr']
-        verbose_name_plural = 'scenario categories'
-
-    def __str__(self):
-        return self.name
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
+    threat_type = models.CharField(max_length=100, help_text=threat_type_help, blank=True)
+    actor = models.CharField(max_length=100, help_text=actor_help, blank=True)
+    event = models.CharField(max_length=100, help_text=event_help, blank=True)
+    asset = models.CharField(max_length=100, help_text=asset_help, blank=True)
+    resource = models.CharField(max_length=100, help_text=resource_help, blank=True)
+    timing = models.CharField(max_length=100, blank=True)
+    duration = models.CharField(max_length=100, blank=True)
+    detection = models.CharField(max_length=100, blank=True)
+    time_lag = models.CharField(max_length=100, blank=True)
+    risk_type_answer = models.ManyToManyField('RiskType', through='RiskTypeAnswer')
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
 
 
 class Scenario(models.Model):
@@ -400,6 +410,7 @@ class Enabler(models.Model):
     def __str__(self):
         return self.reference
 
+
 class ProcessEnabler(models.Model):
     HIGH = 'H'
     MEDIUM = 'M'
@@ -434,3 +445,16 @@ class RiskType(models.Model):
     scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
     risk_type = models.CharField(max_length=100)
     impact = models.CharField(max_length=1, choices=RISK_TYPE_CHOICES, default='N')
+
+
+    def __str__(self):
+        return '{} ({})'.format(self.risk_type, self.impact)
+
+class RiskTypeAnswer(models.Model):
+    """
+    This model is used for its extra fields on many-to-many relationships.
+    https://docs.djangoproject.com/en/dev/topics/db/models/#extra-fields-on-many-to-many-relationships
+    """
+    risk_type = models.ForeignKey(RiskType, on_delete=models.CASCADE)
+    scenario_category_answer = models.ForeignKey(ScenarioCategoryAnswer, on_delete=models.CASCADE)
+    description = models.TextField()

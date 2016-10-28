@@ -7,12 +7,26 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 
-from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap
-from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet
+from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
+    ScenarioCategoryAnswer, Company
+from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet, ScenarioCategoryAnswerForm
 
 
 def riskmaps(request):
     return render(request, template_name='risk/riskmaps.html')
+
+
+def scenarios(request):
+    # hardcoded for now
+    sc = get_object_or_404(ScenarioCategoryAnswer, pk=1)
+    company = get_object_or_404(Company, pk=1)
+    form = ScenarioCategoryAnswerForm()
+    context = {
+        'item': sc,
+        'form': form,
+        'company': company,
+    }
+    return render(request, template_name='risk/scenarios.html', context=context)
 
 
 class SelectionDetail(generic.DetailView):

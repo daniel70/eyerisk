@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
 
 # from risk.forms import ScenarioCategoryForm
+from risk.forms import ScenarioCategoryAnswerForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler, Enabler, RiskType
+    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler, Enabler, RiskType, \
+    ScenarioCategoryAnswer, RiskTypeAnswer
 
 
 class EmployeeInline(admin.StackedInline):
@@ -97,6 +99,22 @@ class ScenarioCategoryAdmin(admin.ModelAdmin):
     inlines = (RiskTypeInline, EnablerInline, ProcessEnablerInline)
 
 
+class RiskTypeAnswerInline(admin.TabularInline):
+    model = RiskTypeAnswer
+    extra = 0
+
+
+class RiskTypeAdmin(admin.ModelAdmin):
+    inlines = (RiskTypeAnswerInline,)
+
+
+class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
+    # form = ScenarioCategoryAnswerForm
+    # list_display = ('company', 'scenario_category', 'created', 'updated')
+    # exclude = ('risk_type_answer',)
+    inlines = (RiskTypeAnswerInline,)
+
+
 class ScenarioAdmin(admin.ModelAdmin):
     # inlines = (ProcessEnablerInline,)
     list_display = ('reference', 'title')
@@ -122,7 +140,10 @@ admin.site.register(ControlPractice, ControlPracticeAdmin)
 admin.site.register(ControlActivity, ControlActivityAdmin)
 admin.site.register(Selection)
 admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
+admin.site.register(ScenarioCategoryAnswer, ScenarioCategoryAnswerAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
+admin.site.register(RiskType, RiskTypeAdmin)
+# admin.site.register(RiskTypeAnswer)
 
 admin.site.site_title = "EYERISK Administration"
 admin.site.site_header = "EYERISK Administration"

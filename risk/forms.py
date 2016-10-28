@@ -1,6 +1,6 @@
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
-    MultipleChoiceField
-from .models import Selection, SelectionControl, ScenarioCategory
+    MultipleChoiceField, inlineformset_factory
+from .models import Selection, SelectionControl, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType
 
 
 class SelectionForm(ModelForm):
@@ -25,19 +25,25 @@ class SelectionControlForm(ModelForm):
 
 SelectionControlFormSet = modelformset_factory(SelectionControl, form=SelectionControlForm, extra=0, can_delete=False)
 
+# RiskTypeAnswerFormSet = inlineformset_factory(RiskType, ScenarioCategoryAnswer, fields=('description',))
 
-# class ScenarioCategoryForm(ModelForm):
-#     # threat_type = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=ScenarioCategory.THREAT_TYPE_CHOICES)
-#
-#     class Meta:
-#         model = ScenarioCategory
-#         fields = ('nr', 'name', 'risk_scenario', 'threat_type', 'actor', 'event', 'asset', 'resource')
-#         widgets = {
-#             'threat_type': CheckboxSelectMultiple(choices=ScenarioCategory.THREAT_TYPE_CHOICES),
-#             'actor': CheckboxSelectMultiple(choices=ScenarioCategory.ACTOR_CHOICES),
-#             'event': CheckboxSelectMultiple(choices=ScenarioCategory.EVENT_CHOICES),
-#             'asset': CheckboxSelectMultiple(choices=ScenarioCategory.ASSET_RESOURCE_CHOICES),
-#             'resource': CheckboxSelectMultiple(choices=ScenarioCategory.ASSET_RESOURCE_CHOICES),
-#
-#         }
-#
+class ScenarioCategoryAnswerForm(ModelForm):
+    # threat_type = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=ScenarioCategory.THREAT_TYPE_CHOICES)
+
+    class Meta:
+        model = ScenarioCategoryAnswer
+        fields = ('company', 'scenario_category', 'threat_type', 'actor', 'event', 'asset', 'resource',
+                  'timing', 'duration', 'detection', 'time_lag')
+
+        widgets = {
+            'threat_type': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.THREAT_TYPE_CHOICES),
+            'actor': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ACTOR_CHOICES),
+            'event': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.EVENT_CHOICES),
+            'asset': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ASSET_RESOURCE_CHOICES),
+            'resource': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ASSET_RESOURCE_CHOICES),
+            'timing': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.TIMING_CHOICES),
+            'duration': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.DURATION_CHOICES),
+            'detection': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.DETECTION_CHOICES),
+            'time_lag': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.TIME_LAG_CHOICES),
+        }
+
