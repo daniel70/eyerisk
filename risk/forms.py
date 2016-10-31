@@ -27,6 +27,7 @@ SelectionControlFormSet = modelformset_factory(SelectionControl, form=SelectionC
 
 # RiskTypeAnswerFormSet = inlineformset_factory(RiskType, ScenarioCategoryAnswer, fields=('description',))
 
+
 class ScenarioCategoryAnswerForm(ModelForm):
     # threat_type = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=ScenarioCategory.THREAT_TYPE_CHOICES)
 
@@ -47,3 +48,9 @@ class ScenarioCategoryAnswerForm(ModelForm):
             'time_lag': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.TIME_LAG_CHOICES),
         }
 
+
+class RiskTypeAnswerForm(ModelForm):
+
+    class Meta:
+        model = RiskTypeAnswer
+        fields = ('risk_type', 'scenario_category_answer', 'description')

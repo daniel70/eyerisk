@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
 
 # from risk.forms import ScenarioCategoryForm
-from risk.forms import ScenarioCategoryAnswerForm
+from risk.forms import ScenarioCategoryAnswerForm, RiskTypeAnswerForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
     Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler, Enabler, RiskType, \
     ScenarioCategoryAnswer, RiskTypeAnswer
@@ -104,9 +104,12 @@ class RiskTypeAnswerInline(admin.TabularInline):
     extra = 0
 
 
-class RiskTypeAdmin(admin.ModelAdmin):
-    inlines = (RiskTypeAnswerInline,)
+class MyRiskTypeAnswer(admin.ModelAdmin):
+    form = RiskTypeAnswerForm
 
+# class RiskTypeAdmin(admin.ModelAdmin):
+#     inlines = (RiskTypeAnswerInline,)
+#
 
 class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
     form = ScenarioCategoryAnswerForm
@@ -142,8 +145,8 @@ admin.site.register(Selection)
 admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
 admin.site.register(ScenarioCategoryAnswer, ScenarioCategoryAnswerAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
-admin.site.register(RiskType, RiskTypeAdmin)
-admin.site.register(RiskTypeAnswer)
+# admin.site.register(RiskType, RiskTypeAdmin)
+admin.site.register(RiskTypeAnswer, MyRiskTypeAnswer)
 
 admin.site.site_title = "EYERISK Administration"
 admin.site.site_header = "EYERISK Administration"
