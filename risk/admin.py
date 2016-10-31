@@ -78,9 +78,9 @@ class ControlActivityAdmin(TabbedTranslationAdmin):
     # )
 
 
-class RiskTypeInline(admin.TabularInline):
-    model = RiskType
-    extra = 1
+# class RiskTypeInline(admin.TabularInline):
+#     model = RiskType
+#     extra = 1
 
 
 class EnablerInline(admin.TabularInline):
@@ -96,7 +96,7 @@ class ProcessEnablerInline(admin.TabularInline):
 class ScenarioCategoryAdmin(admin.ModelAdmin):
     # form = ScenarioCategoryForm
     list_display = ('nr', 'name')
-    inlines = (RiskTypeInline, EnablerInline, ProcessEnablerInline)
+    inlines = (EnablerInline, ProcessEnablerInline)
 
 
 class RiskTypeAnswerInline(admin.TabularInline):
@@ -109,8 +109,8 @@ class RiskTypeAdmin(admin.ModelAdmin):
 
 
 class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
-    # form = ScenarioCategoryAnswerForm
-    # list_display = ('company', 'scenario_category', 'created', 'updated')
+    form = ScenarioCategoryAnswerForm
+    list_display = ('company', 'scenario_category', 'created', 'updated')
     # exclude = ('risk_type_answer',)
     inlines = (RiskTypeAnswerInline,)
 
@@ -143,7 +143,7 @@ admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
 admin.site.register(ScenarioCategoryAnswer, ScenarioCategoryAnswerAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
 admin.site.register(RiskType, RiskTypeAdmin)
-# admin.site.register(RiskTypeAnswer)
+admin.site.register(RiskTypeAnswer)
 
 admin.site.site_title = "EYERISK Administration"
 admin.site.site_header = "EYERISK Administration"

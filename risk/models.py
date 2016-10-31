@@ -241,10 +241,32 @@ class RiskMap(models.Model):
         return self.name
 
 
+
+class RiskType(models.Model):
+    """
+    As part of the Risk Scenario Category the customer needs to fill out some risk types
+    They consist of a name and a choice between Primary of Secundary (menno fills this in).
+    The customer will add a Risk Description to this when the form is filled out.
+    """
+    IMPACT_CHOICES = (
+        ('N', 'N/A'),
+        ('P', 'Primary'),
+        ('S', 'Secondary'),
+    )
+    # scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
+    description = models.CharField(max_length=100)
+    impact = models.CharField(max_length=1, choices=IMPACT_CHOICES, default='N')
+
+
+    def __str__(self):
+        return '{} ({})'.format(self.description, self.impact)
+
+
 class ScenarioCategory(models.Model):
     nr = models.CharField(max_length=4, primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     risk_scenario = models.TextField(blank=True)
+    risk_types = models.ManyToManyField(RiskType)
     process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
 
     class Meta:
@@ -351,10 +373,12 @@ class ScenarioCategoryAnswer(models.Model):
     duration = models.CharField(max_length=100, blank=True)
     detection = models.CharField(max_length=100, blank=True)
     time_lag = models.CharField(max_length=100, blank=True)
-    risk_type_answer = models.ManyToManyField('RiskType', through='RiskTypeAnswer')
+    # risk_type_answer = models.ManyToManyField('RiskType', through='RiskTypeAnswer')
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{} answers to {}".format(self.company, self.scenario_category)
 
 class Scenario(models.Model):
     NOT_AVAILABLE = 'N/A'
@@ -431,25 +455,6 @@ class ProcessEnabler(models.Model):
 #     group = models.CharField()
 
 
-class RiskType(models.Model):
-    """
-    As part of the Risk Scenario Category the customer needs to fill out some risk types
-    They consist of a name and a choice between Primary of Secundary (menno fills this in).
-    The customer will add a Risk Description to this when the form is filled out.
-    """
-    RISK_TYPE_CHOICES = (
-        ('N', 'N/A'),
-        ('P', 'Primary'),
-        ('S', 'Secondary'),
-    )
-    scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
-    risk_type = models.CharField(max_length=100)
-    impact = models.CharField(max_length=1, choices=RISK_TYPE_CHOICES, default='N')
-
-
-    def __str__(self):
-        return '{} ({})'.format(self.risk_type, self.impact)
-
 class RiskTypeAnswer(models.Model):
     """
     This model is used for its extra fields on many-to-many relationships.
@@ -458,3 +463,6 @@ class RiskTypeAnswer(models.Model):
     risk_type = models.ForeignKey(RiskType, on_delete=models.CASCADE)
     scenario_category_answer = models.ForeignKey(ScenarioCategoryAnswer, on_delete=models.CASCADE)
     description = models.TextField()
+
+    class Meta:
+        unique_together = ('risk_type', 'scenario_category_answer')
