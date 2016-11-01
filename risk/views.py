@@ -6,9 +6,10 @@ from django.http import HttpResponse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
+from django.forms import inlineformset_factory
 
 from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
-    ScenarioCategoryAnswer, Company
+    ScenarioCategoryAnswer, Company, RiskTypeAnswer
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet, ScenarioCategoryAnswerForm
 
 
@@ -20,13 +21,18 @@ def scenarios(request):
     # hardcoded for now
     sc = get_object_or_404(ScenarioCategoryAnswer, pk=1)
     company = get_object_or_404(Company, pk=1)
-    form = ScenarioCategoryAnswerForm()
+    form = ScenarioCategoryAnswerForm(instance=sc)
+    RiskTypeAnswerFormSet = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
+                                                  extra=0, can_delete=False)
+    risktype_answer_formset = RiskTypeAnswerFormSet(instance=sc)
+
     context = {
         'item': sc,
         'form': form,
         'company': company,
+        'risktype_answers_formset': risktype_answer_formset,
     }
-    return render(request, template_name='risk/scenarios.html', context=context)
+    return render(request, template_name='risk/simple_scenarios.html', context=context)
 
 
 class SelectionDetail(generic.DetailView):
