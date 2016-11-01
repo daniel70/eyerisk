@@ -4,7 +4,7 @@ from django.db.models.signals import m2m_changed, post_save
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.conf import settings
-
+from django.dispatch import receiver
 
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -193,6 +193,7 @@ class SelectionControl(models.Model):
     class Meta:
         unique_together = ('selection', 'control')
 
+
 class RiskMap(models.Model):
     STRATEGIC = 'S'
     FINANCIAL = 'F'
@@ -266,7 +267,7 @@ class ScenarioCategory(models.Model):
     nr = models.CharField(max_length=4, primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     risk_scenario = models.TextField(blank=True)
-    risk_types = models.ManyToManyField(RiskType)
+    risk_types = models.ManyToManyField(RiskType, blank=True)
     process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
 
     class Meta:
@@ -275,6 +276,29 @@ class ScenarioCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(m2m_changed, sender=ScenarioCategory.risk_types.through)
+def risk_types_changed(sender, **kwargs):
+    """
+    One or more risk_types have been added to (or removed from) a ScenarioCategory.
+    All of the ScenarioCategoryAnswers that are linked to this ScenarioCategory need to have these new risk_types
+    created as risk_type_answers so that the can be answered.
+    """
+    action = kwargs.pop('action', None)     # pre_add | post_add | pre_remove | post_remove
+    instance = kwargs.pop('instance', None) # the instance of ScenarioCategory
+    pk_set = kwargs.pop('pk_set', None)     # {1, 2, 3}
+    reverse = kwargs.pop('reverse', None)   # boolean
+
+    if action == "pre_add":
+        risk_types = RiskType.objects.filter(pk__in=pk_set)
+        for scenario_category_answer in ScenarioCategoryAnswer.objects.filter(scenario_category=instance):
+            RiskTypeAnswer.objects.bulk_create(
+                [RiskTypeAnswer(risk_type=risk_type, scenario_category_answer=scenario_category_answer)
+                 for risk_type in risk_types])
+
+    if action == "pre_remove":
+        RiskTypeAnswer.objects.filter(risk_type__in=pk_set, scenario_category_answer__scenario_category=instance).delete()
 
 
 class ScenarioCategoryAnswer(models.Model):
@@ -462,7 +486,10 @@ class RiskTypeAnswer(models.Model):
     """
     risk_type = models.ForeignKey(RiskType, on_delete=models.CASCADE)
     scenario_category_answer = models.ForeignKey(ScenarioCategoryAnswer, on_delete=models.CASCADE)
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     class Meta:
         unique_together = ('risk_type', 'scenario_category_answer')
+
+    def __str__(self):
+        return '{} - {}'.format(self.risk_type, self.scenario_category_answer)
