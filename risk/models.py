@@ -2,7 +2,6 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import m2m_changed, post_save
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.dispatch import receiver
 
@@ -19,6 +18,7 @@ class Company(models.Model):
         verbose_name_plural = 'companies'
 
 
+@receiver(signal=post_save, sender=Company)
 def company_created(sender, instance, created, **kwargs):
     """
     When a Company is created, the COSO risk map is copied into this company.
@@ -33,10 +33,10 @@ def company_created(sender, instance, created, **kwargs):
             rm.company = instance
             rm.is_template = False
             rm.name = 'Enterprise'
-            rm.level = 1 #Enterprise level
+            rm.level = 1  # Enterprise level
             rm.save()
 
-post_save.connect(company_created, sender=Company)
+# post_save.connect(company_created, sender=Company)
 
 
 class Employee(models.Model):
@@ -91,7 +91,7 @@ class ControlProcess(models.Model):
         return '{0}. {1}'.format(self.process_id, self.process_name)
 
     class Meta:
-        ordering = ['controldomain__standard', 'controldomain__ordering', 'ordering',]
+        ordering = ['controldomain__standard', 'controldomain__ordering', 'ordering']
         verbose_name_plural = 'Control processes'
 
 
@@ -100,13 +100,14 @@ class ControlPractice(models.Model):
     ordering = models.IntegerField()
     practice_id = models.CharField(max_length=15, blank=True)
     practice_name = models.CharField(max_length=100, blank=True)
-    practice_governance = models.TextField(blank=True) # code_text
+    practice_governance = models.TextField(blank=True)  # code_text
 
     def __str__(self):
         return '{0}. {1}'.format(self.practice_id, self.practice_name)
 
     class Meta:
-        ordering = ['controlprocess__controldomain__standard', 'controlprocess__controldomain__ordering',
+        ordering = ['controlprocess__controldomain__standard',
+                    'controlprocess__controldomain__ordering',
                     'controlprocess__ordering', 'ordering']
 
 
@@ -123,7 +124,8 @@ class ControlActivity(models.Model):
         return self.activity
 
     class Meta:
-        ordering = ['controlpractice__controlprocess__controldomain__standard', 'controlpractice__controlprocess__controldomain__ordering',
+        ordering = ['controlpractice__controlprocess__controldomain__standard',
+                    'controlpractice__controlprocess__controldomain__ordering',
                     'controlpractice__controlprocess__ordering', 'controlpractice__ordering', 'ordering']
         verbose_name_plural = 'Control activities'
 
@@ -145,6 +147,7 @@ class Selection(models.Model):
         ordering = ['name']
 
 
+@receiver(m2m_changed, sender=Selection.standards.through)
 def selection_changed(sender, **kwargs):
     """
     When a Standard is added or removed from a Selection, all of the Questions that belong to that
@@ -154,7 +157,7 @@ def selection_changed(sender, **kwargs):
     """
     action = kwargs.pop('action', None)
     instance = kwargs.pop('instance', None)
-    pk_set = kwargs.pop('pk_set', None)
+    pk_set = kwargs.pop('pk_set', [])
     if action == "pre_add":
         for pk in pk_set:
             selection_controls = []
@@ -167,8 +170,6 @@ def selection_changed(sender, **kwargs):
         SelectionControl.objects.filter(
             selection=instance, control__controlpractice__controlprocess__controldomain__standard__in=pk_set
         ).delete()
-
-m2m_changed.connect(selection_changed, sender=Selection.standards.through)
 
 
 class SelectionControl(models.Model):
@@ -242,7 +243,6 @@ class RiskMap(models.Model):
         return self.name
 
 
-
 class RiskType(models.Model):
     """
     As part of the Risk Scenario Category the customer needs to fill out some risk types
@@ -258,7 +258,6 @@ class RiskType(models.Model):
     description = models.CharField(max_length=100)
     impact = models.CharField(max_length=1, choices=IMPACT_CHOICES, default='N')
 
-
     def __str__(self):
         return '{} ({})'.format(self.description, self.impact)
 
@@ -268,7 +267,7 @@ class ScenarioCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
     risk_scenario = models.TextField(blank=True)
     risk_types = models.ManyToManyField(RiskType, blank=True)
-    process_enabler = models.ManyToManyField(ControlPractice, through='ProcessEnabler')
+    process_enablers = models.ManyToManyField(ControlPractice, blank=True)
 
     class Meta:
         ordering = ['nr']
@@ -283,12 +282,12 @@ def risk_types_changed(sender, **kwargs):
     """
     One or more risk_types have been added to (or removed from) a ScenarioCategory.
     All of the ScenarioCategoryAnswers that are linked to this ScenarioCategory need to have these new risk_types
-    created as risk_type_answers so that the can be answered.
+    created as RiskTypeAnswer so that they can be answered.
     """
-    action = kwargs.pop('action', None)     # pre_add | post_add | pre_remove | post_remove
-    instance = kwargs.pop('instance', None) # the instance of ScenarioCategory
-    pk_set = kwargs.pop('pk_set', None)     # {1, 2, 3}
-    reverse = kwargs.pop('reverse', None)   # boolean
+    action = kwargs.pop('action', None)         # pre_add | post_add | pre_remove | post_remove
+    instance = kwargs.pop('instance', None)     # the instance of ScenarioCategory
+    pk_set = kwargs.pop('pk_set', None)         # {1, 2, 3}
+    reverse = kwargs.pop('reverse', None)       # boolean
 
     if action == "pre_add":
         risk_types = RiskType.objects.filter(pk__in=pk_set)
@@ -299,6 +298,29 @@ def risk_types_changed(sender, **kwargs):
 
     if action == "pre_remove":
         RiskTypeAnswer.objects.filter(risk_type__in=pk_set, scenario_category_answer__scenario_category=instance).delete()
+
+@receiver(m2m_changed, sender=ScenarioCategory.process_enablers.through)
+def process_enablers_changed(sender, **kwargs):
+    """
+    One or more process_enablers have been added to (or removed from) a ScenarioCategory.
+    All of the ScenarioCategoryAnswers that are linked to this ScenarioCategory need to have these new process enablers
+    created as ProcessEnablerAnswer so that they can be answered.
+    """
+    action = kwargs.pop('action', None)         # pre_add | post_add | pre_remove | post_remove
+    instance = kwargs.pop('instance', None)     # the instance of ScenarioCategory
+    pk_set = kwargs.pop('pk_set', None)         # {1, 2, 3}
+    reverse = kwargs.pop('reverse', None)       # boolean
+
+    if action == "pre_add":
+        process_enablers = ControlPractice.objects.filter(pk__in=pk_set)
+        for scenario_category_answer in ScenarioCategoryAnswer.objects.filter(scenario_category=instance):
+            ProcessEnablerAnswer.objects.bulk_create(
+                [ProcessEnablerAnswer(control_practice=process_enabler, scenario_category_answer=scenario_category_answer)
+                 for process_enabler in process_enablers])
+
+    if action == "pre_remove":
+        ProcessEnablerAnswer.objects.filter(control_practice__in=pk_set, scenario_category_answer__scenario_category=instance).delete()
+
 
 
 class ScenarioCategoryAnswer(models.Model):
@@ -386,6 +408,7 @@ class ScenarioCategoryAnswer(models.Model):
         (2, 'Delayed'),
     )
 
+    name = models.CharField(max_length=50)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
     threat_type = models.CharField(max_length=100, help_text=threat_type_help, blank=True)
@@ -397,12 +420,15 @@ class ScenarioCategoryAnswer(models.Model):
     duration = models.CharField(max_length=100, blank=True)
     detection = models.CharField(max_length=100, blank=True)
     time_lag = models.CharField(max_length=100, blank=True)
-    # risk_type_answer = models.ManyToManyField('RiskType', through='RiskTypeAnswer')
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ['name', 'company']
+
     def __str__(self):
-        return "{} answers to {}".format(self.company, self.scenario_category)
+        return "{}".format(self.name)
+
 
 class Scenario(models.Model):
     NOT_AVAILABLE = 'N/A'
@@ -459,7 +485,7 @@ class Enabler(models.Model):
         return self.reference
 
 
-class ProcessEnabler(models.Model):
+class ProcessEnablerAnswer(models.Model):
     HIGH = 'H'
     MEDIUM = 'M'
     LOW = 'L'
@@ -468,15 +494,18 @@ class ProcessEnabler(models.Model):
         (MEDIUM, 'Medium'),
         (LOW, 'Low'),
     )
-    scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
-    practice = models.ForeignKey(ControlPractice, on_delete=models.CASCADE)
-    # scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
-    # freq_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
-    # impact_effect = models.CharField(max_length=1, choices=EFFECTS, default=MEDIUM)
-    # is_essential_control = models.BooleanField(default=True)
+    control_practice = models.ForeignKey(ControlPractice, on_delete=models.CASCADE)
+    scenario_category_answer = models.ForeignKey(ScenarioCategoryAnswer, on_delete=models.CASCADE)
+    effect_on_frequency = models.CharField(max_length=1, choices=EFFECTS, blank=True)
+    effect_on_impact = models.CharField(max_length=1, choices=EFFECTS, blank=True)
+    essential_control = models.CharField(max_length=1, choices=[('Y', 'Y'), ('N', 'N')], blank=True)
 
-# class ScenarioComponent(models.Model):
-#     group = models.CharField()
+    class Meta:
+        unique_together = ('control_practice', 'scenario_category_answer')
+
+
+    def __str__(self):
+        return '{} - {}'.format(self.control_practice, self.scenario_category_answer)
 
 
 class RiskTypeAnswer(models.Model):

@@ -3,13 +3,14 @@ import json
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.forms import inlineformset_factory
 
 from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
-    ScenarioCategoryAnswer, Company, RiskTypeAnswer
+    ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet, ScenarioCategoryAnswerForm
 
 
@@ -17,19 +18,46 @@ def riskmaps(request):
     return render(request, template_name='risk/riskmaps.html')
 
 
-def scenarios(request):
+def scenarios(request, simple=False):
     # hardcoded for now
     sca = get_object_or_404(ScenarioCategoryAnswer, pk=1)
-    form = ScenarioCategoryAnswerForm(instance=sca)
-    RiskTypeAnswerFormSet = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
+    risk_type_answer_factory = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
                                                   extra=0, can_delete=False)
-    risktype_answer_formset = RiskTypeAnswerFormSet(instance=sca)
+    process_enabler_answer_factory = inlineformset_factory(
+        ScenarioCategoryAnswer, ProcessEnablerAnswer,
+        fields=('effect_on_frequency', 'effect_on_impact', 'essential_control'),
+        extra=0, can_delete=False
+    )
+
+    if request.method == "POST":
+        form = ScenarioCategoryAnswerForm(request.POST, request.FILES, instance=sca)
+        risk_type_answer_formset = risk_type_answer_factory(request.POST, request.FILES, instance=sca)
+        process_enabler_answer_formset = process_enabler_answer_factory(request.POST, request.FILES, instance=sca)
+
+        if form.is_valid() \
+                and risk_type_answer_formset.is_valid() \
+                and process_enabler_answer_formset:
+            form.save()
+            risk_type_answer_formset.save()
+            process_enabler_answer_formset.save()
+            return HttpResponseRedirect(reverse('simple_scenarios', args=['T']))
+    else:
+        form = ScenarioCategoryAnswerForm(instance=sca)
+        risk_type_answer_formset = risk_type_answer_factory(instance=sca)
+        process_enabler_answer_formset = process_enabler_answer_factory(instance=sca)
+
 
     context = {
         'form': form,
-        'risktype_answers_formset': risktype_answer_formset,
+        'risk_type_answer_formset': risk_type_answer_formset,
+        'process_enabler_answer_formset': process_enabler_answer_formset,
     }
-    return render(request, template_name='risk/simple_scenarios.html', context=context)
+
+    template_name = 'risk/scenarios.html'
+    if simple:
+        template_name = 'risk/simple_scenarios.html'
+
+    return render(request, template_name=template_name, context=context)
 
 
 class SelectionDetail(generic.DetailView):

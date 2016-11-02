@@ -2,18 +2,18 @@
 {% load staticfiles %}
 {% load bootstrap %}
 {% block content %}
-<form class="form scenario" method="post" action="">
+<form class="form" method="post" action="">
     {% csrf_token %}
-    <!--{{ form }}-->
+    <div class="scenario">
     <div class="row scenario-title text-center">
         <div class="col-md-12">
-            Risk Scenario Category {{item.scenario_category.nr}}: {{item.scenario_category.name}}
+            Risk Scenario Category {{form.instance.scenario_category.nr}}: {{form.instance.scenario_category.name}}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <b>Risk Scenario</b><br>
-            {{item.scenario_category.risk_scenario}}
+            {{form.instance.scenario_category.risk_scenario}}
         </div>
     </div>
     <div class="row scenario-divider">
@@ -168,6 +168,7 @@
 
 
     <div class="row scenario-divider">
+        {{ risk_type_answer_formset.management_form }}
         <div class="col-md-12">
             Risk Type<br>
             <small>Describe the consequences resulting from the event.
@@ -179,42 +180,32 @@
             Risk Type
         </div>
         <div class="col-md-1 text-center">
-            <abr title="Primary / Secundary">P/S</abr>
+            <abbr title="Primary / Secundary">P/S</abbr>
         </div>
         <div class="col-md-7 text-center">
             Risk Description
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            IT Benefit/Value Enablement
+
+    {% for risk_type_answer_form in risk_type_answer_formset %}
+        <div class="row">
+            {% for hidden in risk_type_answer_form.hidden_fields %}
+            {{ hidden }}
+            {% endfor %}
+            <div class="col-md-4">
+                {{ risk_type_answer_form.instance.risk_type.description }}
+            </div>
+            <div class="col-md-1 text-center">
+                {{ risk_type_answer_form.instance.risk_type.get_impact_display }}
+            </div>
+            <div class="col-md-7">
+                {{ risk_type_answer_form.description }}
+            </div>
         </div>
-        <div class="col-md-1 text-center">
-            S
-        </div>
-        <div class="col-md-7">
-            <textarea></textarea>
-        </div>
-        <div class="col-md-4">
-            IT Program and Project Delivery
-        </div>
-        <div class="col-md-1 text-center">
-            S
-        </div>
-        <div class="col-md-7">
-            <textarea></textarea>
-        </div>
-        <div class="col-md-4">
-            IT Operations and Service Delivery
-        </div>
-        <div class="col-md-1 text-center">
-            P
-        </div>
-        <div class="col-md-7">
-            <textarea></textarea>
-        </div>
-    </div>
+    {% endfor %}
+
     <div class="row scenario-divider">
+        {{ process_enabler_answer_formset.management_form }}
         <div class="col-md-12">
             Process Enabler
         </div>
@@ -230,135 +221,57 @@
             Governance and Management Practices
         </div>
         <div class="col-md-1 text-center">
-            Effect on Frequency
+            <abbr title="High / Medium / Low">Effect on Frequency</abbr>
         </div>
         <div class="col-md-1 text-center">
-            Effect on Impact
+            <abbr title="High / Medium / Low">Effect on Impact</abbr>
         </div>
         <div class="col-md-1 text-center">
-            Essential Control
+            <abbr title="Yes / No">Essential Control</abbr>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-1">
-            APO07.01
-        </div>
-        <div class="col-md-2">
-            Maintain adequate and appropriate staffing.
-        </div>
-        <div class="col-md-6">
-            Monitor the key goals and metrics to determine the extent to which the business is generating the expected value and benefits to the enterprise from IT-enabled investments and services. Identify significant issues and consider corrective actions.
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="freq_1">
-                    <option>-----</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
+
+    {% for process_enabler_answer_form in process_enabler_answer_formset %}
+        <div class="row">
+            {% for hidden in process_enabler_answer_form.hidden_fields %}
+            {{ hidden }}
+            {% endfor %}
+            <div class="col-md-1">
+                {{ process_enabler_answer_form.instance.control_practice.practice_id }}
+            </div>
+            <div class="col-md-2">
+                {{ process_enabler_answer_form.instance.control_practice.practice_name }}
+            </div>
+            <div class="col-md-6">
+                {{ process_enabler_answer_form.instance.control_practice.practice_governance }}
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    {{ process_enabler_answer_form.effect_on_frequency }}
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    {{ process_enabler_answer_form.effect_on_impact }}
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    {{ process_enabler_answer_form.essential_control }}
+                </div>
             </div>
         </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="impact_1">
-                    <option>-----</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="essential_1">
-                    <option>---</option>
-                    <option>Yes</option>
-                    <option>No</option>
-                </select>
-            </div>
-        </div>
+    {% endfor %}
     </div>
-    <div class="row">
-        <div class="col-md-1">
-            APO01.01
-        </div>
-        <div class="col-md-2">
-            Define the organizational structure.
-        </div>
-        <div class="col-md-6">
-            Establish an internal and extended organizational structure that reflects business needs and IT priorities. Put in place the required management structures (e.g., committees) that enable management decision making to take place in the most effective and efficient manner.
-        </div>
-        <div class="col-md-1">
+    <div class="row scenario-button-bar">
+        <div class="col-md-12">
             <div class="form-group">
-                <select class="form-control" id="freq_2">
-                    <option>-----</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="impact_2">
-                    <option>-----</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="essential_2">
-                    <option>---</option>
-                    <option>Yes</option>
-                    <option>No</option>
-                </select>
+                <a href="#" class="btn btn-danger">CANCEL</a>
+              <button type="submit" class="btn btn-primary pull-right">SAVE SCENARIO CATEGORY</button>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-1">
-            APO06.04
-        </div>
-        <div class="col-md-2">
-            Model and allocate costs.
-        </div>
-        <div class="col-md-6">
-            Establish and use an IT costing model based on the service definition, ensuring that allocation of costs for services is identifiable, measurable and predictable, to encourage the responsible use of resources including those provided by service providers. Regularly review and benchmark the appropriateness of the cost/ chargeback model to maintain its relevance and appropriateness to the evolving business and IT activities.
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="freq_3">
-                    <option>-----</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="impact_3">
-                    <option>-----</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <select class="form-control" id="essential_3">
-                    <option>---</option>
-                    <option>Yes</option>
-                    <option>No</option>
-                </select>
-            </div>
-        </div>
-    </div>
+
 </form>
 <br/>
 {% endblock content %}

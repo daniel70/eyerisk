@@ -2,12 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
-
-# from risk.forms import ScenarioCategoryForm
-from risk.forms import ScenarioCategoryAnswerForm, RiskTypeAnswerForm
+from .forms import ScenarioCategoryAnswerForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, ProcessEnabler, Enabler, RiskType, \
-    ScenarioCategoryAnswer, RiskTypeAnswer
+    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, Enabler, RiskType, \
+    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer
 
 
 class EmployeeInline(admin.StackedInline):
@@ -75,7 +73,7 @@ class ControlActivityAdmin(TabbedTranslationAdmin):
     list_display = ('activity_id', 'activity')
     # list_filter = (
     #     ('standard', admin.RelatedOnlyFieldListFilter),
-    # )
+    # )null
 
 
 # class RiskTypeInline(admin.TabularInline):
@@ -88,34 +86,34 @@ class EnablerInline(admin.TabularInline):
     extra = 1
 
 
-class ProcessEnablerInline(admin.TabularInline):
-    model = ProcessEnabler
+class ControlPracticeInline(admin.TabularInline):
+    model = ScenarioCategory.process_enablers.through
     extra = 1
 
 
 class ScenarioCategoryAdmin(admin.ModelAdmin):
     # form = ScenarioCategoryForm
     list_display = ('nr', 'name')
-    inlines = (EnablerInline, ProcessEnablerInline)
+    inlines = (EnablerInline, ControlPracticeInline)
 
 
 class RiskTypeAnswerInline(admin.TabularInline):
     model = RiskTypeAnswer
     extra = 0
+    can_delete = False
 
 
-class MyRiskTypeAnswer(admin.ModelAdmin):
-    form = RiskTypeAnswerForm
+class ProcessEnablerAnswerInline(admin.TabularInline):
+    model = ProcessEnablerAnswer
+    extra = 0
+    can_delete = False
 
-# class RiskTypeAdmin(admin.ModelAdmin):
-#     inlines = (RiskTypeAnswerInline,)
-#
 
 class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
     form = ScenarioCategoryAnswerForm
-    list_display = ('company', 'scenario_category', 'created', 'updated')
+    list_display = ('__str__', 'company', 'created', 'updated')
     # exclude = ('risk_type_answer',)
-    inlines = (RiskTypeAnswerInline,)
+    inlines = (RiskTypeAnswerInline, ProcessEnablerAnswerInline)
 
 
 class ScenarioAdmin(admin.ModelAdmin):
@@ -145,8 +143,9 @@ admin.site.register(Selection)
 admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
 admin.site.register(ScenarioCategoryAnswer, ScenarioCategoryAnswerAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
-# admin.site.register(RiskType, RiskTypeAdmin)
-admin.site.register(RiskTypeAnswer, MyRiskTypeAnswer)
+#no need to clutter the admin with these inlines
+admin.site.register(RiskTypeAnswer)
+admin.site.register(ProcessEnablerAnswer)
 
 admin.site.site_title = "EYERISK Administration"
 admin.site.site_header = "EYERISK Administration"

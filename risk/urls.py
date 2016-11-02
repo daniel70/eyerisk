@@ -20,5 +20,6 @@ urlpatterns = [
 
     url(r'^riskmaps/$', riskmaps, name='riskmaps'),
     url(r'^scenarios/$', scenarios, name='scenarios'),
+    url(r'^scenarios/(?P<simple>T)/$', scenarios, name='simple_scenarios'),
 ]
 

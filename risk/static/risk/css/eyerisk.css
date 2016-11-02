@@ -92,6 +92,10 @@
     background-color: #F5F79D;
 }
 
+.scenario-button-bar {
+    margin-top: 15px;
+}
+
 .scenario textarea {
     width: 100%;
     height: 5em;
