@@ -4,7 +4,9 @@
 {% block content %}
 <form class="form scenario" method="post" action="">
     {% csrf_token %}
+
     {% for risktype_answers_form in risktype_answers_formset %}
+        {{ risktype_answers_form.description }}<br />
         {{ risktype_answers_form }}
     {% endfor %}
 

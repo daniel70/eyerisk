@@ -19,17 +19,14 @@ def riskmaps(request):
 
 def scenarios(request):
     # hardcoded for now
-    sc = get_object_or_404(ScenarioCategoryAnswer, pk=1)
-    company = get_object_or_404(Company, pk=1)
-    form = ScenarioCategoryAnswerForm(instance=sc)
+    sca = get_object_or_404(ScenarioCategoryAnswer, pk=1)
+    form = ScenarioCategoryAnswerForm(instance=sca)
     RiskTypeAnswerFormSet = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
                                                   extra=0, can_delete=False)
-    risktype_answer_formset = RiskTypeAnswerFormSet(instance=sc)
+    risktype_answer_formset = RiskTypeAnswerFormSet(instance=sca)
 
     context = {
-        'item': sc,
         'form': form,
-        'company': company,
         'risktype_answers_formset': risktype_answer_formset,
     }
     return render(request, template_name='risk/simple_scenarios.html', context=context)
