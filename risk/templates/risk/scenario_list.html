@@ -1,0 +1,52 @@
+{% extends "risk/base.html" %}
+
+{% block content %}
+<table class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <th>
+                NAME
+            </th>
+            <th>
+                CATEGORY
+            </th>
+            <th>
+                EDIT
+            </th>
+            <th>
+                DELETE
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if not scenario_list %}
+        <tr><td colspan="3">No scenario's yet, go ahead and create one!</td></tr>
+        {% endif %}
+        {% for scenario in scenario_list %}
+        <tr>
+            <td>
+                {{ scenario }}
+            </td>
+            <td>
+                {{ scenario.scenario_category }}
+            </td>
+            <td>
+                <a href="{% url 'scenario-edit' pk=scenario.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+            <td>
+                <a href="{% url 'scenario-delete' pk=scenario.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">
+                No scenario's yet, go ahead and create one!
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="well well-sm text-right">
+    <a class="btn btn-primary" role="button" href="{% url 'scenario-add' %}">ADD SCENARIO</a>
+</div>
+{% endblock content %}

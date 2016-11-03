@@ -2,8 +2,14 @@
 {% load staticfiles %}
 {% load bootstrap %}
 {% block content %}
+{{ form.non_field_errors }}
+
 <form class="form" method="post" action="">
     {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
     <div class="scenario">
     <div class="row scenario-title text-center">
         <div class="col-md-12">
@@ -262,11 +268,70 @@
             </div>
         </div>
     {% endfor %}
+
+    {% for enabler_answer_form in enabler_answer_formset %}
+        {% ifchanged enabler_answer_form.instance.enabler.type %}
+        <div class="row scenario-divider">
+            {% if forloop.first %}
+                {{ enabler_answer_formset.management_form }}
+            {% endif %}
+            <div class="col-md-12">
+                {{ enabler_answer_form.instance.enabler.get_type_display}}
+            </div>
+        </div>
+        <div class="row scenario-header">
+            <div class="col-md-3 text-center">
+                Reference
+            </div>
+            <div class="col-md-6 text-center">
+                Contribution to Response
+            </div>
+            <div class="col-md-1 text-center">
+                <abbr title="High / Medium / Low">Effect on Frequency</abbr>
+            </div>
+            <div class="col-md-1 text-center">
+                <abbr title="High / Medium / Low">Effect on Impact</abbr>
+            </div>
+            <div class="col-md-1 text-center">
+                <abbr title="Yes / No">Essential Control</abbr>
+            </div>
+        </div>
+        {% endifchanged %}
+
+        <div class="row">
+            {% for hidden in enabler_answer_form.hidden_fields %}
+            {{ hidden }}
+            {% endfor %}
+            <div class="col-md-3">
+                {{ enabler_answer_form.instance.enabler.reference }}
+            </div>
+            <div class="col-md-6">
+                {{ enabler_answer_form.instance.enabler.contribution_to_response }}
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    {{ enabler_answer_form.effect_on_frequency }}
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    {{ enabler_answer_form.effect_on_impact }}
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    {{ enabler_answer_form.essential_control }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
     </div>
     <div class="row scenario-button-bar">
         <div class="col-md-12">
             <div class="form-group">
-                <a href="#" class="btn btn-danger">CANCEL</a>
+                <a href="{% url 'scenario-list' %}" class="btn btn-danger">CANCEL</a>
               <button type="submit" class="btn btn-primary pull-right">SAVE SCENARIO CATEGORY</button>
             </div>
         </div>

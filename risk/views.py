@@ -10,7 +10,7 @@ from django.shortcuts import render, get_object_or_404
 from django.forms import inlineformset_factory
 
 from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
-    ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer
+    ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet, ScenarioCategoryAnswerForm
 
 
@@ -18,13 +18,32 @@ def riskmaps(request):
     return render(request, template_name='risk/riskmaps.html')
 
 
-def scenarios(request, simple=False):
+def scenario_list(request):
+    object_list = ScenarioCategoryAnswer.objects.filter(company=request.user.employee.company).order_by('-updated')
+    context = {'scenario_list': object_list, 'object_list': object_list}
+    return render(request, template_name='risk/scenario_list.html', context=context)
+
+
+def scenario_create(request):
+    pass
+
+
+def scenario_delete(request):
+    pass
+
+
+def scenario_edit(request, pk):
     # hardcoded for now
-    sca = get_object_or_404(ScenarioCategoryAnswer, pk=1)
+    sca = get_object_or_404(ScenarioCategoryAnswer, pk=pk)
     risk_type_answer_factory = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
                                                   extra=0, can_delete=False)
     process_enabler_answer_factory = inlineformset_factory(
         ScenarioCategoryAnswer, ProcessEnablerAnswer,
+        fields=('effect_on_frequency', 'effect_on_impact', 'essential_control'),
+        extra=0, can_delete=False
+    )
+    enabler_answer_factory = inlineformset_factory(
+        ScenarioCategoryAnswer, EnablerAnswer,
         fields=('effect_on_frequency', 'effect_on_impact', 'essential_control'),
         extra=0, can_delete=False
     )
@@ -33,30 +52,37 @@ def scenarios(request, simple=False):
         form = ScenarioCategoryAnswerForm(request.POST, request.FILES, instance=sca)
         risk_type_answer_formset = risk_type_answer_factory(request.POST, request.FILES, instance=sca)
         process_enabler_answer_formset = process_enabler_answer_factory(request.POST, request.FILES, instance=sca)
+        enabler_answer_formset = enabler_answer_factory(request.POST, request.FILES, instance=sca)
 
         if form.is_valid() \
                 and risk_type_answer_formset.is_valid() \
-                and process_enabler_answer_formset:
+                and process_enabler_answer_formset.is_valid() \
+                and enabler_answer_formset.is_valid:
             form.save()
             risk_type_answer_formset.save()
             process_enabler_answer_formset.save()
-            return HttpResponseRedirect(reverse('simple_scenarios', args=['T']))
+            enabler_answer_formset.save()
+            return HttpResponseRedirect(reverse('scenario-list'))
+        else:
+            print(form.errors)
+            print(risk_type_answer_formset.errors)
+            print(process_enabler_answer_formset.errors)
+            print(enabler_answer_formset.errors)
     else:
         form = ScenarioCategoryAnswerForm(instance=sca)
         risk_type_answer_formset = risk_type_answer_factory(instance=sca)
         process_enabler_answer_formset = process_enabler_answer_factory(instance=sca)
+        enabler_answer_formset = enabler_answer_factory(instance=sca)
 
 
     context = {
         'form': form,
         'risk_type_answer_formset': risk_type_answer_formset,
         'process_enabler_answer_formset': process_enabler_answer_formset,
+        'enabler_answer_formset': enabler_answer_formset,
     }
 
-    template_name = 'risk/scenarios.html'
-    if simple:
-        template_name = 'risk/simple_scenarios.html'
-
+    template_name = 'risk/scenario_edit.html'
     return render(request, template_name=template_name, context=context)
 
 

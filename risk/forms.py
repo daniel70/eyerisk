@@ -1,5 +1,5 @@
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
-    MultipleChoiceField, inlineformset_factory, BaseInlineFormSet
+    MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple
 from .models import Selection, SelectionControl, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType
 
 
@@ -25,14 +25,22 @@ class SelectionControlForm(ModelForm):
 SelectionControlFormSet = modelformset_factory(SelectionControl, form=SelectionControlForm, extra=0, can_delete=False)
 
 
-class ScenarioCategoryAnswerForm(ModelForm):
-    # threat_type = MultipleChoiceField(widget=CheckboxSelectMultiple, choices=ScenarioCategory.THREAT_TYPE_CHOICES)
+class ScenarioCategoryForm(ModelForm):
+    """
+    We want a larger selectmultiple box for process enablers.
+    """
+    class Meta:
+        model = ScenarioCategory
+        fields = ('nr', 'name', 'risk_scenario', 'risk_types', 'process_enablers')
+        widgets = {
+            'process_enablers': SelectMultiple(attrs={'size': 12, 'style': 'min-height:300px'})
+        }
 
+
+class ScenarioCategoryAnswerForm(ModelForm):
     class Meta:
         model = ScenarioCategoryAnswer
-        fields = ('name', 'company', 'scenario_category', 'threat_type', 'actor', 'event', 'asset', 'resource',
-                  'timing', 'duration', 'detection', 'time_lag')
-
+        fields = ('threat_type', 'actor', 'event', 'asset', 'resource', 'timing', 'duration', 'detection', 'time_lag')
         widgets = {
             'threat_type': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.THREAT_TYPE_CHOICES),
             'actor': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ACTOR_CHOICES),
@@ -44,3 +52,12 @@ class ScenarioCategoryAnswerForm(ModelForm):
             'detection': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.DETECTION_CHOICES),
             'time_lag': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.TIME_LAG_CHOICES),
         }
+
+class ScenarioCategoryAnswerAdminForm(ScenarioCategoryAnswerForm):
+    """
+    Only difference with the 'normal' form is that we show a few extra fields in admin.
+    Note the trick to override Meta class. Nice.
+    """
+    class Meta(ScenarioCategoryAnswerForm.Meta):
+        fields = ('name', 'company', 'scenario_category') + ScenarioCategoryAnswerForm.Meta.fields
+

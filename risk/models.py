@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.signals import m2m_changed, post_save, post_delete
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
 from django.dispatch import receiver
@@ -299,6 +299,7 @@ def risk_types_changed(sender, **kwargs):
     if action == "pre_remove":
         RiskTypeAnswer.objects.filter(risk_type__in=pk_set, scenario_category_answer__scenario_category=instance).delete()
 
+
 @receiver(m2m_changed, sender=ScenarioCategory.process_enablers.through)
 def process_enablers_changed(sender, **kwargs):
     """
@@ -320,7 +321,6 @@ def process_enablers_changed(sender, **kwargs):
 
     if action == "pre_remove":
         ProcessEnablerAnswer.objects.filter(control_practice__in=pk_set, scenario_category_answer__scenario_category=instance).delete()
-
 
 
 class ScenarioCategoryAnswer(models.Model):
@@ -468,6 +468,15 @@ class Scenario(models.Model):
 
 
 class Enabler(models.Model):
+    """
+    Enablers are questions on Scenario Category Forms.
+    They have a reference and a contribution to response (text).
+    As with process enablers, the response is effect on frequency, impact and essential control.
+    The difference with process enablers and risk types is that those are many-to-many relationships,
+    while these are created as foreign-key relationships.
+    Each scenario category has its own specific enablers and they are copied to the scenario category answers
+    when they are created.
+    """
     ENABLER_CHOICES = (
         (1, 'Principles, Policies and Frameworks Enabler'),
         (2, 'Organisational Structures Enabler'),
@@ -483,6 +492,53 @@ class Enabler(models.Model):
 
     def __str__(self):
         return self.reference
+
+
+@receiver(post_save, sender=Enabler)
+def enabler_saved(sender, **kwargs):
+    """
+    create an EnablerAnswer from this Enabler and save it to all ScenarioCategoryAnswers that point to the
+    scenario_category that this Enabler points to.
+    """
+    instance = kwargs.pop('instance', None)
+    created = kwargs.pop('created', None)
+    raw = kwargs.pop('raw', None)
+    using = kwargs.pop('using', None)
+    update_fields = kwargs.pop('update_fields', None)
+
+    print('sender', sender)
+    print('instance', instance)
+    print('created', created)
+    print('raw', raw)
+    print('using', using)
+    print('update_fields', update_fields)
+
+    if created:
+        for scenario_category_answer in ScenarioCategoryAnswer.objects.filter(scenario_category=instance.scenario_category):
+            EnablerAnswer.objects.create(enabler=instance, scenario_category_answer=scenario_category_answer)
+
+
+class EnablerAnswer(models.Model):
+    HIGH = 'H'
+    MEDIUM = 'M'
+    LOW = 'L'
+    EFFECTS = (
+        (HIGH, 'High'),
+        (MEDIUM, 'Medium'),
+        (LOW, 'Low'),
+    )
+    enabler = models.ForeignKey(Enabler, on_delete=models.CASCADE)
+    scenario_category_answer = models.ForeignKey(ScenarioCategoryAnswer, on_delete=models.CASCADE)
+    effect_on_frequency = models.CharField(max_length=1, choices=EFFECTS, blank=True)
+    effect_on_impact = models.CharField(max_length=1, choices=EFFECTS, blank=True)
+    essential_control = models.CharField(max_length=1, choices=[('Y', 'Y'), ('N', 'N')], blank=True)
+
+    class Meta:
+        unique_together = ('enabler', 'scenario_category_answer')
+
+
+    def __str__(self):
+        return '{} - {}'.format(self.enabler, self.scenario_category_answer)
 
 
 class ProcessEnablerAnswer(models.Model):

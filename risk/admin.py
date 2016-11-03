@@ -2,10 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
-from .forms import ScenarioCategoryAnswerForm
+from .forms import ScenarioCategoryAnswerForm, ScenarioCategoryForm, ScenarioCategoryAnswerAdminForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
     Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, Enabler, RiskType, \
-    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer
+    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
 
 
 class EmployeeInline(admin.StackedInline):
@@ -93,8 +93,9 @@ class ControlPracticeInline(admin.TabularInline):
 
 class ScenarioCategoryAdmin(admin.ModelAdmin):
     # form = ScenarioCategoryForm
+    form = ScenarioCategoryForm
     list_display = ('nr', 'name')
-    inlines = (EnablerInline, ControlPracticeInline)
+    inlines = (EnablerInline,)
 
 
 class RiskTypeAnswerInline(admin.TabularInline):
@@ -109,11 +110,17 @@ class ProcessEnablerAnswerInline(admin.TabularInline):
     can_delete = False
 
 
+class EnablerAnswerInline(admin.TabularInline):
+    model = EnablerAnswer
+    extra = 0
+    can_delete = False
+
+
 class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
-    form = ScenarioCategoryAnswerForm
+    form = ScenarioCategoryAnswerAdminForm
     list_display = ('__str__', 'company', 'created', 'updated')
     # exclude = ('risk_type_answer',)
-    inlines = (RiskTypeAnswerInline, ProcessEnablerAnswerInline)
+    inlines = (RiskTypeAnswerInline, ProcessEnablerAnswerInline, EnablerAnswerInline)
 
 
 class ScenarioAdmin(admin.ModelAdmin):
@@ -144,6 +151,8 @@ admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
 admin.site.register(ScenarioCategoryAnswer, ScenarioCategoryAnswerAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
 #no need to clutter the admin with these inlines
+admin.site.register(Enabler)
+admin.site.register(EnablerAnswer)
 admin.site.register(RiskTypeAnswer)
 admin.site.register(ProcessEnablerAnswer)
 

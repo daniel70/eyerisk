@@ -2,8 +2,7 @@ import django.contrib.auth.urls
 from django.conf.urls import url, include
 from .views import SelectionDetail, SelectionList, SelectionCreate, SelectionUpdate, SelectionControlAssess, \
     SelectionDelete, SelectionControlView, ControlSelectionView, control_selection, control_selection_react, \
-    riskmaps, scenarios
-
+    riskmaps, scenario_list, scenario_create, scenario_edit, scenario_delete
 
 urlpatterns = [
     url(r'^$', SelectionList.as_view(), name='risk-home'),
@@ -19,7 +18,10 @@ urlpatterns = [
     url(r'^selectioncontrol/(?P<selection_id>\d+)/assess$', SelectionControlAssess.as_view(), name='selection-assess'),
 
     url(r'^riskmaps/$', riskmaps, name='riskmaps'),
-    url(r'^scenarios/$', scenarios, name='scenarios'),
-    url(r'^scenarios/(?P<simple>T)/$', scenarios, name='simple_scenarios'),
+
+    url(r'^scenario/$', scenario_list, name='scenario-list'),
+    url(r'^scenario/create$', scenario_create, name='scenario-add'),
+    url(r'^scenario/(?P<pk>\d+)/edit$', scenario_edit, name='scenario-edit'),
+    url(r'^scenario/(?P<pk>\d+)/delete$', scenario_delete, name='scenario-delete'),
 ]
 
