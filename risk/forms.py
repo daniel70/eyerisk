@@ -61,3 +61,12 @@ class ScenarioCategoryAnswerAdminForm(ScenarioCategoryAnswerForm):
     class Meta(ScenarioCategoryAnswerForm.Meta):
         fields = ('name', 'company', 'scenario_category') + ScenarioCategoryAnswerForm.Meta.fields
 
+
+class ScenarioCategoryAnswerCreateForm(ModelForm):
+    """
+    This form is used to create a new ScenarioCategoryAnswer.
+    After the form is created the risk types, and enablers are copied over from the ScenarioCategory.
+    """
+    class Meta:
+        model = ScenarioCategoryAnswer
+        fields = ('name', 'scenario_category')

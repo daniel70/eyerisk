@@ -11,7 +11,8 @@ from django.forms import inlineformset_factory
 
 from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
     ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
-from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet, ScenarioCategoryAnswerForm
+from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet, ScenarioCategoryAnswerForm, \
+    ScenarioCategoryAnswerCreateForm
 
 
 def riskmaps(request):
@@ -20,7 +21,8 @@ def riskmaps(request):
 
 def scenario_list(request):
     object_list = ScenarioCategoryAnswer.objects.filter(company=request.user.employee.company).order_by('-updated')
-    context = {'scenario_list': object_list, 'object_list': object_list}
+    form = ScenarioCategoryAnswerCreateForm()
+    context = {'scenario_list': object_list, 'object_list': object_list, 'form': form}
     return render(request, template_name='risk/scenario_list.html', context=context)
 
 

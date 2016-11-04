@@ -1,6 +1,26 @@
 {% extends "risk/base.html" %}
-
+{% load bootstrap %}
 {% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">CREATE SCENARIO</h4>
+      </div>
+      <div class="modal-body">
+        {{ form|bootstrap }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+        <button type="button" class="btn btn-primary">CREATE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <table class="table table-responsive table-striped">
     <thead>
         <tr>
@@ -47,6 +67,11 @@
     </tbody>
 </table>
 <div class="well well-sm text-right">
-    <a class="btn btn-primary" role="button" href="{% url 'scenario-add' %}">ADD SCENARIO</a>
+    <!--<a class="btn btn-primary" role="button" href="{% url 'scenario-add' %}">ADD SCENARIO</a>-->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+      ADD SCENARIO
+    </button>
 </div>
+
+
 {% endblock content %}
