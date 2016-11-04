@@ -1,16 +1,16 @@
 import django.contrib.auth.urls
 from django.conf.urls import url, include
-from .views import SelectionDetail, SelectionList, SelectionCreate, SelectionUpdate, SelectionControlAssess, \
-    SelectionDelete, SelectionControlView, ControlSelectionView, control_selection, control_selection_react, \
-    riskmaps, scenario_list, scenario_create, scenario_edit, scenario_delete
+from .views import SelectionDetail, SelectionCreate, SelectionUpdate, SelectionControlAssess, \
+    SelectionControlView, ControlSelectionView, control_selection, control_selection_react, \
+    riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete
 
 urlpatterns = [
-    url(r'^$', SelectionList.as_view(), name='risk-home'),
-    url(r'^selection/$', SelectionList.as_view(), name='selection-list'),
+    url(r'^$', selection_list, name='risk-home'),
+    url(r'^selection/$', selection_list, name='selection-list'),
     url(r'^selection/(?P<pk>\d+)/$', SelectionDetail.as_view(), name='selection-detail'),
     url(r'^selection/create$', SelectionCreate.as_view(), name='selection-add'),
     url(r'^selection/(?P<pk>\d+)/edit$', SelectionUpdate.as_view(), name='selection-edit'),
-    url(r'^selection/(?P<pk>\d+)/delete$', SelectionDelete.as_view(), name='selection-delete'),
+    url(r'^selection/(?P<pk>\d+)/delete$', selection_delete, name='selection-delete'),
     url(r'^selectioncontrol/(?P<pk>\d+)/$', SelectionControlView.as_view(), name='selection-control'),
     url(r'^controlselection/(?P<pk>\d+)/$', control_selection, name='control-selection'),
     url(r'^controlselectionreact/(?P<pk>\d+)/$', control_selection_react, name='control-selection-react'),
@@ -20,7 +20,6 @@ urlpatterns = [
     url(r'^riskmaps/$', riskmaps, name='riskmaps'),
 
     url(r'^scenario/$', scenario_list, name='scenario-list'),
-    url(r'^scenario/create$', scenario_create, name='scenario-add'),
     url(r'^scenario/(?P<pk>\d+)/edit$', scenario_edit, name='scenario-edit'),
     url(r'^scenario/(?P<pk>\d+)/delete$', scenario_delete, name='scenario-delete'),
 ]

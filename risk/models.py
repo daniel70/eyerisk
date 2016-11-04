@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, transaction
 from django.db.models.signals import m2m_changed, post_save, post_delete
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
@@ -35,8 +35,6 @@ def company_created(sender, instance, created, **kwargs):
             rm.name = 'Enterprise'
             rm.level = 1  # Enterprise level
             rm.save()
-
-# post_save.connect(company_created, sender=Company)
 
 
 class Employee(models.Model):
@@ -420,14 +418,47 @@ class ScenarioCategoryAnswer(models.Model):
     duration = models.CharField(max_length=100, blank=True)
     detection = models.CharField(max_length=100, blank=True)
     time_lag = models.CharField(max_length=100, blank=True)
-    created = models.DateTimeField(auto_now=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ['name', 'company']
 
     def __str__(self):
         return "{}".format(self.name)
+
+
+@receiver(post_save, sender=ScenarioCategoryAnswer)
+def scenario_category_answer_saved(sender, **kwargs):
+    """
+    create an EnablerAnswer from this Enabler and save it to all ScenarioCategoryAnswers that point to the
+    scenario_category that this Enabler points to.
+    """
+    instance = kwargs.pop('instance', None)
+    created = kwargs.pop('created', None)
+    raw = kwargs.pop('raw', None)
+    using = kwargs.pop('using', None)
+    update_fields = kwargs.pop('update_fields', None)
+
+    if created:
+        sc = instance.scenario_category
+        # get the risk types
+        risk_types = []
+        for risk_type in sc.risk_types.all():
+            risk_types.append(RiskTypeAnswer(risk_type=risk_type, scenario_category_answer=instance))
+
+        process_enablers = []
+        for process_enabler in sc.process_enablers.all():
+            process_enablers.append(ProcessEnablerAnswer(control_practice=process_enabler, scenario_category_answer=instance))
+
+        enablers = []
+        for enabler in sc.enabler_set.all():
+            enablers.append(EnablerAnswer(enabler=enabler, scenario_category_answer=instance))
+
+        with transaction.atomic():
+            RiskTypeAnswer.objects.bulk_create(risk_types)
+            ProcessEnablerAnswer.objects.bulk_create(process_enablers)
+            EnablerAnswer.objects.bulk_create(enablers)
 
 
 class Scenario(models.Model):

@@ -1,46 +1,56 @@
 {% extends "risk/base.html" %}
 
 {% block content %}
-<table class="table">
+<table class="table table-responsive table-striped">
     <thead>
         <tr>
             <th>
-                Name
+                NAME
             </th>
+            {% if perms.risk.change_selection %}
             <th>
-                <!--edit -->
+                EDIT
             </th>
+            {% endif %}
+            {% if perms.risk.delete_selection %}
             <th>
-                <!--assess -->
+                DELETE
             </th>
-            <th>
-                <!--delete -->
-            </th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
-        {% if not selection_list %}
-        <tr><td colspan="3">No selections yet, go ahead and create one!</td></tr>
-        {% endif %}
         {% for selection in selection_list %}
         <tr>
             <td>
                 {{ selection }}
             </td>
+            {% if perms.risk.change_selection %}
             <td>
-                <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span> change</a>
+                <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
             </td>
+            {% endif %}
+            {% if perms.risk.delete_selection %}
             <td>
-                <a href="{% url 'selection-assess' selection_id=selection.pk %}"><span class="glyphicon glyphicon-eye-open"></span> assess</a>
+                <a href="{% url 'selection-delete' pk=selection.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
             </td>
-            <td>
-                <a href="{% url 'selection-delete' pk=selection.pk %}"><span class="glyphicon glyphicon-trash"></span> delete</a>
-            </td>
+            {% endif %}
         </tr>
+        {% empty %}
+        <tr>
+            {% if perms.risk.add_selection %}
+            <td colspan="3">No selections yet, go ahead and create one!</td>
+            {% else %}
+            <td colspan="3">There are no selections and you don't have the permission to create one!</td>
+            {% endif %}
+        </tr>
+
         {% endfor %}
     </tbody>
 </table>
+{% if perms.risk.add_selection %}
 <div class="well well-sm text-right">
     <a class="btn btn-primary" role="button" href="{% url 'selection-add' %}">ADD SELECTION</a>
 </div>
+{% endif %}
 {% endblock content %}

@@ -1,7 +1,6 @@
 {% extends "risk/base.html" %}
 {% load bootstrap %}
 {% block content %}
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -10,16 +9,25 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">CREATE SCENARIO</h4>
       </div>
-      <div class="modal-body">
-        {{ form|bootstrap }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
-        <button type="button" class="btn btn-primary">CREATE</button>
-      </div>
+      <form class="form" method="post" action="">
+          {% csrf_token %}
+          <div class="modal-body">
+                {{ form|bootstrap }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+            <button type="submit" class="btn btn-primary">CREATE</button>
+          </div>
+      </form>
     </div>
   </div>
 </div>
+{% for error in errors %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  {{ error }}
+</div>
+{% endfor %}
 
 <table class="table table-responsive table-striped">
     <thead>
@@ -30,18 +38,19 @@
             <th>
                 CATEGORY
             </th>
+            {% if perms.risk.change_scenariocategoryanswer %}
             <th>
                 EDIT
             </th>
+            {% endif %}
+            {% if perms.risk.delete_scenariocategoryanswer %}
             <th>
                 DELETE
             </th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
-        {% if not scenario_list %}
-        <tr><td colspan="3">No scenario's yet, go ahead and create one!</td></tr>
-        {% endif %}
         {% for scenario in scenario_list %}
         <tr>
             <td>
@@ -50,28 +59,38 @@
             <td>
                 {{ scenario.scenario_category }}
             </td>
+            {% if perms.risk.change_scenariocategoryanswer %}
             <td>
                 <a href="{% url 'scenario-edit' pk=scenario.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
             </td>
+            {% endif %}
+            {% if perms.risk.delete_scenariocategoryanswer %}
             <td>
                 <a href="{% url 'scenario-delete' pk=scenario.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
             </td>
+            {% endif %}
         </tr>
         {% empty %}
         <tr>
-            <td colspan="4">
+            {% if perms.risk.add_scenariocategoryanswer %}
+            <td colspan="3">
                 No scenario's yet, go ahead and create one!
             </td>
+            {% else %}
+            <td colspan="3">
+                There are no scenario's and you don't have the permission to create one!
+            </td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% if perms.risk.add_scenariocategoryanswer %}
 <div class="well well-sm text-right">
-    <!--<a class="btn btn-primary" role="button" href="{% url 'scenario-add' %}">ADD SCENARIO</a>-->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
       ADD SCENARIO
     </button>
 </div>
-
+{% endif %}
 
 {% endblock content %}

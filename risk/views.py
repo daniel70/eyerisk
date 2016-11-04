@@ -1,4 +1,4 @@
-import json
+import json, sys
 
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -6,8 +6,10 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.shortcuts import render, get_object_or_404
 from django.forms import inlineformset_factory
+from django.db import IntegrityError
 
 from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
     ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
@@ -15,28 +17,92 @@ from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet,
     ScenarioCategoryAnswerCreateForm
 
 
+def is_employee(user):
+    """
+    Most views work with the set of objects that belong to a company.
+    E.g. the list of scenario's only shows the scenario's that belong to the company of the currently logged in user.
+    So most views should be protected to only show its contents when requested by an employee.
+    """
+    return hasattr(user, 'employee')
+
+
 def riskmaps(request):
     return render(request, template_name='risk/riskmaps.html')
 
 
+# @permission_required('risk.change_selection')
+@user_passes_test(is_employee)
+def selection_list(request):
+    selection_list = Selection.objects.filter(company=request.user.employee.company).order_by('-updated')
+    context = {'selection_list': selection_list}
+    return render(request, template_name='risk/selection_list.html', context=context)
+
+
+@user_passes_test(is_employee)
 def scenario_list(request):
-    object_list = ScenarioCategoryAnswer.objects.filter(company=request.user.employee.company).order_by('-updated')
+    """
+    This view lists all the ScenarioCategoryAnswers. They can be edited and deleted.
+    Also, a ScenarioCategoryAnswer can be created from this view.
+    We first ask for the most basic information (name and category) and the post_save signal will do all the work
+    of creating the corresponding risk types and enablers.
+    After the ScenarioCategoryAnswer is created we redirect to the corresponding edit page.
+    Of course it is possible that something goes wrong in the creation process, that is what the try/catch is for.
+    """
+    errors = []
+    if request.method == "POST":
+        form = ScenarioCategoryAnswerCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            sca = ScenarioCategoryAnswer(company=request.user.employee.company,
+                                         scenario_category=form.cleaned_data['scenario_category'],
+                                         name=form.cleaned_data['name'])
+
+            try:
+                sca.save()
+                return HttpResponseRedirect(reverse('scenario-edit', args=[sca.pk]))
+            except IntegrityError as err:
+                print(err)
+                errors.append("Oops, a scenario with this name ({}) already exists, please use a different name.".format(
+                    form.cleaned_data['name']
+                ))
+            except:
+                print(sys.exc_info()[0])
+                errors.append(sys.exc_info()[0])
+        else:
+            errors.append("Please select a category for this scenario.")
+
+    scenario_list = ScenarioCategoryAnswer.objects.filter(company=request.user.employee.company).order_by('-updated')
     form = ScenarioCategoryAnswerCreateForm()
-    context = {'scenario_list': object_list, 'object_list': object_list, 'form': form}
+    context = {'scenario_list': scenario_list, 'form': form, 'errors': errors}
     return render(request, template_name='risk/scenario_list.html', context=context)
 
 
-def scenario_create(request):
-    pass
+@permission_required('risk.delete_scenariocategoryanswer')
+def scenario_delete(request, pk):
+    scenario_category_answer = get_object_or_404(ScenarioCategoryAnswer, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        scenario_category_answer.delete()
+        return HttpResponseRedirect(reverse('scenario-list'))
+
+    context = {'object': scenario_category_answer}
+    return render(request, template_name='risk/scenario_confirm_delete.html', context=context)
 
 
-def scenario_delete(request):
-    pass
+@permission_required('risk.delete_selection')
+def selection_delete(request, pk):
+    selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        selection.delete()
+        return HttpResponseRedirect(reverse('selection-list'))
+
+    context = {'object': selection}
+    return render(request, template_name='risk/selection_confirm_delete.html', context=context)
 
 
+@user_passes_test(is_employee)
+@permission_required('risk.change_scenariocategoryanswer')
 def scenario_edit(request, pk):
     # hardcoded for now
-    sca = get_object_or_404(ScenarioCategoryAnswer, pk=pk)
+    sca = get_object_or_404(ScenarioCategoryAnswer, pk=pk, company=request.user.employee.company)
     risk_type_answer_factory = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
                                                   extra=0, can_delete=False)
     process_enabler_answer_factory = inlineformset_factory(
@@ -93,13 +159,13 @@ class SelectionDetail(generic.DetailView):
     model = Selection
 
 
-class SelectionList(LoginRequiredMixin, generic.ListView):
-    template_name = 'risk/selection_list.html'
-    # model = Selection
-    context_object_name = 'selection_list'
-
-    def get_queryset(self):
-        return Selection.objects.filter(company=self.request.user.employee.company)
+# class SelectionList(LoginRequiredMixin, generic.ListView):
+#     template_name = 'risk/selection_list.html'
+#     # model = Selection
+#     context_object_name = 'selection_list'
+#
+#     def get_queryset(self):
+#         return Selection.objects.filter(company=self.request.user.employee.company)
 
 
 class SelectionCreate(LoginRequiredMixin, generic.CreateView):
@@ -126,12 +192,6 @@ class SelectionUpdate(LoginRequiredMixin, generic.UpdateView):
     template_name = 'risk/selection_update_form.html'
     form_class = SelectionForm
     model = Selection
-
-
-class SelectionDelete(LoginRequiredMixin, generic.DeleteView):
-    template_name = 'risk/selection_confirm_delete.html'
-    model = Selection
-    success_url = reverse_lazy('selection-list')
 
 
 class SelectionControlAssess(LoginRequiredMixin, generic.TemplateView):
