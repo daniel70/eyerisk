@@ -9,6 +9,9 @@
     {% for hidden in form.hidden_fields %}
         {{ hidden }}
     {% endfor %}
+    {{ risk_type_answer_formset.management_form }}
+    {{ process_enabler_answer_formset.management_form }}
+    {{ enabler_answer_formset.management_form }}
 
     <div class="scenario">
     <div class="row scenario-title text-center">
@@ -174,7 +177,6 @@
 
 
     <div class="row scenario-divider">
-        {{ risk_type_answer_formset.management_form }}
         <div class="col-md-12">
             Risk Type<br>
             <small>Describe the consequences resulting from the event.
@@ -211,7 +213,6 @@
     {% endfor %}
 
     <div class="row scenario-divider">
-        {{ process_enabler_answer_formset.management_form }}
         <div class="col-md-12">
             Process Enabler
         </div>
@@ -272,9 +273,6 @@
     {% for enabler_answer_form in enabler_answer_formset %}
         {% ifchanged enabler_answer_form.instance.enabler.type %}
         <div class="row scenario-divider">
-            {% if forloop.first %}
-                {{ enabler_answer_formset.management_form }}
-            {% endif %}
             <div class="col-md-12">
                 {{ enabler_answer_form.instance.enabler.get_type_display}}
             </div>

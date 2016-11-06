@@ -153,6 +153,7 @@ admin.site.register(Scenario, ScenarioAdmin)
 #no need to clutter the admin with these inlines
 admin.site.register(Enabler)
 admin.site.register(EnablerAnswer)
+admin.site.register(RiskType)
 admin.site.register(RiskTypeAnswer)
 admin.site.register(ProcessEnablerAnswer)
 
