@@ -1,15 +1,18 @@
 import django.contrib.auth.urls
 from django.conf.urls import url, include
-from .views import SelectionDetail, SelectionCreate, SelectionUpdate, SelectionControlAssess, \
+from .views import SelectionDetail, SelectionControlAssess, \
     SelectionControlView, ControlSelectionView, control_selection, control_selection_react, \
-    riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete
+    riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete, selection_create, \
+    selection_edit
 
 urlpatterns = [
     url(r'^$', selection_list, name='risk-home'),
     url(r'^selection/$', selection_list, name='selection-list'),
     url(r'^selection/(?P<pk>\d+)/$', SelectionDetail.as_view(), name='selection-detail'),
-    url(r'^selection/create$', SelectionCreate.as_view(), name='selection-add'),
-    url(r'^selection/(?P<pk>\d+)/edit$', SelectionUpdate.as_view(), name='selection-edit'),
+    url(r'^selection/create$', selection_create, name='selection-add'),
+    # url(r'^selection/create$', SelectionCreate.as_view(), name='selection-add'),
+    # url(r'^selection/(?P<pk>\d+)/edit$', SelectionUpdate.as_view(), name='selection-edit'),
+    url(r'^selection/(?P<pk>\d+)/edit$', selection_edit, name='selection-edit'),
     url(r'^selection/(?P<pk>\d+)/delete$', selection_delete, name='selection-delete'),
     url(r'^selectioncontrol/(?P<pk>\d+)/$', SelectionControlView.as_view(), name='selection-control'),
     url(r'^controlselection/(?P<pk>\d+)/$', control_selection, name='control-selection'),

@@ -168,7 +168,21 @@ class SelectionDetail(generic.DetailView):
 #         return Selection.objects.filter(company=self.request.user.employee.company)
 
 
-class SelectionCreate(LoginRequiredMixin, generic.CreateView):
+# class SelectionCreate(LoginRequiredMixin, generic.CreateView):
+#     template_name = 'risk/selection_create_form.html'
+#     form_class = SelectionForm  # will point to SelectionDocumentForm later
+#     success_url = 'selection-edit'
+#
+#     def form_valid(self, form):
+#         form.instance.company = self.request.user.employee.company
+#         return super(SelectionCreate, self).form_valid(form)
+#
+#     def get_success_url(self):
+#         return reverse('selection-edit', args=(self.object.pk,))
+
+
+@user_passes_test(is_employee)
+def selection_create(request):
     """
     When a Selection is created, we also need to associate SelectionDocuments
     and we need to copy the Questions for these Documents to the SelectionQuestion
@@ -176,22 +190,41 @@ class SelectionCreate(LoginRequiredMixin, generic.CreateView):
     has now been removed and, if so, we need to remove their Questions from this Selection
     (or perhaps mark it as deleted to save the `decision` for this SelectionQuestion)
     """
-    template_name = 'risk/selection_create_form.html'
-    form_class = SelectionForm  # will point to SelectionDocumentForm later
-    success_url = 'selection-edit'
+    if request.method == "POST":
+        form = SelectionForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.company = request.user.employee.company
+            selection = form.save()
+            return HttpResponseRedirect(reverse('selection-edit', args=[selection.pk]))
 
-    def form_valid(self, form):
-        form.instance.company = self.request.user.employee.company
-        return super(SelectionCreate, self).form_valid(form)
-
-    def get_success_url(self):
-        return reverse('selection-edit', args=(self.object.pk,))
+    else:
+        form = SelectionForm()
+    context = {'form': form}
+    return render(request, template_name='risk/selection_create_form.html', context=context)
 
 
-class SelectionUpdate(LoginRequiredMixin, generic.UpdateView):
-    template_name = 'risk/selection_update_form.html'
-    form_class = SelectionForm
-    model = Selection
+# class SelectionUpdate(LoginRequiredMixin, generic.UpdateView):
+#     template_name = 'risk/selection_update_form.html'
+#     form_class = SelectionForm
+#     model = Selection
+
+
+@user_passes_test(is_employee)
+def selection_edit(request, pk):
+    selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        form = SelectionForm(request.POST, request.FILES, instance=selection)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('selection-edit', args=[selection.pk]))
+    else:
+        form = SelectionForm(instance=selection)
+
+    # let's try to create a formset of 'Selection Standards'
+    ss = selection.standards.all()
+
+    context = {'form': form}
+    return render(request, template_name='risk/selection_update_form.html', context=context)
 
 
 class SelectionControlAssess(LoginRequiredMixin, generic.TemplateView):
