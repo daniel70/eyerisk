@@ -160,17 +160,17 @@ def selection_changed(sender, **kwargs):
         for pk in pk_set:
             selection_controls = []
             for control in ControlActivity.objects.filter(controlpractice__controlprocess__controldomain__standard=pk):
-                selection_controls.append(SelectionControl(selection=instance, control=control, response='N'))
+                selection_controls.append(ControlSelection(selection=instance, control=control, response='N'))
 
-            SelectionControl.objects.bulk_create(selection_controls)
+            ControlSelection.objects.bulk_create(selection_controls)
 
     if action == "pre_remove":
-        SelectionControl.objects.filter(
+        ControlSelection.objects.filter(
             selection=instance, control__controlpractice__controlprocess__controldomain__standard__in=pk_set
         ).delete()
 
 
-class SelectionControl(models.Model):
+class ControlSelection(models.Model):
     NOTHING = 'N'  # no choice has been made yet
     ACCEPT = 'A'
     MITIGATE = 'M'

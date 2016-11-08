@@ -1,4 +1,4 @@
-from .models import Standard, Selection, SelectionControl, ControlDomain, ControlActivity, ControlPractice, \
+from .models import Standard, Selection, ControlSelection, ControlDomain, ControlActivity, ControlPractice, \
     ControlProcess, RiskMap
 from rest_framework import serializers
 
@@ -62,5 +62,5 @@ class RiskMapSerializer(serializers.ModelSerializer):
 #     # control = ControlActivitySerializer(many=False, read_only=True)
 #
 #     class Meta:
-#         model = SelectionControl
+#         model = ControlSelection
 #         fields = ('id', 'selection', 'control', 'response')

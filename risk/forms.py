@@ -1,6 +1,6 @@
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
     MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple
-from .models import Selection, SelectionControl, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType
+from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType
 
 
 class SelectionForm(ModelForm):
@@ -15,14 +15,14 @@ class SelectionForm(ModelForm):
 
 class SelectionControlForm(ModelForm):
     class Meta:
-        model = SelectionControl
+        model = ControlSelection
         fields = ('response', )
         widgets = {
             'response': RadioSelect(),
         }
 
 
-SelectionControlFormSet = modelformset_factory(SelectionControl, form=SelectionControlForm, extra=0, can_delete=False)
+SelectionControlFormSet = modelformset_factory(ControlSelection, form=SelectionControlForm, extra=0, can_delete=False)
 
 
 class ScenarioCategoryForm(ModelForm):

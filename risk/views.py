@@ -11,7 +11,7 @@ from django.shortcuts import render, get_object_or_404
 from django.forms import inlineformset_factory
 from django.db import IntegrityError
 
-from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
+from .models import Standard, Selection, ControlSelection, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
     ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
 from .forms import SelectionForm, SelectionControlForm, SelectionControlFormSet, ScenarioCategoryAnswerForm, \
     ScenarioCategoryAnswerCreateForm
@@ -193,7 +193,7 @@ def selection_create(request):
     if request.method == "POST":
         form = SelectionForm(request.POST, request.FILES)
         if form.is_valid():
-            form.company = request.user.employee.company
+            form.instance.company = request.user.employee.company
             selection = form.save()
             return HttpResponseRedirect(reverse('selection-edit', args=[selection.pk]))
 
@@ -230,13 +230,13 @@ def selection_edit(request, pk):
 class SelectionControlAssess(LoginRequiredMixin, generic.TemplateView):
     template_name = 'risk/selection_control_update_form.html'
     form_class = SelectionControlForm
-    # model = SelectionControl
+    # model = ControlSelection
 
     def get_context_data(self, **kwargs):
         context = super(SelectionControlAssess, self).get_context_data(**kwargs)
-        # context['formset'] = SelectionControl.objects.select_related().filter(selection=self.kwargs['selection_id'])
+        # context['formset'] = ControlSelection.objects.select_related().filter(selection=self.kwargs['selection_id'])
         context['formset'] = SelectionControlFormSet(
-            queryset=SelectionControl.objects.filter(selection=self.kwargs['selection_id'])
+            queryset=ControlSelection.objects.filter(selection=self.kwargs['selection_id'])
         )
         return context
 
@@ -248,7 +248,7 @@ class ControlSelectionView(LoginRequiredMixin, generic.TemplateView):
         context = super(ControlSelectionView, self).get_context_data(**kwargs)
         selection = get_object_or_404(Selection, pk=self.kwargs['pk'])
         context['selection'] = selection
-        context['control_selection'] = SelectionControl.objects.filter(selection=selection).select_related(
+        context['control_selection'] = ControlSelection.objects.filter(selection=selection).select_related(
             'control__controlpractice__controlprocess__controldomain__standard'
         ).order_by(
             'control__controlpractice__controlprocess__controldomain__standard__id',
@@ -272,7 +272,7 @@ def control_selection(request, pk):
 
         # update the database
         controls = post_dict['controls'].split('-')
-        update = SelectionControl.objects.filter(selection=selection)
+        update = ControlSelection.objects.filter(selection=selection)
         # first filter on standard
         update = update.filter(control__controlpractice__controlprocess__controldomain__standard=controls.pop(0))
         if controls: # second is domain filter
@@ -288,7 +288,7 @@ def control_selection(request, pk):
         print(affected, "row(s) affected")
         return HttpResponse(json.dumps("OK"))
 
-    selected_controls = SelectionControl.objects.filter(selection=selection).select_related(
+    selected_controls = ControlSelection.objects.filter(selection=selection).select_related(
         'control__controlpractice__controlprocess__controldomain__standard'
     ).order_by(
         'control__controlpractice__controlprocess__controldomain__standard__id',
@@ -321,7 +321,7 @@ class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
         selection = get_object_or_404(Selection, pk = self.kwargs['pk'])
         context['selection'] = selection
 
-        controls = SelectionControl.objects.filter(selection=selection).select_related(
+        controls = ControlSelection.objects.filter(selection=selection).select_related(
             'control__controlpractice__controlprocess__controldomain__standard'
         )
         tree = []
@@ -414,7 +414,7 @@ class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
 def control_selection_react(request, pk):
     selection = get_object_or_404(Selection, pk=pk)
 
-    selected_controls = SelectionControl.objects.filter(selection=selection).select_related(
+    selected_controls = ControlSelection.objects.filter(selection=selection).select_related(
         'control__controlpractice__controlprocess__controldomain__standard'
     ).order_by(
         'control__controlpractice__controlprocess__controldomain__standard__id',
@@ -424,7 +424,7 @@ def control_selection_react(request, pk):
         'control__ordering',
     )
 
-    # controls = SelectionControl.objects.filter(selection=selection).select_related(
+    # controls = ControlSelection.objects.filter(selection=selection).select_related(
     #     'control__controlpractice__controlprocess__controldomain__standard'
     # )
 

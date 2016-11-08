@@ -54,3 +54,4 @@ docs/_build/
 .idea/
 secrets.py
 *.pdf
+/tools/pg_backup/
