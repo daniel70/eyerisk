@@ -5,7 +5,7 @@ from modeltranslation.admin import TabbedTranslationAdmin
 from .forms import ScenarioCategoryAnswerForm, ScenarioCategoryForm, ScenarioCategoryAnswerAdminForm
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
     Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, Enabler, RiskType, \
-    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
+    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, Project
 
 
 class EmployeeInline(admin.StackedInline):
@@ -92,7 +92,6 @@ class ControlPracticeInline(admin.TabularInline):
 
 
 class ScenarioCategoryAdmin(admin.ModelAdmin):
-    # form = ScenarioCategoryForm
     form = ScenarioCategoryForm
     list_display = ('nr', 'name')
     inlines = (EnablerInline,)
@@ -118,7 +117,7 @@ class EnablerAnswerInline(admin.TabularInline):
 
 class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
     form = ScenarioCategoryAnswerAdminForm
-    list_display = ('__str__', 'company', 'created', 'updated')
+    list_display = ('__str__', 'project', 'created', 'updated')
     # exclude = ('risk_type_answer',)
     inlines = (RiskTypeAnswerInline, ProcessEnablerAnswerInline, EnablerAnswerInline)
 
@@ -140,6 +139,7 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Company)
+admin.site.register(Project)
 admin.site.register(RiskMap, RiskMapAdmin)
 admin.site.register(Standard, StandardAdmin)
 admin.site.register(ControlDomain, ControlDomainAdmin)

@@ -39,52 +39,43 @@ def selection_list(request):
 
 
 @user_passes_test(is_employee)
-def scenario_list(request):
+def selection_create(request):
     """
-    This view lists all the ScenarioCategoryAnswers. They can be edited and deleted.
-    Also, a ScenarioCategoryAnswer can be created from this view.
-    We first ask for the most basic information (name and category) and the post_save signal will do all the work
-    of creating the corresponding risk types and enablers.
-    After the ScenarioCategoryAnswer is created we redirect to the corresponding edit page.
-    Of course it is possible that something goes wrong in the creation process, that is what the try/catch is for.
+    When a Selection is created, we also need to associate SelectionDocuments
+    and we need to copy the Questions for these Documents to the SelectionQuestion
+    model. Also, when we save we need to check if any previously associated Document
+    has now been removed and, if so, we need to remove their Questions from this Selection
+    (or perhaps mark it as deleted to save the `decision` for this SelectionQuestion)
     """
-    errors = []
     if request.method == "POST":
-        form = ScenarioCategoryAnswerCreateForm(request.POST, request.FILES)
+        form = SelectionForm(request.POST, request.FILES)
         if form.is_valid():
-            sca = ScenarioCategoryAnswer(company=request.user.employee.company,
-                                         scenario_category=form.cleaned_data['scenario_category'],
-                                         name=form.cleaned_data['name'])
+            form.instance.company = request.user.employee.company
+            selection = form.save()
+            return HttpResponseRedirect(reverse('selection-edit', args=[selection.pk]))
 
-            try:
-                sca.save()
-                return HttpResponseRedirect(reverse('scenario-edit', args=[sca.pk]))
-            except IntegrityError as err:
-                print(err)
-                errors.append("Oops, a scenario with this name ({}) already exists, please use a different name.".format(
-                    form.cleaned_data['name']
-                ))
-            except:
-                print(sys.exc_info()[0])
-                errors.append(sys.exc_info()[0])
-        else:
-            errors.append("Please select a category for this scenario.")
-
-    scenario_list = ScenarioCategoryAnswer.objects.filter(company=request.user.employee.company).order_by('-updated')
-    form = ScenarioCategoryAnswerCreateForm()
-    context = {'scenario_list': scenario_list, 'form': form, 'errors': errors}
-    return render(request, template_name='risk/scenario_list.html', context=context)
+    else:
+        form = SelectionForm()
+    context = {'form': form}
+    return render(request, template_name='risk/selection_create_form.html', context=context)
 
 
-@permission_required('risk.delete_scenariocategoryanswer')
-def scenario_delete(request, pk):
-    scenario_category_answer = get_object_or_404(ScenarioCategoryAnswer, pk=pk, company=request.user.employee.company)
+@user_passes_test(is_employee)
+def selection_edit(request, pk):
+    selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
     if request.method == "POST":
-        scenario_category_answer.delete()
-        return HttpResponseRedirect(reverse('scenario-list'))
+        form = SelectionForm(request.POST, request.FILES, instance=selection)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('selection-edit', args=[selection.pk]))
+    else:
+        form = SelectionForm(instance=selection)
 
-    context = {'object': scenario_category_answer}
-    return render(request, template_name='risk/scenario_confirm_delete.html', context=context)
+    # let's try to create a formset of 'Selection Standards'
+    ss = selection.standards.all()
+
+    context = {'form': form}
+    return render(request, template_name='risk/selection_update_form.html', context=context)
 
 
 @permission_required('risk.delete_selection')
@@ -99,10 +90,34 @@ def selection_delete(request, pk):
 
 
 @user_passes_test(is_employee)
+def scenario_list(request):
+    """
+    This view lists all the ScenarioCategoryAnswers. They can be edited and deleted.
+    Also, a ScenarioCategoryAnswer can be created from this view.
+    We first ask for the most basic information (name and category) and the post_save signal will do all the work
+    of creating the corresponding risk types and enablers.
+    After the ScenarioCategoryAnswer is created we redirect to the corresponding edit page.
+    """
+    if request.method == "POST":
+        form = ScenarioCategoryAnswerCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            sca = ScenarioCategoryAnswer(scenario_category=form.cleaned_data['scenario_category'],
+                                         project=form.cleaned_data['project'])
+            sca.save()
+            return HttpResponseRedirect(reverse('scenario-edit', args=[sca.pk]))
+
+    else:
+        form = ScenarioCategoryAnswerCreateForm()
+    scenarios = ScenarioCategoryAnswer.objects.filter(project__company=request.user.employee.company).order_by('-updated')
+    context = {'scenario_list': scenarios, 'form': form}
+    return render(request, template_name='risk/scenario_list.html', context=context)
+
+
+@user_passes_test(is_employee)
 @permission_required('risk.change_scenariocategoryanswer')
 def scenario_edit(request, pk):
     # hardcoded for now
-    sca = get_object_or_404(ScenarioCategoryAnswer, pk=pk, company=request.user.employee.company)
+    sca = get_object_or_404(ScenarioCategoryAnswer, pk=pk, project__company=request.user.employee.company)
     risk_type_answer_factory = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
                                                   extra=0, can_delete=False)
     process_enabler_answer_factory = inlineformset_factory(
@@ -154,6 +169,17 @@ def scenario_edit(request, pk):
     return render(request, template_name=template_name, context=context)
 
 
+@permission_required('risk.delete_scenariocategoryanswer')
+def scenario_delete(request, pk):
+    scenario_category_answer = get_object_or_404(ScenarioCategoryAnswer, pk=pk, project__company=request.user.employee.company)
+    if request.method == "POST":
+        scenario_category_answer.delete()
+        return HttpResponseRedirect(reverse('scenario-list'))
+
+    context = {'object': scenario_category_answer}
+    return render(request, template_name='risk/scenario_confirm_delete.html', context=context)
+
+
 class SelectionDetail(generic.DetailView):
     template_name = 'risk/selection_detail.html'
     model = Selection
@@ -181,50 +207,10 @@ class SelectionDetail(generic.DetailView):
 #         return reverse('selection-edit', args=(self.object.pk,))
 
 
-@user_passes_test(is_employee)
-def selection_create(request):
-    """
-    When a Selection is created, we also need to associate SelectionDocuments
-    and we need to copy the Questions for these Documents to the SelectionQuestion
-    model. Also, when we save we need to check if any previously associated Document
-    has now been removed and, if so, we need to remove their Questions from this Selection
-    (or perhaps mark it as deleted to save the `decision` for this SelectionQuestion)
-    """
-    if request.method == "POST":
-        form = SelectionForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.instance.company = request.user.employee.company
-            selection = form.save()
-            return HttpResponseRedirect(reverse('selection-edit', args=[selection.pk]))
-
-    else:
-        form = SelectionForm()
-    context = {'form': form}
-    return render(request, template_name='risk/selection_create_form.html', context=context)
-
-
 # class SelectionUpdate(LoginRequiredMixin, generic.UpdateView):
 #     template_name = 'risk/selection_update_form.html'
 #     form_class = SelectionForm
 #     model = Selection
-
-
-@user_passes_test(is_employee)
-def selection_edit(request, pk):
-    selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
-    if request.method == "POST":
-        form = SelectionForm(request.POST, request.FILES, instance=selection)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('selection-edit', args=[selection.pk]))
-    else:
-        form = SelectionForm(instance=selection)
-
-    # let's try to create a formset of 'Selection Standards'
-    ss = selection.standards.all()
-
-    context = {'form': form}
-    return render(request, template_name='risk/selection_update_form.html', context=context)
 
 
 class SelectionControlAssess(LoginRequiredMixin, generic.TemplateView):
@@ -305,6 +291,22 @@ def control_selection(request, pk):
 
     return render(request, template_name='risk/control_selection.html', context=context)
 
+
+def get_control_selection(pk):
+    selection = get_object_or_404(Selection, pk=pk)
+    selected_controls = ControlSelection.objects.filter(selection=selection).select_related(
+        'control__controlpractice__controlprocess__controldomain__standard'
+    ).order_by(
+        'control__controlpractice__controlprocess__controldomain__standard__id',
+        'control__controlpractice__controlprocess__controldomain__ordering',
+        'control__controlpractice__controlprocess__ordering',
+        'control__controlpractice__ordering',
+        'control__ordering',
+    )
+
+    tree = []
+    for cs in selected_controls:
+        pass
 
 class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
     """

@@ -42,6 +42,31 @@ class Employee(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 
+class Project(models.Model):
+    """
+    A project acts as a container for Scenario's bla bla
+    """
+    PERIODIC = 'Q'
+    PROJECT = 'P'
+    CHANGE = 'C'
+    PROJECT_TYPE_CHOICES = (
+        (PERIODIC, 'Periodic'),
+        (PROJECT, 'Project'),
+        (CHANGE, 'Change'),
+    )
+    name = models.CharField(max_length=30, blank=False)
+    type = models.CharField(max_length=1, blank=False, choices=PROJECT_TYPE_CHOICES)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('name', 'company')
+
+    def __str__(self):
+        return self.name
+
+
 class Standard(models.Model):
     name = models.CharField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
@@ -406,8 +431,9 @@ class ScenarioCategoryAnswer(models.Model):
         (2, 'Delayed'),
     )
 
-    name = models.CharField(max_length=50)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    # name = models.CharField(max_length=50)
+    # company = models.ForeignKey(Company, on_delete=models.CASCADE)
     scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
     threat_type = models.CharField(max_length=100, help_text=threat_type_help, blank=True)
     actor = models.CharField(max_length=100, help_text=actor_help, blank=True)
@@ -422,10 +448,10 @@ class ScenarioCategoryAnswer(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ['name', 'company']
+        unique_together = ['project', 'scenario_category']
 
     def __str__(self):
-        return "{}".format(self.name)
+        return "{}".format(self.project)
 
 
 @receiver(post_save, sender=ScenarioCategoryAnswer)
@@ -567,7 +593,6 @@ class EnablerAnswer(models.Model):
     class Meta:
         unique_together = ('enabler', 'scenario_category_answer')
 
-
     def __str__(self):
         return '{} - {}'.format(self.enabler, self.scenario_category_answer)
 
@@ -589,7 +614,6 @@ class ProcessEnablerAnswer(models.Model):
 
     class Meta:
         unique_together = ('control_practice', 'scenario_category_answer')
-
 
     def __str__(self):
         return '{} - {}'.format(self.control_practice, self.scenario_category_answer)

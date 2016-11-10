@@ -22,18 +22,15 @@
     </div>
   </div>
 </div>
-{% for error in errors %}
-<div class="alert alert-danger alert-dismissible" role="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-  {{ error }}
-</div>
-{% endfor %}
 
 <table class="table table-responsive table-striped">
     <thead>
         <tr>
             <th>
-                NAME
+                PROJECT
+            </th>
+            <th>
+                TYPE
             </th>
             <th>
                 CATEGORY
@@ -57,6 +54,9 @@
                 {{ scenario }}
             </td>
             <td>
+                {{ scenario.project.get_type_display }}
+            </td>
+            <td>
                 {{ scenario.scenario_category }}
             </td>
             {% if perms.risk.change_scenariocategoryanswer %}
@@ -73,11 +73,11 @@
         {% empty %}
         <tr>
             {% if perms.risk.add_scenariocategoryanswer %}
-            <td colspan="4">
+            <td colspan="5">
                 No scenario's yet, go ahead and create one!
             </td>
             {% else %}
-            <td colspan="4">
+            <td colspan="5">
                 There are no scenario's and you don't have the permission to create one!
             </td>
             {% endif %}
@@ -91,6 +91,14 @@
       ADD SCENARIO
     </button>
 </div>
+{% endif %}
+
+{% if form.non_field_errors or form.project.error or form.scenario_category.errors %}
+<script type="text/javascript">
+    $(window).load(function(){
+        $('#myModal').modal('show');
+    });
+</script>
 {% endif %}
 
 {% endblock content %}

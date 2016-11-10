@@ -59,7 +59,7 @@ class ScenarioCategoryAnswerAdminForm(ScenarioCategoryAnswerForm):
     Note the trick to override Meta class. Nice.
     """
     class Meta(ScenarioCategoryAnswerForm.Meta):
-        fields = ('name', 'company', 'scenario_category') + ScenarioCategoryAnswerForm.Meta.fields
+        fields = ('project', 'scenario_category') + ScenarioCategoryAnswerForm.Meta.fields
 
 
 class ScenarioCategoryAnswerCreateForm(ModelForm):
@@ -69,4 +69,4 @@ class ScenarioCategoryAnswerCreateForm(ModelForm):
     """
     class Meta:
         model = ScenarioCategoryAnswer
-        fields = ('name', 'scenario_category')
+        fields = ('project', 'scenario_category')
