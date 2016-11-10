@@ -9,19 +9,18 @@ class RiskMapSerializer(serializers.ModelSerializer):
         model = RiskMap
 
 
+class SelectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Selection
+        fields = ('id', 'name', 'standards')
+        depth = 1
+
 # class StandardSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Standard
 #         fields = ('id', 'name', 'is_active')
 #
 #
-# class SelectionSerializer(serializers.ModelSerializer):
-#     # standards = StandardSerializer(many=True, read_only=True)
-#
-#     class Meta:
-#         model = Selection
-#         fields = ('id', 'name', 'standards')
-#         depth = 1
 #
 #
 # class ControlDomainSerializer(serializers.ModelSerializer):

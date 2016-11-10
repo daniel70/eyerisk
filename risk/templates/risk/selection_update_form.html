@@ -8,4 +8,26 @@
       <button type="submit" class="btn btn-primary">EDIT SELECTION</button>
     </div>
 </form>
+<hr>
+
+{% for pk, standard in tree.items %}
+    <div>standard: {{ pk }} - {{ standard.text }}</div>
+    {% for pk, domain in standard.nodes.items %}
+        <div>domain: {{ pk }} - {{ domain.text }}</div>
+        {% for pk, process in domain.nodes.items %}
+            <div>process: {{ pk }} - {{ process.text }}</div>
+            {% for pk, practice in process.nodes.items %}
+                <div>practice: {{ pk }} - {{ practice.text }}</div>
+                {% for pk, activiy in practice.nodes.items %}
+                    <div>activity: {{ pk }} - {{ activity.text }}</div>
+                    {% for pk, response in activity.nodes.items %}
+                        <div>response: {{ pk }} - {{ response.text }}</div>
+                        <div>response: {{ response.response }}</div>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
+
 {% endblock content %}

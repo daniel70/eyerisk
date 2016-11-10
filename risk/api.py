@@ -1,8 +1,9 @@
-from .models import RiskMap
-from .serializers import RiskMapSerializer
+from .models import RiskMap, Selection
+from .serializers import RiskMapSerializer,  SelectionSerializer
 
 
 from rest_framework import viewsets
+
 
 class RiskMapViewSet(viewsets.ModelViewSet):
     serializer_class = RiskMapSerializer
@@ -10,6 +11,21 @@ class RiskMapViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return RiskMap.objects.filter(company=self.request.user.employee.company)
 
+
+class SelectionViewSet(viewsets.ModelViewSet):
+    serializer_class = SelectionSerializer
+
+    def get_queryset(self):
+        return Selection.objects.filter(company=self.request.user.employee.company)
+
+    # @detail_route(methods=['get'], url_path='controls')
+    # def get_selection(self, request, pk=None):
+    #     """
+    #     This function will be available at: /api/selection/{pk}/controls
+    #     It returns all the SelectionControls and all related information up to the Standard
+    #
+    #     """
+    #     return Response({"hello": "daniel"})
 
 # from .models import Standard, Selection, SelectionControl, ControlDomain, ControlProcess
 # from .serializers import StandardSerializer, SelectionSerializer, ControlDomainSerializer, SelectionControlSerializer, \
@@ -28,21 +44,6 @@ class RiskMapViewSet(viewsets.ModelViewSet):
 #     serializer_class = StandardSerializer
 #
 #
-# class SelectionViewSet(viewsets.ModelViewSet):
-#     queryset = Selection.objects.all()
-#     serializer_class = SelectionSerializer
-#
-#     def get_queryset(self):
-#         return Selection.objects.filter(company=self.request.user.employee.company)
-#
-#     @detail_route(methods=['get'], url_path='controls')
-#     def get_selection(self, request, pk=None):
-#         """
-#         This function will be available at: /api/selection/{pk}/controls
-#         It returns all the SelectionControls and all related information up to the Standard
-#
-#         """
-#         return Response({"hello": "daniel"})
 #
 #
 # class SelectionControlViewSet(viewsets.ModelViewSet):

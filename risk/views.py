@@ -1,7 +1,5 @@
-import json, sys
-
+from pprint import pprint
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.views import generic
@@ -9,7 +7,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.shortcuts import render, get_object_or_404
 from django.forms import inlineformset_factory
-from django.db import IntegrityError
 
 from .models import Standard, Selection, ControlSelection, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
     ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
@@ -71,10 +68,8 @@ def selection_edit(request, pk):
     else:
         form = SelectionForm(instance=selection)
 
-    # let's try to create a formset of 'Selection Standards'
-    ss = selection.standards.all()
-
-    context = {'form': form}
+    tree = get_control_selection(pk)
+    context = {'form': form, 'tree': tree}
     return render(request, template_name='risk/selection_update_form.html', context=context)
 
 
@@ -304,9 +299,72 @@ def get_control_selection(pk):
         'control__ordering',
     )
 
-    tree = []
+    tree = {}
+    a = None; b = None; c = None; d = None
     for cs in selected_controls:
-        pass
+
+        if cs.control.controlpractice.controlprocess.controldomain.standard.id not in tree:
+            if a:
+                answers = set([v['response'] for v in d['nodes'].values()])
+                d['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+                answers = set([v['response'] for v in c['nodes'].values()])
+                c['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+                answers = set([v['response'] for v in b['nodes'].values()])
+                b['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+                answers = set([v['response'] for v in a['nodes'].values()])
+                a['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+            a = tree[cs.control.controlpractice.controlprocess.controldomain.standard.id] = {}
+            a['nodes'] = {}
+            a['text'] = cs.control.controlpractice.controlprocess.controldomain.standard.name
+
+        if cs.control.controlpractice.controlprocess.controldomain.id not in a['nodes']:
+            if b:
+                answers = set([v['response'] for v in d['nodes'].values()])
+                d['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+                answers = set([v['response'] for v in c['nodes'].values()])
+                c['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+                answers = set([v['response'] for v in b['nodes'].values()])
+                b['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+            b = a['nodes'][cs.control.controlpractice.controlprocess.controldomain.id] = {}
+            b['nodes'] = {}
+            b['text'] = cs.control.controlpractice.controlprocess.controldomain.domain
+
+        if cs.control.controlpractice.controlprocess.id not in b['nodes']:
+            if c:
+                answers = set([v['response'] for v in d['nodes'].values()])
+                d['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+                answers = set([v['response'] for v in c['nodes'].values()])
+                c['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+            c = b['nodes'][cs.control.controlpractice.controlprocess.id] = {}
+            c['nodes'] = {}
+            c['text'] = cs.control.controlpractice.controlprocess.process_name
+
+        if cs.control.controlpractice.id not in c['nodes']:
+            if d:
+                answers = set([v['response'] for v in d['nodes'].values()])
+                d['response'] = 'N' if len(answers) > 1 else answers.pop()
+
+            d = c['nodes'][cs.control.controlpractice.id] = {}
+            d['nodes'] = {}
+            d['text'] = cs.control.controlpractice.practice_name
+
+        if cs.control.id not in d['nodes']:
+            e = d['nodes'][cs.control.id] = {}
+            e['text'] = cs.control.activity
+            e['response_id'] = cs.id
+            e['response'] = cs.response
+
+    return tree
+
 
 class SelectionControlView(LoginRequiredMixin, generic.TemplateView):
     """

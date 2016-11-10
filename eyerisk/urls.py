@@ -26,10 +26,10 @@ from risk import api
 
 router = routers.DefaultRouter()
 router.register(r'riskmaps', api.RiskMapViewSet, base_name='RiskMap')
+router.register(r'selection', api.SelectionViewSet, base_name='Selection')
 
 # router.register(r'standards', api.StandardListView.as_view(), base_name='Standard')
 # router.register(r'standards', api.StandardViewSet)
-# router.register(r'selection', api.SelectionViewSet)
 # router.register(r'controldomains', api.ControlDomainViewSet)
 # router.register(r'controlprocess', api.ControlProcessViewSet)
 # router.register(r'selectioncontrols', api.SelectionControlViewSet)
