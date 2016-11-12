@@ -1,5 +1,7 @@
 {% extends "risk/base.html" %}
+{% load risk_tags %}
 {% load bootstrap %}
+
 {% block content %}
 <form action="" method="post" role="form">{% csrf_token %}
     <legend>SELECTIONS</legend>
@@ -8,26 +10,119 @@
       <button type="submit" class="btn btn-primary">EDIT SELECTION</button>
     </div>
 </form>
+{% if tree %}
 <hr>
-
-{% for pk, standard in tree.items %}
-    <div>standard: {{ pk }} - {{ standard.text }}</div>
-    {% for pk, domain in standard.nodes.items %}
-        <div>domain: {{ pk }} - {{ domain.text }}</div>
-        {% for pk, process in domain.nodes.items %}
-            <div>process: {{ pk }} - {{ process.text }}</div>
-            {% for pk, practice in process.nodes.items %}
-                <div>practice: {{ pk }} - {{ practice.text }}</div>
-                {% for pk, activiy in practice.nodes.items %}
-                    <div>activity: {{ pk }} - {{ activity.text }}</div>
-                    {% for pk, response in activity.nodes.items %}
-                        <div>response: {{ pk }} - {{ response.text }}</div>
-                        <div>response: {{ response.response }}</div>
+    <div class="list-group list-group-root well">
+    {% for pk, standard in tree.items %}
+        <a href="#list-group-standard-{{ pk }}" class="list-group-item {{ standard.response|response }}" data-toggle="collapse">
+            <div class="row">
+                <div class="col-xs-8 col-md-10">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    {{ standard.text }}
+                </div>
+                <div class="col-xs-4 col-md-2">
+                    <div class="btn-group btn-group-xs pull-right" role="group" aria-label="..." data-level="standard" data-id="{{ pk }}">
+                      <button type="button" class="btn btn-success" alt="Accept" data-type="response">A</button>
+                      <button type="button" class="btn btn-info" alt="Mitigate" data-type="response">M</button>
+                      <button type="button" class="btn btn-warning" alt="Transfer" data-type="response">T</button>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <div class="list-group collapse" id="list-group-standard-{{ pk }}">
+        {% for pk, domain in standard.nodes.items %}
+            <a href="#list-group-domain-{{ pk }}" class="list-group-item {{ domain.response|response }}" data-toggle="collapse">
+            <div class="row">
+                <div class="col-xs-8 col-md-10">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    {{ domain.text }}
+                </div>
+                <div class="col-xs-4 col-md-2">
+                    <div class="btn-group btn-group-xs pull-right" role="group" aria-label="..." data-level="domain" data-id="{{ pk }}">
+                      <button type="button" class="btn btn-success" alt="Accept" data-type="response">A</button>
+                      <button type="button" class="btn btn-info" alt="Mitigate" data-type="response">M</button>
+                      <button type="button" class="btn btn-warning" alt="Transfer" data-type="response">T</button>
+                    </div>
+                </div>
+            </div>
+            </a>
+            <div class="list-group collapse" id="list-group-domain-{{ pk }}">
+            {% for pk, process in domain.nodes.items %}
+                <a href="#list-group-process-{{ pk }}" class="list-group-item {{ process.response|response }}" data-toggle="collapse">
+                <div class="row">
+                    <div class="col-xs-8 col-md-10">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                        {{ process.text }}
+                    </div>
+                    <div class="col-xs-4 col-md-2">
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="..." data-id="{{ pk }}">
+                          <button type="button" class="btn btn-success" alt="Accept">A</button>
+                          <button type="button" class="btn btn-info" alt="Mitigate">M</button>
+                          <button type="button" class="btn btn-warning" alt="Transfer">T</button>
+                        </div>
+                    </div>
+                </div>
+                </a>
+                <div class="list-group collapse" id="list-group-process-{{ pk }}">
+                {% for pk, practice in process.nodes.items %}
+                    <a href="#list-group-practice-{{ pk }}" class="list-group-item {{ practice.response|response }}" data-toggle="collapse">
+                    <div class="row">
+                        <div class="col-xs-8 col-md-10">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                            {{ practice.text }}
+                        </div>
+                        <div class="col-xs-4 col-md-2">
+                            <div class="btn-group btn-group-xs pull-right" role="group" aria-label="..." data-id="{{ pk }}">
+                              <button type="button" class="btn btn-success" alt="Accept">A</button>
+                              <button type="button" class="btn btn-info" alt="Mitigate">M</button>
+                              <button type="button" class="btn btn-warning" alt="Transfer">T</button>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <div class="list-group collapse" id="list-group-practice-{{ pk }}">
+                    {% for pk, activity in practice.nodes.items %}
+                        <a href="#list-group-activity-{{ pk }}" class="list-group-item {{ activity.response|response }}" data-toggle="collapse">
+                        <div class="row">
+                            <div class="col-xs-8 col-md-10">
+                                <!--<i class="glyphicon glyphicon-chevron-right"></i>-->
+                                {{ activity.text }}
+                            </div>
+                            <div class="col-xs-4 col-md-2">
+                                <div class="btn-group btn-group-xs pull-right" role="group" aria-label="..." data-id="{{ pk }}">
+                                  <button type="button" class="btn btn-success" alt="Accept">A</button>
+                                  <button type="button" class="btn btn-info" alt="Mitigate">M</button>
+                                  <button type="button" class="btn btn-warning" alt="Transfer">T</button>
+                                </div>
+                            </div>
+                        </div>
+                        </a>
                     {% endfor %}
+                    </div>
                 {% endfor %}
+                </div>
             {% endfor %}
+            </div>
         {% endfor %}
+        </div>
     {% endfor %}
-{% endfor %}
-
+    </div>
+{% endif %}
+<script>
+    $("button[data-type=response]").click(function(event) {
+        event.stopPropagation();
+        var response = $(this).text();
+        var level = $(this).parent("div").data("level");
+        var id = $(this).parent("div").data("id");
+        $.post(
+            "response",
+            {
+                "csrfmiddlewaretoken": '{{ csrf_token }}',
+                "level": level,
+                "id": id,
+                "response": response,
+            }
+         );
+    });
+</script>
 {% endblock content %}

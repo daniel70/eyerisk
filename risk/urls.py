@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from .views import SelectionDetail, SelectionControlAssess, \
     SelectionControlView, ControlSelectionView, control_selection, control_selection_react, \
     riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete, selection_create, \
-    selection_edit
+    selection_edit, selection_response
 
 urlpatterns = [
     url(r'^$', selection_list, name='risk-home'),
@@ -14,6 +14,7 @@ urlpatterns = [
     # url(r'^selection/(?P<pk>\d+)/edit$', SelectionUpdate.as_view(), name='selection-edit'),
     url(r'^selection/(?P<pk>\d+)/edit$', selection_edit, name='selection-edit'),
     url(r'^selection/(?P<pk>\d+)/delete$', selection_delete, name='selection-delete'),
+    url(r'^selection/(?P<pk>\d+)/response$', selection_response, name='selection-response'),
     url(r'^selectioncontrol/(?P<pk>\d+)/$', SelectionControlView.as_view(), name='selection-control'),
     url(r'^controlselection/(?P<pk>\d+)/$', control_selection, name='control-selection'),
     url(r'^controlselectionreact/(?P<pk>\d+)/$', control_selection_react, name='control-selection-react'),
