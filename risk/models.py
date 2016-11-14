@@ -202,6 +202,7 @@ class ControlSelection(models.Model):
     TRANSFER = 'T'
     AVOID = 'O'
     SELECTION_CHOICES = (
+        (NOTHING, 'No selection'),
         (ACCEPT, 'Accept'),
         (MITIGATE, 'Mitigate'),
         (TRANSFER, 'Transfer'),
@@ -210,7 +211,7 @@ class ControlSelection(models.Model):
 
     selection = models.ForeignKey(Selection, on_delete=models.CASCADE)
     control = models.ForeignKey(ControlActivity, on_delete=models.CASCADE)
-    response = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=ACCEPT)
+    response = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=NOTHING)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
 

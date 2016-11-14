@@ -92,8 +92,11 @@ def selection_response(request, pk):
         level = request.POST['level']
         id = request.POST['id']
         response = request.POST['response']
-        print('the response is for {}, {}, {}'.format(response, level, id))
-        if level not in ["standard", "domain"]:
+
+        if response not in ["N", "A", "T", "M"]:
+            return HttpResponse("notok")
+
+        if level not in ["standard", "domain", "process", "practice", "activity"]:
             return HttpResponse("notok")
 
         selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
@@ -104,16 +107,102 @@ def selection_response(request, pk):
                 control__controlpractice__controlprocess__controldomain__standard_id=id
             ).update(response=response)
         elif level == "domain":
-            print("domain")
             ControlSelection.objects.filter(selection_id=pk).select_related(
                 'control__controlpractice__controlprocess__controldomain'
             ).filter(
                 control__controlpractice__controlprocess__controldomain_id=id
             ).update(response=response)
-
+        elif level == "process":
+            ControlSelection.objects.filter(selection_id=pk).select_related(
+                'control__controlpractice__controlprocess'
+            ).filter(
+                control__controlpractice__controlprocess_id=id
+            ).update(response=response)
+        elif level == "practice":
+            ControlSelection.objects.filter(selection_id=pk).select_related(
+                'control__controlpractice'
+            ).filter(
+                control__controlpractice_id=id
+            ).update(response=response)
+        elif level == "activity":
+            ControlSelection.objects.filter(selection_id=pk).select_related(
+                'control'
+            ).filter(
+                control_id=id
+            ).update(response=response)
 
         return HttpResponse("ok")
     return HttpResponse("notok")
+
+
+def get_control_selection(pk):
+    selection = get_object_or_404(Selection, pk=pk)
+    selected_controls = ControlSelection.objects.filter(selection=selection).select_related(
+        'control__controlpractice__controlprocess__controldomain__standard'
+    ).order_by(
+        'control__controlpractice__controlprocess__controldomain__standard__id',
+        'control__controlpractice__controlprocess__controldomain__ordering',
+        'control__controlpractice__controlprocess__ordering',
+        'control__controlpractice__ordering',
+        'control__ordering',
+    )
+
+    tree = {}
+    if not selected_controls:
+        return tree
+
+    a = None; b = None; c = None; d = None
+    for cs in selected_controls:
+
+        if cs.control.controlpractice.controlprocess.controldomain.standard.id not in tree:
+            if a:
+                calculate_response([d, c, b, a])
+
+            a = tree[cs.control.controlpractice.controlprocess.controldomain.standard.id] = {}
+            a['nodes'] = {}
+            a['text'] = cs.control.controlpractice.controlprocess.controldomain.standard.name
+
+        if cs.control.controlpractice.controlprocess.controldomain.id not in a['nodes']:
+            if b:
+                calculate_response([d, c, b])
+
+            b = a['nodes'][cs.control.controlpractice.controlprocess.controldomain.id] = {}
+            b['nodes'] = {}
+            b['text'] = cs.control.controlpractice.controlprocess.controldomain.domain
+
+        if cs.control.controlpractice.controlprocess.id not in b['nodes']:
+            if c:
+                calculate_response([d, c])
+
+            c = b['nodes'][cs.control.controlpractice.controlprocess.id] = {}
+            c['nodes'] = {}
+            c['text'] = cs.control.controlpractice.controlprocess.process_name
+
+        if cs.control.controlpractice.id not in c['nodes']:
+            if d:
+                calculate_response([d])
+
+            d = c['nodes'][cs.control.controlpractice.id] = {}
+            d['nodes'] = {}
+            d['text'] = cs.control.controlpractice.practice_name
+
+        if cs.control.id not in d['nodes']:
+            e = d['nodes'][cs.control.id] = {}
+            e['text'] = cs.control.activity
+            e['response_id'] = cs.id
+            e['response'] = cs.response
+
+    # after iterating the QuerySet we need to calculate the reponses for the final row!
+    calculate_response([d, c, b, a])
+
+    return tree
+
+
+def calculate_response(columns: list):
+    for column in columns:
+        answers = set([v['response'] for v in column['nodes'].values()])
+        column['response'] = 'N' if len(answers) > 1 else answers.pop()
+
 
 @user_passes_test(is_employee)
 def scenario_list(request):
@@ -316,75 +405,6 @@ def control_selection(request, pk):
     }
 
     return render(request, template_name='risk/control_selection.html', context=context)
-
-
-def get_control_selection(pk):
-    selection = get_object_or_404(Selection, pk=pk)
-    selected_controls = ControlSelection.objects.filter(selection=selection).select_related(
-        'control__controlpractice__controlprocess__controldomain__standard'
-    ).order_by(
-        'control__controlpractice__controlprocess__controldomain__standard__id',
-        'control__controlpractice__controlprocess__controldomain__ordering',
-        'control__controlpractice__controlprocess__ordering',
-        'control__controlpractice__ordering',
-        'control__ordering',
-    )
-
-    tree = {}
-    if not selected_controls:
-        return tree
-
-    a = None; b = None; c = None; d = None
-    for cs in selected_controls:
-
-        if cs.control.controlpractice.controlprocess.controldomain.standard.id not in tree:
-            if a:
-                calculate_response([d, c, b, a])
-
-            a = tree[cs.control.controlpractice.controlprocess.controldomain.standard.id] = {}
-            a['nodes'] = {}
-            a['text'] = cs.control.controlpractice.controlprocess.controldomain.standard.name
-
-        if cs.control.controlpractice.controlprocess.controldomain.id not in a['nodes']:
-            if b:
-                calculate_response([d, c, b])
-
-            b = a['nodes'][cs.control.controlpractice.controlprocess.controldomain.id] = {}
-            b['nodes'] = {}
-            b['text'] = cs.control.controlpractice.controlprocess.controldomain.domain
-
-        if cs.control.controlpractice.controlprocess.id not in b['nodes']:
-            if c:
-                calculate_response([d, c])
-
-            c = b['nodes'][cs.control.controlpractice.controlprocess.id] = {}
-            c['nodes'] = {}
-            c['text'] = cs.control.controlpractice.controlprocess.process_name
-
-        if cs.control.controlpractice.id not in c['nodes']:
-            if d:
-                calculate_response([d])
-
-            d = c['nodes'][cs.control.controlpractice.id] = {}
-            d['nodes'] = {}
-            d['text'] = cs.control.controlpractice.practice_name
-
-        if cs.control.id not in d['nodes']:
-            e = d['nodes'][cs.control.id] = {}
-            e['text'] = cs.control.activity
-            e['response_id'] = cs.id
-            e['response'] = cs.response
-
-    # after iterating the QuerySet we need to calculate the reponses for the final row!
-    calculate_response([d, c, b, a])
-
-    return tree
-
-
-def calculate_response(columns: list):
-    for column in columns:
-        answers = set([v['response'] for v in column['nodes'].values()])
-        column['response'] = 'N' if len(answers) > 1 else answers.pop()
 
 
 class SelectionControlView(LoginRequiredMixin, generic.TemplateView):

@@ -11,12 +11,12 @@ def response(value):
 
     s = value[0].upper()
     if s == 'N':
-        return ''
+        return 'list-group-item-nothing'
     elif s == 'A':
         return 'list-group-item-success'
     elif s == 'M':
         return 'list-group-item-info'
     elif s == 'T':
         return 'list-group-item-warning'
-
-    return ''
+    else:
+        return 'error-not-a-valid-response'
