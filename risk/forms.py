@@ -13,18 +13,6 @@ class SelectionForm(ModelForm):
         }
 
 
-class SelectionControlForm(ModelForm):
-    class Meta:
-        model = ControlSelection
-        fields = ('response', )
-        widgets = {
-            'response': RadioSelect(),
-        }
-
-
-SelectionControlFormSet = modelformset_factory(ControlSelection, form=SelectionControlForm, extra=0, can_delete=False)
-
-
 class ScenarioCategoryForm(ModelForm):
     """
     We want a larger selectmultiple box for process enablers.
