@@ -25,6 +25,7 @@ def company_created(sender, instance, created, **kwargs):
     This risk map consists of Likelihood and Risk tuples.
     The template record has a 'is_template' column that is True for templates.
     """
+    #TODO: if no template exit cleanly
     if created:
         t = RiskMap.objects.get(is_template=True)
         # before making changes to the RiskMap, first get its Values
@@ -636,7 +637,8 @@ def risk_map_created(sender, instance, created, **kwargs):
     """
     When a RiskMap is created we automatically create the RiskMapValues.
     """
-    if created:
+    #TODO: if no riskmapvalues exist then exit cleanly
+    if created and instance.is_template is False:
         parent = RiskMap.objects.get(pk=instance.parent_id_id)
         for rmv in RiskMapValue.objects.filter(risk_map=parent):
             print('updating', rmv)
