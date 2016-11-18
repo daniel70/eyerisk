@@ -1,6 +1,7 @@
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
     MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple
-from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType
+from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType, \
+    Project
 
 
 class SelectionForm(ModelForm):
@@ -55,6 +56,10 @@ class ScenarioCategoryAnswerCreateForm(ModelForm):
     This form is used to create a new ScenarioCategoryAnswer.
     After the form is created the risk types, and enablers are copied over from the ScenarioCategory.
     """
+    def __init__(self, company, *args, **kwargs):
+        super(ScenarioCategoryAnswerCreateForm, self).__init__(*args, **kwargs)
+        self.fields['project'].queryset = Project.objects.filter(company=company)
+
     class Meta:
         model = ScenarioCategoryAnswer
         fields = ('project', 'scenario_category')

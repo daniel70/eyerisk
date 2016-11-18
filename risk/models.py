@@ -23,18 +23,21 @@ def company_created(sender, instance, created, **kwargs):
     """
     When a Company is created, the COSO risk map is copied into this company.
     This risk map consists of Likelihood and Risk tuples.
-    The template records have an 'is_template' column that is True for templates.
+    The template record has a 'is_template' column that is True for templates.
     """
     if created:
-        max_riskmap_id = RiskMap.objects.latest('riskmap_id').riskmap_id
-        for rm in RiskMap.objects.filter(is_template=True):
-            rm.pk = None
-            rm.riskmap_id = max_riskmap_id + 1
-            rm.company = instance
-            rm.is_template = False
-            rm.name = 'Enterprise'
-            rm.level = 1  # Enterprise level
-            rm.save()
+        t = RiskMap.objects.get(is_template=True)
+        # before making changes to the RiskMap, first get its Values
+        rmv_list = list(RiskMapValue.objects.filter(risk_map=t))
+        t.parent_id_id = t.pk
+        t.pk = None
+        t.company = instance
+        t.is_template = False
+        t.name = 'ENTERPRISE'
+        t.level = 1  # Enterprise level
+        t.save()
+
+
 
 
 class Employee(models.Model):
@@ -217,54 +220,6 @@ class ControlSelection(models.Model):
 
     class Meta:
         unique_together = ('selection', 'control')
-
-
-class RiskMap(models.Model):
-    STRATEGIC = 'S'
-    FINANCIAL = 'F'
-    OPERATIONAL = 'O'
-    COMPLIANCE = 'C'
-    LEVEL_CHOICES = (
-        (0, 'TEMPLATE'),
-        (1, 'ENTERPRISE'),
-        (2, 'RISK TYPE'),
-        (3, 'RISK CATEGORY')
-    )
-
-    RISKTYPE_CHOICES = (
-        (STRATEGIC, 'Strategic'),
-        (FINANCIAL, 'Financial'),
-        (OPERATIONAL, 'Operational'),
-        (COMPLIANCE, 'Compliance'),
-    )
-
-    IMPACT = 'I'
-    LIKELIHOOD = 'L'
-    AXISTYPE_CHOICES = (
-        (IMPACT, 'Impact'),
-        (LIKELIHOOD, 'Likelihood'),
-    )
-
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
-    riskmap_id = models.IntegerField(auto_created=True)
-    parent_id = models.IntegerField(blank=True, null=True)
-    level = models.IntegerField(choices=LEVEL_CHOICES)
-    # parent_id = models.ForeignKey('self', to_field='riskmap_id', blank=True, null=True)
-    risk_type = models.CharField(max_length=1, choices=RISKTYPE_CHOICES, blank=True, null=True)
-    name = models.CharField(max_length=50, blank=True, null=True)
-    axis_type = models.CharField(max_length=1, choices=AXISTYPE_CHOICES)
-    position = models.IntegerField(validators=[MaxValueValidator(5)])
-    rating = models.IntegerField(validators=[MinValueValidator(0)])
-    descriptor = models.CharField(max_length=30)
-    definition = models.TextField(blank=False)
-    is_template = models.BooleanField(default=False)
-
-    class Meta:
-        unique_together = ('company', 'riskmap_id', 'risk_type', 'axis_type', 'position')
-        ordering = ('company', 'risk_type', 'name', 'axis_type', 'position')
-
-    def __str__(self):
-        return self.name
 
 
 class RiskType(models.Model):
@@ -634,3 +589,83 @@ class RiskTypeAnswer(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.risk_type, self.scenario_category_answer)
+
+
+class RiskMap(models.Model):
+    """
+    A new risk map is automatically created for each new company when the company is created (company_created).
+    That is the Enterprise risk type.
+    """
+    LEVEL_CHOICES = (
+        (0, 'TEMPLATE'),
+        (1, 'ENTERPRISE'),
+        (2, 'RISK TYPE'),
+        (3, 'RISK CATEGORY'),
+    )
+
+    STRATEGIC = 'S'
+    FINANCIAL = 'F'
+    OPERATIONAL = 'O'
+    COMPLIANCE = 'C'
+    RISK_TYPE_CHOICES = (
+        (STRATEGIC, 'Strategic'),
+        (FINANCIAL, 'Financial'),
+        (OPERATIONAL, 'Operational'),
+        (COMPLIANCE, 'Compliance'),
+    )
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=50)
+    level = models.IntegerField(choices=LEVEL_CHOICES)
+    parent_id = models.ForeignKey('self', to_field='id', blank=True, null=True, on_delete=models.CASCADE)
+    risk_type = models.CharField(max_length=1, choices=RISK_TYPE_CHOICES, blank=True, null=True)
+    is_template = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('company', 'name')
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+
+
+@receiver(signal=post_save, sender=RiskMap)
+def risk_map_created(sender, instance, created, **kwargs):
+    """
+    When a RiskMap is created we automatically create the RiskMapValues.
+    """
+    if created:
+        parent = RiskMap.objects.get(pk=instance.parent_id_id)
+        for rmv in RiskMapValue.objects.filter(risk_map=parent):
+            print('updating', rmv)
+            rmv.pk = None
+            rmv.risk_map = instance
+            rmv.save()
+
+
+class RiskMapValue(models.Model):
+    IMPACT = 'I'
+    LIKELIHOOD = 'L'
+    AXIS_TYPE_CHOICES = (
+        (IMPACT, 'Impact'),
+        (LIKELIHOOD, 'Likelihood'),
+    )
+
+    risk_map = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
+    axis_type = models.CharField(max_length=1, choices=AXIS_TYPE_CHOICES)
+    position = models.IntegerField(validators=[MaxValueValidator(5)])
+    rating = models.IntegerField(validators=[MinValueValidator(0)])
+    descriptor = models.CharField(max_length=30)
+    definition = models.TextField(blank=False)
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('risk_map', 'axis_type', 'position')
+        ordering = ('risk_map', 'axis_type', 'position')
+
+    def __str__(self):
+        return "{} ({}, {})".format(self.risk_map.name, self.get_axis_type_display(), self.position)
+

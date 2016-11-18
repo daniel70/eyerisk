@@ -1,0 +1,61 @@
+{% extends "risk/base.html" %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">CREATE RISK MAP</h4>
+      </div>
+      <form class="form" method="post" action="">
+          {% csrf_token %}
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+            <button type="submit" class="btn btn-primary">CREATE</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ul>
+    {% for lvl_1_name, lvl_1_values in risk_map.items %}
+    <li>
+        <button class="btn btn-warning">{{ lvl_1_name }}</button>
+    </li>
+    <ul>
+        {% for lvl_2_name, lvl_2_values in lvl_1_values.maps.items %}
+        {% if 'id' in lvl_2_values %}
+        <li>
+            <button class="btn btn-primary">{{ lvl_2_name }}</button>
+        </li>
+        <ul>
+            <li>
+                <form action="{% url 'risk-map-create' %}" method="post">{% csrf_token %}
+                    <input type="hidden" name="level" value="3">
+                    <input type="hidden" name="risk_type" value="{{ lvl_2_name }}">
+                    <button type="submit" class="btn btn-success" data-parent-id="{{ lvl_2_values.id }}">CREATE RISK CATEGORY</button>
+                </form>
+
+            </li>
+        </ul>
+        {% else %}
+        <li>
+            <form action="{% url 'risk-map-create' %}" method="post">{% csrf_token %}
+                <input type="hidden" name="level" value="2">
+                <input type="hidden" name="risk_type" value="{{ lvl_2_name }}">
+                <button type="submit" class="btn btn-info">CREATE {{ lvl_2_name }}</button>
+            </form>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endfor %}
+</ul>
+{{ risk_map }}
+<hr>
+{{ risk_map_values }}
+{% endblock content %}

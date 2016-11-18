@@ -6,8 +6,8 @@ from modeltranslation.admin import TabbedTranslationAdmin
 from .forms import ScenarioCategoryForm, ScenarioCategoryAnswerAdminForm
 
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
-    Selection, Employee, Company, Scenario, ScenarioCategory, RiskMap, Enabler, RiskType, \
-    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, Project
+    Selection, Employee, Company, Scenario, ScenarioCategory, Enabler, RiskType, \
+    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, Project, RiskMap, RiskMapValue
 
 
 class EmployeeInline(admin.StackedInline):
@@ -116,12 +116,20 @@ class ScenarioAdmin(admin.ModelAdmin):
     list_display = ('reference', 'title')
 
 
+class RiskMapValueInline(admin.TabularInline):
+    model = RiskMapValue
+    extra = 0
+    can_delete = False
+
+
 class RiskMapAdmin(admin.ModelAdmin):
-    list_display = ('company', 'riskmap_id', 'name', 'risk_type', 'axis_type', 'position', 'descriptor', 'is_template')
+    model = RiskMap
+    list_display = ('__str__', 'company', 'level', 'risk_type')
     list_filter = (
         ('is_template', admin.BooleanFieldListFilter),
         ('company', admin.RelatedOnlyFieldListFilter),
     )
+    inlines = (RiskMapValueInline,)
 
 
 admin.site.unregister(User)
@@ -129,7 +137,6 @@ admin.site.register(User, UserAdmin)
 
 admin.site.register(Company)
 admin.site.register(Project)
-admin.site.register(RiskMap, RiskMapAdmin)
 admin.site.register(Standard, StandardAdmin)
 admin.site.register(ControlDomain, ControlDomainAdmin)
 admin.site.register(ControlProcess, ControlProcessAdmin)
@@ -139,6 +146,9 @@ admin.site.register(Selection)
 admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
 admin.site.register(ScenarioCategoryAnswer, ScenarioCategoryAnswerAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
+
+admin.site.register(RiskMap, RiskMapAdmin)
+
 
 #no need to clutter the admin with these inlines
 admin.site.register(Enabler)

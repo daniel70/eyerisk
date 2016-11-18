@@ -1,16 +1,16 @@
-import json
+from datetime import datetime as dt
+from collections import OrderedDict
 from pprint import pprint
+import json
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required, user_passes_test
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.forms import inlineformset_factory
 
-from .models import Standard, Selection, ControlSelection, ControlDomain, ControlProcess, RiskMap, ScenarioCategory, \
-    ScenarioCategoryAnswer, Company, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer
+from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, \
+    RiskMap, RiskMapValue
 
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm
 
@@ -22,10 +22,6 @@ def is_employee(user):
     So most views should be protected to only show its contents when requested by an employee.
     """
     return hasattr(user, 'employee')
-
-
-def riskmaps(request):
-    return render(request, template_name='risk/riskmaps.html')
 
 
 # @permission_required('risk.change_selection')
@@ -59,6 +55,7 @@ def selection_create(request):
 
 
 @user_passes_test(is_employee)
+@permission_required('risk.change_selection')
 def selection_edit(request, pk):
     selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
     if request.method == "POST":
@@ -222,7 +219,7 @@ def scenario_list(request):
             return HttpResponseRedirect(reverse('scenario-edit', args=[sca.pk]))
 
     else:
-        form = ScenarioCategoryAnswerCreateForm()
+        form = ScenarioCategoryAnswerCreateForm(company=request.user.employee.company)
     scenarios = ScenarioCategoryAnswer.objects.filter(project__company=request.user.employee.company).order_by('-updated')
     context = {'scenario_list': scenarios, 'form': form}
     return render(request, template_name='risk/scenario_list.html', context=context)
@@ -293,3 +290,90 @@ def scenario_delete(request, pk):
 
     context = {'object': scenario_category_answer}
     return render(request, template_name='risk/scenario_confirm_delete.html', context=context)
+
+
+def riskmaps(request):
+    return render(request, template_name='risk/riskmaps.html')
+
+
+@user_passes_test(is_employee)
+def risk_map_list(request, pk=None):
+    """
+    risk_maps = {
+        "ENTERPRISE": {
+            "id": 42,
+            "level": "ENTERPRISE",
+            "risk_type": "",
+            "maps": {
+                "STRATEGIC": {},
+                "FINANCIAL": {},
+                "OPERATIONAL": {
+                    "id": 13,
+                    "level": "RISK TYPE",
+                    "risk_type": "Operational",
+                    "maps": {
+                        "RISK ABC": {
+                            "id": 14,
+                            "level": "RISK CATEGORY",
+                            "risk_type": "Operational",
+                        },
+                    },
+                },
+                "COMPLIANCE": {},
+            }
+        }
+    }
+    """
+    risk_map = {
+        "ENTERPRISE": {
+            "maps": OrderedDict(),
+        },
+    }
+    for k, v in RiskMap.RISK_TYPE_CHOICES:
+        risk_map["ENTERPRISE"]["maps"][v.upper()] = {"maps": OrderedDict()}
+
+    risk_maps = RiskMap.objects.filter(company=request.user.employee.company)
+    for map in risk_maps:
+        level = map.get_level_display()
+        if level == 'ENTERPRISE':
+            risk_map['ENTERPRISE']['id'] = map.pk
+            if pk is None:
+                pk = map.pk
+        elif level == 'RISK TYPE':
+            risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['id'] = map.pk
+        elif level == 'RISK CATEGORY':
+            risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['maps']['name'] = OrderedDict()
+            risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['maps']['name']['id'] = map.pk
+
+    # risk_map_values = get_list_or_404(RiskMapValue, risk_map=pk)
+
+    context = {
+        'risk_map': risk_map,
+        # 'risk_map_values': risk_map_values,
+    }
+    return render(request, template_name='risk/risk_map_list.html', context=context)
+
+
+def risk_map_create(request):
+    if request.method == "POST":
+        level = request.POST.get('level', None)
+        risk_type = request.POST.get('risk_type', None)
+
+        if risk_type is not None:
+            for k, v in RiskMap.RISK_TYPE_CHOICES:
+                if v.upper() == risk_type.upper():
+                    risk_type_key = k
+
+        if level == '2':
+            #  we are going to create a new risk type level, copying from the ENTERPRISE level
+            risk_map = get_object_or_404(RiskMap, company=request.user.employee.company, level=1, is_template=False)
+            risk_map.parent_id_id = risk_map.pk
+            risk_map.pk = None
+            risk_map.name = risk_type
+            risk_map.level = level
+            risk_map.risk_type = risk_type_key
+            risk_map.is_template = False
+            risk_map.created = dt.now()
+            risk_map.save()
+
+        return HttpResponseRedirect(reverse('risk-map-list', args=[risk_map.pk]))
