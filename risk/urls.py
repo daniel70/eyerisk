@@ -1,7 +1,7 @@
 import django.contrib.auth.urls
 from django.conf.urls import url, include
 from .views import riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete,\
-    selection_create, selection_edit, selection_response, risk_map_list, risk_map_create
+    selection_create, selection_edit, selection_response, risk_map_list, risk_map_create, risk_map_create_category
 
 urlpatterns = [
     url(r'^$', selection_list, name='risk-home'),
@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^riskmap/$', risk_map_list, name='risk-map-list'),
     url(r'^riskmap/(?P<pk>\d+)/$', risk_map_list, name='risk-map-list'),
     url(r'^riskmap/create$', risk_map_create, name='risk-map-create'),
+    url(r'^riskmap/create-category$', risk_map_create_category, name='risk-map-create-category'),
 
     url(r'^scenario/$', scenario_list, name='scenario-list'),
     url(r'^scenario/(?P<pk>\d+)/edit$', scenario_edit, name='scenario-edit'),

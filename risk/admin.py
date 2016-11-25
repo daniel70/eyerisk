@@ -7,7 +7,8 @@ from .forms import ScenarioCategoryForm, ScenarioCategoryAnswerAdminForm
 
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
     Selection, Employee, Company, Scenario, ScenarioCategory, Enabler, RiskType, \
-    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, Project, RiskMap, RiskMapValue
+    ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, Project, RiskMap, RiskMapValue, \
+    Software, Department, Process
 
 
 class EmployeeInline(admin.StackedInline):
@@ -132,11 +133,60 @@ class RiskMapAdmin(admin.ModelAdmin):
     inlines = (RiskMapValueInline,)
 
 
+class SoftwareAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'company')
+    list_filter = (
+        ('company', admin.RelatedOnlyFieldListFilter),
+    )
+
+
+class SoftwareInline(admin.TabularInline):
+    model = Software
+    can_delete = True
+    extra = 1
+
+
+class ProcessAdmin(admin.ModelAdmin):
+    model = Process
+    list_display = ('__str__', 'department',)
+    list_filter = (
+        ('department', admin.RelatedOnlyFieldListFilter),
+    )
+
+
+class ProcessInline(admin.TabularInline):
+    model = Process
+    can_delete = True
+    extra = 1
+
+
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'company')
+    list_filter = (
+        ('company', admin.RelatedOnlyFieldListFilter),
+    )
+    inlines = (ProcessInline,)
+
+
+class DepartmentInline(admin.TabularInline):
+    model = Department
+    can_delete = True
+    extra = 1
+
+
+class CompanyAdmin(admin.ModelAdmin):
+    model = Company
+    inlines = (DepartmentInline, SoftwareInline)
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
-admin.site.register(Company)
+admin.site.register(Company, CompanyAdmin)
+admin.site.register(Software, SoftwareAdmin)
 admin.site.register(Project)
+admin.site.register(Department, DepartmentAdmin)
+admin.site.register(Process, ProcessAdmin)
 admin.site.register(Standard, StandardAdmin)
 admin.site.register(ControlDomain, ControlDomainAdmin)
 admin.site.register(ControlProcess, ControlProcessAdmin)

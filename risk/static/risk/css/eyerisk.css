@@ -1,3 +1,7 @@
+ul {
+    list-style-type: none;
+}
+
 .multiple-checkbox ul {
 /* Used to hide <li> elements in multiple checkbox forms for bootstrap forms */
     padding-left: 0px;
@@ -60,6 +64,15 @@
 .eye-rm-row {
     border-top: 1px dotted grey;
 }
+
+ul.risk-map-list li {
+    margin-bottom: 20px;
+}
+
+div.row.odd {
+    background-color: #f9f9f9;
+}
+
 /* end risk-hierarchy */
 
 
@@ -92,8 +105,9 @@
     background-color: #F5F79D;
 }
 
-.scenario-button-bar {
+.button-bar {
     margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .scenario textarea {

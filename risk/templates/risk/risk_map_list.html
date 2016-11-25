@@ -1,61 +1,127 @@
 {% extends "risk/base.html" %}
+{% load bootstrap %}
 {% block content %}
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+        <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">CREATE RISK MAP</h4>
-      </div>
-      <form class="form" method="post" action="">
-          {% csrf_token %}
-          <div class="modal-body">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
-            <button type="submit" class="btn btn-primary">CREATE</button>
-          </div>
-      </form>
+        </div>
+        <form class="form" method="post" action="{% url 'risk-map-create-category' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                {{ risk_form|bootstrap }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                <button type="submit" class="btn btn-primary">CREATE</button>
+            </div>
+        </form>
     </div>
-  </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <ul class="risk-map-list">
+            {% for lvl_1_name, lvl_1_values in risk_map_tree.items %}
+            <li>
+                <a href="{% url 'risk-map-list' lvl_1_values.id %}" class="btn btn-warning">{{ lvl_1_name }}</a>
+            </li>
+            <ul class="risk-map-list">
+                {% for lvl_2_name, lvl_2_values in lvl_1_values.maps.items %}
+                {% if 'id' in lvl_2_values %}
+                <li>
+                    <a href="{% url 'risk-map-list' lvl_2_values.id %}" class="btn btn-primary">{{ lvl_2_name }}</a>
+                </li>
+                <ul>
+                    {% for lvl_3_name, lvl_3_values in lvl_2_values.maps.items %}
+                    <li>
+                        <button class="btn btn-success">{{ lvl_3_name }}</button>
+                    </li>
+                    {% endfor %}
+                    {% if perms.risk.add_riskmap %}
+                    <li>
+                        <button type="button" class="btn btn-success" data-parent-id="{{ lvl_2_values.id }}"
+                        data-toggle="modal" data-target="#myModal">
+                            CREATE RISK CATEGORY
+                        </button>
+                    </li>
+                    {% endif %}
+                </ul>
+                {% else %}
+                {% if perms.risk.add_riskmap %}
+                <li>
+                    <form action="{% url 'risk-map-create' %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="level" value="2">
+                        <input type="hidden" name="risk_type" value="{{ lvl_2_name }}">
+                        <button type="submit" class="btn btn-info">CREATE {{ lvl_2_name }}</button>
+                    </form>
+                </li>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-8">
+        <form action="" method="post">{% csrf_token %}
+        {{ risk_formset.management_form }}
+        {% for form in risk_formset %}
+            {{ form.id }}
+            <div class="row {% cycle 'even' 'odd' %}">
+                <div class="col-md-12">
+                    <h4>{{ risk_map }} - {{ form.instance.get_axis_type_display }} - {{ form.instance.position }}</h4>
+                </div>
+            </div>
+            <div class="row {% cycle 'even' 'odd' %}">
+                <div class="col-md-3">
+                    {{ form.rating|bootstrap }}
+                    {{ form.descriptor|bootstrap }}
+                </div>
+                <div class="col-md-9">
+                    {{ form.definition|bootstrap }}
+                </div>
+            </div>
+        {% endfor %}
+            {% if perms.risk.change_riskmap %}
+            <div class="row button-bar">
+                <div class="col-md-12">
+                    {% if perms.risk.delete_riskmap %}
+                    <a href="#" class="btn btn-danger">DELETE</a>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary pull-right">SAVE RISKMAP</button>
+                </div>
+            </div>
+            {% endif %}
+        </form>
+    </div>
 </div>
 
-<ul>
-    {% for lvl_1_name, lvl_1_values in risk_map.items %}
-    <li>
-        <button class="btn btn-warning">{{ lvl_1_name }}</button>
-    </li>
-    <ul>
-        {% for lvl_2_name, lvl_2_values in lvl_1_values.maps.items %}
-        {% if 'id' in lvl_2_values %}
-        <li>
-            <button class="btn btn-primary">{{ lvl_2_name }}</button>
-        </li>
-        <ul>
-            <li>
-                <form action="{% url 'risk-map-create' %}" method="post">{% csrf_token %}
-                    <input type="hidden" name="level" value="3">
-                    <input type="hidden" name="risk_type" value="{{ lvl_2_name }}">
-                    <button type="submit" class="btn btn-success" data-parent-id="{{ lvl_2_values.id }}">CREATE RISK CATEGORY</button>
-                </form>
 
-            </li>
-        </ul>
-        {% else %}
-        <li>
-            <form action="{% url 'risk-map-create' %}" method="post">{% csrf_token %}
-                <input type="hidden" name="level" value="2">
-                <input type="hidden" name="risk_type" value="{{ lvl_2_name }}">
-                <button type="submit" class="btn btn-info">CREATE {{ lvl_2_name }}</button>
-            </form>
-        </li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    {% endfor %}
-</ul>
-{{ risk_map }}
-<hr>
-{{ risk_map_values }}
+
+<script type="text/javascript">
+$('#myModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)     // the button that triggered the modal
+    var parent_id = button.data('parent-id');
+    if (parent_id) { // if this modal is shown due to an error then parent_id will be 'undefined'!
+        $('#id_parent_id').val(parent_id);
+    }
+})
+
+$('#myModal').on('shown.bs.modal', function (event) {
+    $('#id_name').focus();
+})
+</script>
+
+{% if form.non_field_errors or form.name.errors or form.parent_id.errors %}
+<script type="text/javascript">
+    $(window).load(function(){
+        $('#myModal').modal('show');
+    });
+</script>
+{% endif %}
+
 {% endblock content %}

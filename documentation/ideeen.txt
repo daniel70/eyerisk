@@ -85,3 +85,38 @@ RiskMap tabel:
 - definition
 - is_template
 - level
+
+Om de ENTERPRISE riskmap en riskmapvalue records aan te maken kun je de volgende query uitvoeren:
+
+with new_maps as (
+insert into risk_riskmap (name, level, is_template, company_id, parent_id_id, created, updated)
+select 'ENTERPRISE', 1, false, comp.id, risk.id, current_timestamp, current_timestamp
+from risk_riskmap risk
+cross join risk_company comp
+where risk.is_template = true
+and comp.id not in (select company_id from risk_riskmap where company_id is not null)
+returning id
+)
+insert into risk_riskmapvalue (axis_type, position, rating, descriptor, definition, created, updated, risk_map_id)
+select v1.axis_type, v1.position, v1.rating, v1.descriptor, v1.definition, current_timestamp, current_timestamp, i.id
+from risk_riskmap temp
+join risk_riskmapvalue v1 on temp.id = v1.risk_map_id
+cross join new_maps i
+where temp.is_template = true
+
+
+=========================================================================================
+BIA Business Impact Analysis
+=========================================================================================
+BIV Beschikbaarheid (Availability), Integriteit (Integrity), Vertrouwlijkheid (Confidentiality)
+
+(?) Application is een text veld die suggesties aanlevert n.a.v.bestaande software
+We hebben Departments --> Processes en Software
+
+De standaard vragen voor BIA komen uit de data classificatie (Taskforce)
+
+De criteria verschillen per B, I of A
+De impacts verschillen per B, I of A
+Per company wordt er niet gedifferentieerd.
+Er zijn altijd 5 impact categorien maar de omschrijving per category per company verschilt per B, I of A.
+

@@ -25,9 +25,13 @@ def company_created(sender, instance, created, **kwargs):
     This risk map consists of Likelihood and Risk tuples.
     The template record has a 'is_template' column that is True for templates.
     """
-    #TODO: if no template exit cleanly
     if created:
         t = RiskMap.objects.get(is_template=True)
+        if t is None:
+            # no risk map template defined!
+            # log error
+            return
+
         # before making changes to the RiskMap, first get its Values
         rmv_list = list(RiskMapValue.objects.filter(risk_map=t))
         t.parent_id_id = t.pk
@@ -39,6 +43,35 @@ def company_created(sender, instance, created, **kwargs):
         t.save()
 
 
+class Software(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True)
+    is_saas = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = 'Software'
+
+    def __str__(self):
+        return self.name
+
+
+class Department(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    manager = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Process(models.Model):
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
+    owner = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class Employee(models.Model):
@@ -609,10 +642,10 @@ class RiskMap(models.Model):
     OPERATIONAL = 'O'
     COMPLIANCE = 'C'
     RISK_TYPE_CHOICES = (
-        (STRATEGIC, 'Strategic'),
-        (FINANCIAL, 'Financial'),
-        (OPERATIONAL, 'Operational'),
-        (COMPLIANCE, 'Compliance'),
+        (STRATEGIC, 'STRATEGIC'),
+        (FINANCIAL, 'FINANCIAL'),
+        (OPERATIONAL, 'OPERATIONAL'),
+        (COMPLIANCE, 'COMPLIANCE'),
     )
 
     company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
@@ -637,11 +670,9 @@ def risk_map_created(sender, instance, created, **kwargs):
     """
     When a RiskMap is created we automatically create the RiskMapValues.
     """
-    #TODO: if no riskmapvalues exist then exit cleanly
     if created and instance.is_template is False:
         parent = RiskMap.objects.get(pk=instance.parent_id_id)
         for rmv in RiskMapValue.objects.filter(risk_map=parent):
-            print('updating', rmv)
             rmv.pk = None
             rmv.risk_map = instance
             rmv.save()
@@ -670,4 +701,3 @@ class RiskMapValue(models.Model):
 
     def __str__(self):
         return "{} ({}, {})".format(self.risk_map.name, self.get_axis_type_display(), self.position)
-

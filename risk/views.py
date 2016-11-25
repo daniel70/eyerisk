@@ -6,13 +6,17 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required, user_passes_test
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.forms import inlineformset_factory
+from django.db.utils import IntegrityError
+from django.views.decorators.http import require_http_methods
 
 from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, \
     RiskMap, RiskMapValue
 
-from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm
+from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
+    RiskMapCategoryCreateForm, RiskMapValueFormSet
 
 
 def is_employee(user):
@@ -27,8 +31,8 @@ def is_employee(user):
 # @permission_required('risk.change_selection')
 @user_passes_test(is_employee)
 def selection_list(request):
-    selection_list = Selection.objects.filter(company=request.user.employee.company).order_by('-updated')
-    context = {'selection_list': selection_list}
+    selection = Selection.objects.filter(company=request.user.employee.company).order_by('-updated')
+    context = {'selection_list': selection}
     return render(request, template_name='risk/selection_list.html', context=context)
 
 
@@ -211,7 +215,7 @@ def scenario_list(request):
     After the ScenarioCategoryAnswer is created we redirect to the corresponding edit page.
     """
     if request.method == "POST":
-        form = ScenarioCategoryAnswerCreateForm(request.POST, request.FILES)
+        form = ScenarioCategoryAnswerCreateForm(data=request.POST, files=request.FILES, company=request.user.employee.company)
         if form.is_valid():
             sca = ScenarioCategoryAnswer(scenario_category=form.cleaned_data['scenario_category'],
                                          project=form.cleaned_data['project'])
@@ -298,6 +302,91 @@ def riskmaps(request):
 
 @user_passes_test(is_employee)
 def risk_map_list(request, pk=None):
+    if request.method == "POST":
+
+        formset = RiskMapValueFormSet(request.POST)
+        risk_map_values = formset.save()
+        return HttpResponseRedirect(reverse('risk-map-list', args=[pk,]))
+
+    if pk is None:
+        risk_map = get_object_or_404(RiskMap, company=request.user.employee.company, level=1)
+    else:
+        risk_map = get_object_or_404(RiskMap, company=request.user.employee.company, pk=pk)
+    formset = RiskMapValueFormSet(queryset=risk_map.riskmapvalue_set.all())
+
+    risk_map_tree = get_risk_map_tree(request.user.employee.company, pk)
+    # risk_map_values = get_list_or_404(RiskMapValue, risk_map=pk)
+    # add a form to the context in case the client wants to create a new CATEGORY
+    form = RiskMapCategoryCreateForm()
+    context = {
+        'risk_map': risk_map,
+        'risk_form': form,
+        'risk_formset': formset,
+        'risk_map_tree': risk_map_tree,
+        # 'risk_map_values': risk_map_values,
+    }
+    return render(request, template_name='risk/risk_map_list.html', context=context)
+
+
+@require_http_methods(["POST", ])
+@permission_required('risk.add_riskmap')
+def risk_map_create(request):
+    if request.method == "POST":
+        level = request.POST.get('level', None)
+        risk_type = request.POST.get('risk_type', None)
+
+        if risk_type is not None:
+            for k, v in RiskMap.RISK_TYPE_CHOICES:
+                if v.upper() == risk_type.upper():
+                    risk_type_key = k
+
+        if level == '2':
+            #  we are going to create a new risk type level, copying from the ENTERPRISE level
+            #  make sure it does not already exist
+            if RiskMap.objects.filter(company=request.user.employee.company, level=2, risk_type=risk_type_key).exists():
+                messages.warning(request, "Risk map could not be created because it already exists.")
+                return HttpResponseRedirect(reverse('risk-map-list'))
+
+            risk_map = get_object_or_404(RiskMap, company=request.user.employee.company, level=1, is_template=False)
+            risk_map.parent_id_id = risk_map.pk
+            risk_map.pk = None
+            risk_map.name = risk_type
+            risk_map.level = level
+            risk_map.risk_type = risk_type_key
+            risk_map.is_template = False
+            risk_map.created = dt.now()
+            risk_map.save()
+
+        return HttpResponseRedirect(reverse('risk-map-list', args=[risk_map.pk]))
+
+
+@require_http_methods(["POST", ])
+@permission_required('risk.add_riskmap')
+def risk_map_create_category(request):
+    if request.method == "POST":
+        form = RiskMapCategoryCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            parent = form.cleaned_data['parent_id']  # parent_id points to the parent record, not the int value
+            new_risk_map = form.save(commit=False)
+            new_risk_map.company = request.user.employee.company
+            new_risk_map.level = 3
+            new_risk_map.risk_type = parent.risk_type
+            new_risk_map.is_template = False
+            try:
+                new_risk_map.save()
+                return HttpResponseRedirect(reverse('risk-map-list', args=[new_risk_map.pk]))
+            except IntegrityError as e:
+                form.add_error('name', "A risk map with this name already exists.")
+                risk_map = get_risk_map_tree(request.user.employee.company)
+                context = {
+                    'risk_form': form,
+                    'risk_map': risk_map,
+                    # 'risk_map_values': risk_map_values,
+                }
+                return render(request, template_name='risk/risk_map_list.html', context=context)
+
+
+def get_risk_map_tree(company, pk=None):
     """
     risk_maps = {
         "ENTERPRISE": {
@@ -332,7 +421,7 @@ def risk_map_list(request, pk=None):
     for k, v in RiskMap.RISK_TYPE_CHOICES:
         risk_map["ENTERPRISE"]["maps"][v.upper()] = {"maps": OrderedDict()}
 
-    risk_maps = RiskMap.objects.filter(company=request.user.employee.company)
+    risk_maps = RiskMap.objects.filter(company=company)
     for map in risk_maps:
         level = map.get_level_display()
         if level == 'ENTERPRISE':
@@ -342,38 +431,6 @@ def risk_map_list(request, pk=None):
         elif level == 'RISK TYPE':
             risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['id'] = map.pk
         elif level == 'RISK CATEGORY':
-            risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['maps']['name'] = OrderedDict()
-            risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['maps']['name']['id'] = map.pk
+            risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['maps'][map.name] = map.pk
 
-    # risk_map_values = get_list_or_404(RiskMapValue, risk_map=pk)
-
-    context = {
-        'risk_map': risk_map,
-        # 'risk_map_values': risk_map_values,
-    }
-    return render(request, template_name='risk/risk_map_list.html', context=context)
-
-
-def risk_map_create(request):
-    if request.method == "POST":
-        level = request.POST.get('level', None)
-        risk_type = request.POST.get('risk_type', None)
-
-        if risk_type is not None:
-            for k, v in RiskMap.RISK_TYPE_CHOICES:
-                if v.upper() == risk_type.upper():
-                    risk_type_key = k
-
-        if level == '2':
-            #  we are going to create a new risk type level, copying from the ENTERPRISE level
-            risk_map = get_object_or_404(RiskMap, company=request.user.employee.company, level=1, is_template=False)
-            risk_map.parent_id_id = risk_map.pk
-            risk_map.pk = None
-            risk_map.name = risk_type
-            risk_map.level = level
-            risk_map.risk_type = risk_type_key
-            risk_map.is_template = False
-            risk_map.created = dt.now()
-            risk_map.save()
-
-        return HttpResponseRedirect(reverse('risk-map-list', args=[risk_map.pk]))
+    return risk_map

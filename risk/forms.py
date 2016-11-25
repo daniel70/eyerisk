@@ -1,7 +1,7 @@
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
-    MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple
+    MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple, HiddenInput
 from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType, \
-    Project
+    Project, RiskMap, RiskMapValue
 
 
 class SelectionForm(ModelForm):
@@ -42,6 +42,7 @@ class ScenarioCategoryAnswerForm(ModelForm):
             'time_lag': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.TIME_LAG_CHOICES),
         }
 
+
 class ScenarioCategoryAnswerAdminForm(ScenarioCategoryAnswerForm):
     """
     Only difference with the 'normal' form is that we show a few extra fields in admin.
@@ -63,3 +64,21 @@ class ScenarioCategoryAnswerCreateForm(ModelForm):
     class Meta:
         model = ScenarioCategoryAnswer
         fields = ('project', 'scenario_category')
+
+
+class RiskMapCategoryCreateForm(ModelForm):
+    """
+    When a new RiskMap of type CATEGORY is created we only need a name and a parent_id.
+    """
+    class Meta:
+        model = RiskMap
+        fields = ('name', 'parent_id')
+        widgets = {'parent_id': HiddenInput()}
+
+
+class RiskMapValueForm(ModelForm):
+    class Meta:
+        model = RiskMapValue
+        fields = ('rating', 'descriptor', 'definition')
+
+RiskMapValueFormSet = modelformset_factory(RiskMapValue, form=RiskMapValueForm, extra=0)

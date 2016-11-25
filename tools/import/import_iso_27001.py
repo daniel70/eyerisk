@@ -18,6 +18,7 @@ standard = {
     'ISO/IEC 27002:2013 nl': current_version,
 }
 
+
 def find_position(values, search):
     """search for a string position in a list, return None if not exists"""
     try:
@@ -25,6 +26,7 @@ def find_position(values, search):
     except ValueError:
         pos = None
     return pos
+
 
 def get_position_dict(values, search_list):
     """create an ordereddict with all existing items in search_list and their positions"""
