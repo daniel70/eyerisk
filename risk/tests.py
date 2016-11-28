@@ -16,17 +16,24 @@ class CompanyTests(TestCase):
     fixtures = ['riskmap.json', 'riskmapvalue.json']
 
     def setUp(self):
-        Company.objects.create(name='ACME')
+        pass
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.company = Company.objects.create(name='ACME')
 
     def test_if_company_exists(self):
-        self.assertTrue(RiskMap.objects.filter(company__name='ACME').exists())
+        self.assertTrue(Company.objects.filter(name='ACME').exists())
 
     def test_if_risk_map_is_created_when_company_is_created(self):
         self.assertEqual(RiskMap.objects.get(company__name='ACME').name, 'ENTERPRISE')
+        self.assertEqual(self.company.riskmap_set.count(), 1, "There should be exactly one risk map for Company")
 
     def test_if_ten_risk_map_values_are_created_when_company_is_created(self):
         risk_map = RiskMap.objects.get(company__name='ACME')
         self.assertEqual(risk_map.riskmapvalue_set.all().count(), 10)
+        self.assertEqual(self.company.riskmap_set.get().riskmapvalue_set.count(), 10,
+                         "There should be exactly ten RiskMapValue records for Company")
 
 
 class RiskMapTests(TestCase):
