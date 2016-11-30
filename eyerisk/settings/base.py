@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
+from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
+
 import os
 import dj_database_url
 
@@ -169,4 +171,8 @@ EYERISK = {
     # this will determine the number of columns and rows in the heat maps
     # 'MINIMUM_RISKMAP_RATINGS': 3,
     # 'MAXIMUM_RISKMAP_RATINGS': 9,
+}
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
 }

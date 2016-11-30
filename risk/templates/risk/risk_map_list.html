@@ -36,9 +36,10 @@
                     <a href="{% url 'risk-map-list' lvl_2_values.id %}" class="btn btn-primary">{{ lvl_2_name }}</a>
                 </li>
                 <ul>
-                    {% for lvl_3_name, lvl_3_values in lvl_2_values.maps.items %}
+                    {% for lvl_3_name, lvl_3_id in lvl_2_values.maps.items %}
                     <li>
-                        <button class="btn btn-success">{{ lvl_3_name }}</button>
+                        <!--<button class="btn btn-success">{{ lvl_3_values }}</button>-->
+                        <a href="{% url 'risk-map-list' lvl_3_id %}" class="btn btn-success">{{ lvl_3_name }}</a>
                     </li>
                     {% endfor %}
                     {% if perms.risk.add_riskmap %}

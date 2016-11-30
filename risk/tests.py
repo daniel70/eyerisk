@@ -2,6 +2,9 @@ from django.test import TestCase
 
 from .models import Company, RiskMap, RiskMapValue
 
+# riskmap voorbeeld toevoegen bij het aanmaken/wijzigen van risk maps
+
+# impact 4 van een risk map mag niet lager zijn dan impact 3 etc.
 
 class SimpleTest(TestCase):
     def test_no_access_as_anonymous(self):

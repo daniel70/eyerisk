@@ -11,6 +11,7 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.forms import inlineformset_factory
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, \
     RiskMap, RiskMapValue
@@ -302,17 +303,21 @@ def riskmaps(request):
 
 @user_passes_test(is_employee)
 def risk_map_list(request, pk=None):
-    if request.method == "POST":
-
-        formset = RiskMapValueFormSet(request.POST)
-        risk_map_values = formset.save()
-        return HttpResponseRedirect(reverse('risk-map-list', args=[pk,]))
 
     if pk is None:
         risk_map = get_object_or_404(RiskMap, company=request.user.employee.company, level=1)
     else:
         risk_map = get_object_or_404(RiskMap, company=request.user.employee.company, pk=pk)
-    formset = RiskMapValueFormSet(queryset=risk_map.riskmapvalue_set.all())
+
+    if request.method == "POST":
+        formset = RiskMapValueFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(reverse('risk-map-list', args=[risk_map.pk,]))
+        else:
+            messages.error(request, _('An error occured. The form has NOT been saved.'))
+    else:
+        formset = RiskMapValueFormSet(queryset=risk_map.riskmapvalue_set.all())
 
     risk_map_tree = get_risk_map_tree(request.user.employee.company, pk)
     # risk_map_values = get_list_or_404(RiskMapValue, risk_map=pk)

@@ -1,9 +1,12 @@
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.db.models.signals import m2m_changed, post_save, post_delete
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy as _
+
 
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -600,7 +603,7 @@ class ProcessEnablerAnswer(models.Model):
     scenario_category_answer = models.ForeignKey(ScenarioCategoryAnswer, on_delete=models.CASCADE)
     effect_on_frequency = models.CharField(max_length=1, choices=EFFECTS, blank=True)
     effect_on_impact = models.CharField(max_length=1, choices=EFFECTS, blank=True)
-    essential_control = models.CharField(max_length=1, choices=[('Y', 'Y'), ('N', 'N')], blank=True)
+    essential_control = models.CharField(max_length=1, choices=[('Y', 'Yes'), ('N', 'No')], blank=True)
 
     class Meta:
         unique_together = ('control_practice', 'scenario_category_answer')
@@ -701,3 +704,17 @@ class RiskMapValue(models.Model):
 
     def __str__(self):
         return "{} ({}, {})".format(self.risk_map.name, self.get_axis_type_display(), self.position)
+
+    def clean(self):
+        """
+        Each higher position on the same risk map and same axis, should have a higher rating than the previous.
+        (this has moved to the modelformset validation because this check needs to take place before the form is saved)
+        """
+    #     if self.position > 1:
+    #         if RiskMapValue.objects.get(risk_map=self.risk_map, axis_type=self.axis_type, position=self.position-1)\
+    #                 .rating >= self.rating:
+    #             raise ValidationError({'rating': 'Rating can not be lower than or equal to previous rating.'})
+
+        """Check that rating of type L is between 1 and 100"""
+        if self.axis_type == "L" and (self.rating < 1 or self.rating > 100):
+            raise ValidationError({'rating': _('Rating of likelihood must be between 1 and 100')})

@@ -1,5 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
     MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple, HiddenInput
+from django.forms.models import BaseModelFormSet
+from django.utils.translation import ugettext_lazy as _
+
 from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType, \
     Project, RiskMap, RiskMapValue
 
@@ -81,4 +85,26 @@ class RiskMapValueForm(ModelForm):
         model = RiskMapValue
         fields = ('rating', 'descriptor', 'definition')
 
-RiskMapValueFormSet = modelformset_factory(RiskMapValue, form=RiskMapValueForm, extra=0)
+
+class BaseRiskMapValueFormSet(BaseModelFormSet):
+    """Override BaseModelFormSet for use in RiskMapValueFormSet in order to be able to check if the form is valid"""
+    def clean(self):
+        if any(self.errors):
+            return
+        x_rating, y_rating = 0, 0
+        for form in self.forms:
+            """Check that a higher position on the same axis also has a higher rating"""
+            if form.instance.axis_type == 'I':
+                if form.cleaned_data['rating'] <= x_rating:
+                    form.add_error('rating', ValidationError(_('Rating cannot be lower than a previous rating')))
+                else:
+                    x_rating = form.cleaned_data['rating']
+
+            if form.instance.axis_type == 'L':
+                if form.cleaned_data['rating'] <= y_rating:
+                    form.add_error('rating', ValidationError(_('Rating cannot be lower than a previous rating')))
+                else:
+                    y_rating = form.cleaned_data['rating']
+
+
+RiskMapValueFormSet = modelformset_factory(RiskMapValue, form=RiskMapValueForm, formset=BaseRiskMapValueFormSet, extra=0)
