@@ -185,7 +185,7 @@ except:
     pass
 
 try:
-    TWILIO_AUTH_TOKEN = os.environ['5122639a67b380bd395aba5b13bac073']
+    TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
 except:
     pass
 
