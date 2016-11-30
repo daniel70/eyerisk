@@ -173,6 +173,12 @@ EYERISK = {
     # 'MAXIMUM_RISKMAP_RATINGS': 9,
 }
 
+########################### BOOTSTRAP ###########################
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+########################### TWILIO ##############################
+TWILIO_CALLER_ID = '+13475739675'
+PHONENUMBER_DEFAULT_REGION = 'NL'
+
