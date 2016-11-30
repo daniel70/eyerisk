@@ -5,6 +5,7 @@ try:
 except:
     DEBUG = False
 
+
 ALLOWED_HOSTS = [".herokuapp.com", "0.0.0.0" ]
 MIDDLEWARE_CLASSES.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))

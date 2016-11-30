@@ -179,6 +179,16 @@ MESSAGE_TAGS = {
 }
 
 ########################### TWILIO ##############################
+try:
+    TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
+except:
+    pass
+
+try:
+    TWILIO_AUTH_TOKEN = os.environ['5122639a67b380bd395aba5b13bac073']
+except:
+    pass
+
 TWILIO_CALLER_ID = '+13475739675'
 PHONENUMBER_DEFAULT_REGION = 'NL'
 
