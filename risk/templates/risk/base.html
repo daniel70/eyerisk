@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load risk_tags %}
 <!doctype html>
 <html class="no-js" lang="">
         <meta charset="utf-8">
@@ -92,17 +93,14 @@
           </div>
         </nav>
         <div class="container">
-        {% if messages %}
-        <ul class="messages">
-            {% for msg in messages %}
-            <li>
-                <div class="alert alert-{{msg.level_tag}}" role="alert">
+
+        {% for msg in messages %}
+        <div class="alert alert-{{ msg.level_tag }}" role="alert">
+            <span class="{{ msg.level_tag|msg_icon_class }}" aria-hidden="true"></span>
             {{msg.message}}
-            </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        </div>
+        {% endfor %}
+
         {% block content %}{% endblock content %}
         </div>
         <!-- {{ perms.risk.add_control }} -->

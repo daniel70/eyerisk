@@ -20,3 +20,22 @@ def response(value):
         return 'list-group-item-warning'
     else:
         return 'error-not-a-valid-response'
+
+
+@register.filter
+@stringfilter
+def msg_icon_class(value):
+    if value == 'danger':
+        return 'glyphicon glyphicon-exclamation-sign'
+    elif value == 'warning':
+        return value
+    elif value == 'success':
+        return 'glyphicon glyphicon-info-sign'
+    elif value == 'info':
+        return value
+    elif value == 'debug':
+        return value
+    else:
+        return value
+
+

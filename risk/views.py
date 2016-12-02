@@ -37,7 +37,12 @@ def selection_list(request):
     return render(request, template_name='risk/selection_list.html', context=context)
 
 
-@user_passes_test(is_employee)
+# @user_passes_test(lambda u: u.is_authenitated())
+def no_company(request):
+    return render(request, template_name='risk/no_company.html')
+
+
+@user_passes_test(is_employee, login_url='no-company')
 def selection_create(request):
     """
     When a Selection is created, we also need to associate SelectionDocuments
@@ -82,6 +87,7 @@ def selection_delete(request, pk):
     selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
     if request.method == "POST":
         selection.delete()
+        messages.success(request, "Selection deleted successfully")
         return HttpResponseRedirect(reverse('selection-list'))
 
     context = {'object': selection}
@@ -206,7 +212,7 @@ def calculate_response(columns: list):
         column['response'] = 'N' if len(answers) > 1 else answers.pop()
 
 
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 def scenario_list(request):
     """
     This view lists all the ScenarioCategoryAnswers. They can be edited and deleted.
@@ -333,6 +339,7 @@ def risk_map_list(request, pk=None):
     return render(request, template_name='risk/risk_map_list.html', context=context)
 
 
+@user_passes_test(is_employee)
 @require_http_methods(["POST", ])
 @permission_required('risk.add_riskmap')
 def risk_map_create(request):
@@ -365,6 +372,7 @@ def risk_map_create(request):
         return HttpResponseRedirect(reverse('risk-map-list', args=[risk_map.pk]))
 
 
+@user_passes_test(is_employee)
 @require_http_methods(["POST", ])
 @permission_required('risk.add_riskmap')
 def risk_map_create_category(request):
