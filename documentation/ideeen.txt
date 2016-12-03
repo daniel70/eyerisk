@@ -110,7 +110,7 @@ BIA Business Impact Analysis
 =========================================================================================
 BIV Beschikbaarheid (Availability), Integriteit (Integrity), Vertrouwlijkheid (Confidentiality)
 
-(?) Application is een text veld die suggesties aanlevert n.a.v.bestaande software
+(?) Software is een text veld die suggesties aanlevert n.a.v.bestaande software
 We hebben Departments --> Processes en Software
 
 De standaard vragen voor BIA komen uit de data classificatie (Taskforce)
@@ -120,3 +120,18 @@ De impacts verschillen per B, I of A
 Per company wordt er niet gedifferentieerd.
 Er zijn altijd 5 impact categorien maar de omschrijving per category per company verschilt per B, I of A.
 
+Onderzoek of het mogelijk is om optioneel RTO en RPO onderscheid te maken.
+Het moet mogelijk om de resultaten van een proces (binnen een bedrijf binnen een afdeling) te kopieren naar een ander proces.
+
+Een bedrijf krijgt een set met standaard vragen (Marc?)
+5 impacts:
+Very high
+High
+Medium
+Low
+Very Low
+
+Per bedrijf moet er per C/I/A en per impact een tekst kunnen worden bijgehouden, bijv:
+2 hours or costs > € 30m --> A5 --> Availability / very high
+
+software is per proces > 1

@@ -3,12 +3,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from .forms import ScenarioCategoryForm, ScenarioCategoryAnswerAdminForm
+from .forms import ScenarioCategoryForm, ScenarioCategoryAnswerAdminForm, DepartmentAdminForm
 
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
     Selection, Employee, Company, Scenario, ScenarioCategory, Enabler, RiskType, \
     ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, Project, RiskMap, RiskMapValue, \
-    Software, Department, Process
+    Software, Department, Process, Impact
 
 
 class EmployeeInline(admin.StackedInline):
@@ -161,11 +161,31 @@ class ProcessInline(admin.TabularInline):
 
 
 class DepartmentAdmin(admin.ModelAdmin):
+    """
+    When a department is added you can choose the company but can not add software.
+    When a department is changed you can not choose the company but you can select software for that company.
+    """
+    form = DepartmentAdminForm
     list_display = ('__str__', 'company')
     list_filter = (
         ('company', admin.RelatedOnlyFieldListFilter),
     )
     inlines = (ProcessInline,)
+
+    def add_view(self, request, extra_content=None):
+        self.readonly_fields = () #bug?
+        self.fields = ('company', 'name', 'manager')
+        return super(DepartmentAdmin, self).add_view(request)
+
+    def change_view(self,request,object_id,extra_content=None):
+        self.readonly_fields = ('company',)
+        self.fields = ('company', 'name', 'manager', 'software')
+        return super(DepartmentAdmin,self).change_view(request,object_id)
+
+    # def formfield_for_manytomany(self, db_field, request, **kwargs):
+    #     if db_field.name == "software":
+    #         kwargs["queryset"] = Software.objects.filter(company=request.user.employee.company)
+    #     return super(DepartmentAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class DepartmentInline(admin.TabularInline):
@@ -177,6 +197,14 @@ class DepartmentInline(admin.TabularInline):
 class CompanyAdmin(admin.ModelAdmin):
     model = Company
     inlines = (DepartmentInline, SoftwareInline)
+
+
+class ImpactAdmin(admin.ModelAdmin):
+    model = Impact
+    list_display = ('__str__', 'cia_type', 'level', 'company')
+    list_filter = (
+        ('company', admin.RelatedOnlyFieldListFilter),
+    )
 
 
 admin.site.unregister(User)
@@ -196,8 +224,8 @@ admin.site.register(Selection)
 admin.site.register(ScenarioCategory, ScenarioCategoryAdmin)
 admin.site.register(ScenarioCategoryAnswer, ScenarioCategoryAnswerAdmin)
 admin.site.register(Scenario, ScenarioAdmin)
-
 admin.site.register(RiskMap, RiskMapAdmin)
+admin.site.register(Impact, ImpactAdmin)
 
 
 #no need to clutter the admin with these inlines

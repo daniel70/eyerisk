@@ -24,7 +24,7 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        <ul class="risk-map-list">
+        <ul class="risk-map-list" style="padding-left: 0px;">
             {% for lvl_1_name, lvl_1_values in risk_map_tree.items %}
             <li>
                 <a href="{% url 'risk-map-list' lvl_1_values.id %}" class="btn btn-warning">{{ lvl_1_name }}</a>
@@ -44,7 +44,7 @@
                     {% endfor %}
                     {% if perms.risk.add_riskmap %}
                     <li>
-                        <button type="button" class="btn btn-success" data-parent-id="{{ lvl_2_values.id }}"
+                        <button type="button" class="btn btn-success" data-parent="{{ lvl_2_values.id }}"
                         data-toggle="modal" data-target="#myModal">
                             CREATE RISK CATEGORY
                         </button>
@@ -90,8 +90,8 @@
             {% if perms.risk.change_riskmap %}
             <div class="row button-bar">
                 <div class="col-md-12">
-                    {% if perms.risk.delete_riskmap %}
-                    <a href="#" class="btn btn-danger">DELETE</a>
+                    {% if perms.risk.delete_riskmap and not risk_map.level == 1 %}
+                    <a href="{% url 'risk-map-delete' pk=risk_map.pk %}" class="btn btn-danger">DELETE</a>
                     {% endif %}
                     <button type="submit" class="btn btn-primary pull-right">SAVE RISKMAP</button>
                 </div>
@@ -106,9 +106,9 @@
 <script type="text/javascript">
 $('#myModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget)     // the button that triggered the modal
-    var parent_id = button.data('parent-id');
-    if (parent_id) { // if this modal is shown due to an error then parent_id will be 'undefined'!
-        $('#id_parent_id').val(parent_id);
+    var parent = button.data('parent');
+    if (parent) { // if this modal is shown due to an error then parent will be 'undefined'!
+        $('#id_parent').val(parent);
     }
 })
 
@@ -117,7 +117,7 @@ $('#myModal').on('shown.bs.modal', function (event) {
 })
 </script>
 
-{% if form.non_field_errors or form.name.errors or form.parent_id.errors %}
+{% if form.non_field_errors or form.name.errors or form.parent.errors %}
 <script type="text/javascript">
     $(window).load(function(){
         $('#myModal').modal('show');

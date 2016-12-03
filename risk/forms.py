@@ -5,7 +5,7 @@ from django.forms.models import BaseModelFormSet
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType, \
-    Project, RiskMap, RiskMapValue
+    Project, RiskMap, RiskMapValue, Department, Software, Impact
 
 
 class SelectionForm(ModelForm):
@@ -76,8 +76,8 @@ class RiskMapCategoryCreateForm(ModelForm):
     """
     class Meta:
         model = RiskMap
-        fields = ('name', 'parent_id')
-        widgets = {'parent_id': HiddenInput()}
+        fields = ('name', 'parent')
+        widgets = {'parent': HiddenInput()}
 
 
 class RiskMapValueForm(ModelForm):
@@ -108,3 +108,28 @@ class BaseRiskMapValueFormSet(BaseModelFormSet):
 
 
 RiskMapValueFormSet = modelformset_factory(RiskMapValue, form=RiskMapValueForm, formset=BaseRiskMapValueFormSet, extra=0)
+
+class DepartmentAdminForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        """If there is a software field then filter the list to only show software for this company"""
+        super(DepartmentAdminForm, self).__init__(*args, **kwargs)
+        instance = kwargs.get('instance', None)
+        if instance and 'software' in self.fields:
+            self.fields['software'].queryset = Software.objects.filter(company=instance.company)
+
+    class Meta:
+        model = Department
+        fields = []
+
+
+class ImpactChangeForm(ModelForm):
+    """
+    Only used to change the description of an Impact.
+    The Impact are shown in a FormSet (see below)
+    """
+    class Meta:
+        model = Impact
+        fields = ('cia_type', 'level', 'description')
+        readonly_fields = ('cia_type', 'level')
+
+ImpactChangeFormSet = modelformset_factory(Impact, form=ImpactChangeForm, extra=0)

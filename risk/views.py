@@ -7,17 +7,17 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404, _get_queryset
 from django.forms import inlineformset_factory
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, \
-    RiskMap, RiskMapValue
+    RiskMap, RiskMapValue, Impact
 
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
-    RiskMapCategoryCreateForm, RiskMapValueFormSet
+    RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactChangeFormSet
 
 
 def is_employee(user):
@@ -373,13 +373,19 @@ def risk_map_create(request):
 
 
 @user_passes_test(is_employee)
+def impact_list(request):
+    formset = ImpactChangeFormSet(queryset=Impact.objects.filter(company=request.user.employee.company))
+    context = {'formset': formset}
+    return render(request, template_name='risk/impact_list.html', context=context)
+
+@user_passes_test(is_employee)
 @require_http_methods(["POST", ])
 @permission_required('risk.add_riskmap')
 def risk_map_create_category(request):
     if request.method == "POST":
         form = RiskMapCategoryCreateForm(request.POST, request.FILES)
         if form.is_valid():
-            parent = form.cleaned_data['parent_id']  # parent_id points to the parent record, not the int value
+            parent = form.cleaned_data['parent']  # parent_id points to the parent record, not the int value
             new_risk_map = form.save(commit=False)
             new_risk_map.company = request.user.employee.company
             new_risk_map.level = 3
@@ -397,6 +403,19 @@ def risk_map_create_category(request):
                     # 'risk_map_values': risk_map_values,
                 }
                 return render(request, template_name='risk/risk_map_list.html', context=context)
+
+
+@user_passes_test(is_employee)
+@permission_required('risk.delete_riskmap')
+def risk_map_delete(request, pk):
+    risk_map = get_object_or_404(RiskMap, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        risk_map.delete()
+        messages.success(request, "Risk Map deleted successfully")
+        return HttpResponseRedirect(reverse('risk-map-list'))
+
+    context = {'object': risk_map}
+    return render(request, template_name='risk/risk_map_confirm_delete.html', context=context)
 
 
 def get_risk_map_tree(company, pk=None):

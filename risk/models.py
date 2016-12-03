@@ -37,13 +37,16 @@ def company_created(sender, instance, created, **kwargs):
 
         # before making changes to the RiskMap, first get its Values
         rmv_list = list(RiskMapValue.objects.filter(risk_map=t))
-        t.parent_id_id = t.pk
+        t.parent_id = t.pk
         t.pk = None
         t.company = instance
         t.is_template = False
         t.name = 'ENTERPRISE'
         t.level = 1  # Enterprise level
         t.save()
+
+        # create the CIA Impacts
+        Impact.objects.create(company=instance, cia_type='C', level=1, description='Low direct and indirect costs < € 1m')
 
 
 class Software(models.Model):
@@ -54,6 +57,7 @@ class Software(models.Model):
 
     class Meta:
         verbose_name_plural = 'Software'
+        unique_together = ('company', 'name')
 
     def __str__(self):
         return self.name
@@ -63,6 +67,7 @@ class Department(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     manager = models.CharField(max_length=50)
+    software = models.ManyToManyField(Software)
 
     def __str__(self):
         return self.name
@@ -72,6 +77,9 @@ class Process(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     name = models.CharField(max_length=80)
     owner = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name_plural = 'Processes'
 
     def __str__(self):
         return self.name
@@ -654,7 +662,7 @@ class RiskMap(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=50)
     level = models.IntegerField(choices=LEVEL_CHOICES)
-    parent_id = models.ForeignKey('self', to_field='id', blank=True, null=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', to_field='id', blank=True, null=True, on_delete=models.CASCADE)
     risk_type = models.CharField(max_length=1, choices=RISK_TYPE_CHOICES, blank=True, null=True)
     is_template = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now=True)
@@ -674,7 +682,7 @@ def risk_map_created(sender, instance, created, **kwargs):
     When a RiskMap is created we automatically create the RiskMapValues.
     """
     if created and instance.is_template is False:
-        parent = RiskMap.objects.get(pk=instance.parent_id_id)
+        parent = RiskMap.objects.get(pk=instance.parent_id)
         for rmv in RiskMapValue.objects.filter(risk_map=parent):
             rmv.pk = None
             rmv.risk_map = instance
@@ -718,3 +726,31 @@ class RiskMapValue(models.Model):
         """Check that rating of type L is between 1 and 100"""
         if self.axis_type == "L" and (self.rating < 1 or self.rating > 100):
             raise ValidationError({'rating': _('Rating of likelihood must be between 1 and 100')})
+
+
+class Impact(models.Model):
+    CIA_TYPE_CHOICES = (
+        ('C', _('Confidentiality')),
+        ('I', _('Integrity')),
+        ('A', _('Availability')),
+    )
+
+    IMPACT_LEVEL_CHOICES = (
+        (1, _('Very Low')),
+        (2, _('Low')),
+        (3, _('Medium')),
+        (4, _('High')),
+        (5, _('Very High')),
+    )
+
+    company = models.ForeignKey(to=Company, on_delete=models.CASCADE)
+    cia_type = models.CharField(max_length=1, choices=CIA_TYPE_CHOICES)
+    level = models.IntegerField(choices=IMPACT_LEVEL_CHOICES)
+    description = models.CharField(max_length=300)
+
+    class Meta:
+        unique_together = ('company', 'cia_type', 'level')
+        ordering = ('company', 'cia_type', 'level')
+
+    def __str__(self):
+        return self.description
