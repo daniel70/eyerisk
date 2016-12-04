@@ -2,5 +2,21 @@
 {% load bootstrap %}
 
 {% block content %}
-{{ formset|bootstrap_horizontal }}
+<form action method="post">
+{{ formset.management_form }}
+{% for form in formset %}
+    <div class="row">
+        <div class="col-md-1">
+            {{ form.instance.get_cia_type_display }}
+        </div>
+        <div class="col-md-1">
+            {{ form.instance.get_level_display }}
+
+        </div>
+        <div class="col-md-10">
+            {{ form.description|bootstrap_inline }}
+        </div>
+    </div>
+{% endfor %}
+</form>
 {% endblock content %}

@@ -34,10 +34,14 @@
   maakt. Dit maakt veel queries eenvoudiger. Haal de SelectionControls op en match ze met de gegevens uit indexDB.
 
 =========================================================================================
-Categories
+Controls
 =========================================================================================
 
-
+Control - Domain
+Control - Process
+Control - Practice
+Control - Activity
+Control - Selection (response)
 
 =========================================================================================
 Risk Maps

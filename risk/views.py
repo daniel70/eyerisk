@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, get_list_or_404, _get_queryset
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
@@ -17,7 +17,7 @@ from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTyp
     RiskMap, RiskMapValue, Impact
 
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
-    RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactChangeFormSet
+    RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet
 
 
 def is_employee(user):
@@ -374,7 +374,7 @@ def risk_map_create(request):
 
 @user_passes_test(is_employee)
 def impact_list(request):
-    formset = ImpactChangeFormSet(queryset=Impact.objects.filter(company=request.user.employee.company))
+    formset = ImpactDescriptionFormSet(queryset=Impact.objects.filter(company=request.user.employee.company))
     context = {'formset': formset}
     return render(request, template_name='risk/impact_list.html', context=context)
 

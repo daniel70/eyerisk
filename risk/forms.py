@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
-    MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple, HiddenInput
-from django.forms.models import BaseModelFormSet
+    MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple, HiddenInput, CharField
+from django.forms.models import BaseModelFormSet, ModelChoiceField
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType, \
@@ -121,15 +121,20 @@ class DepartmentAdminForm(ModelForm):
         model = Department
         fields = []
 
+ImpactDescriptionFormSet = modelformset_factory(model=Impact, fields=('description',), extra=0)
 
-class ImpactChangeForm(ModelForm):
-    """
-    Only used to change the description of an Impact.
-    The Impact are shown in a FormSet (see below)
-    """
-    class Meta:
-        model = Impact
-        fields = ('cia_type', 'level', 'description')
-        readonly_fields = ('cia_type', 'level')
+# class ImpactChangeForm(ModelForm):
+#     """
+#     Only used to change the description of an Impact.
+#     """
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         """Only allow the description to be changed, cia_type and level are readonly"""
+#         self.fields['cia_type'].disabled = True
+#         self.fields['level'].disabled = True
+#
+#     class Meta:
+#         model = Impact
+#         fields = ('cia_type', 'level', 'description')
 
-ImpactChangeFormSet = modelformset_factory(Impact, form=ImpactChangeForm, extra=0)
+
