@@ -139,3 +139,10 @@ Per bedrijf moet er per C/I/A en per impact een tekst kunnen worden bijgehouden,
 2 hours or costs > € 30m --> A5 --> Availability / very high
 
 software is per proces > 1
+
+
+Interactive visualization library --> Bokeh
+
+
+De impact wordt uitgebreid met een Data / RTO RPO en Privacy component
+impact en omschrijving zijn hetzelfde

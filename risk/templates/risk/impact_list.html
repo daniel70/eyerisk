@@ -2,21 +2,42 @@
 {% load bootstrap %}
 
 {% block content %}
-<form action method="post">
-{{ formset.management_form }}
-{% for form in formset %}
-    <div class="row">
+<form action method="post" class="form-horizontal">{% csrf_token %}
+    {{ formset.management_form }}
+    <div class="row" style="border-bottom: solid 2px #cccccc; margin-bottom: 20px;">
         <div class="col-md-1">
-            {{ form.instance.get_cia_type_display }}
+            <h5>Type</h5>
         </div>
         <div class="col-md-1">
-            {{ form.instance.get_level_display }}
-
+            <h5>Level</h5>
+        </div>
+        <div class="col-md-10">
+            <h5>Description</h5>
+        </div>
+    </div>
+    {% for form in formset %}
+    {{ form.id }}
+    <div class="row">
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="control-label">{{ form.instance.get_cia_type_display }}</label>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="control-label">{{ form.instance.get_level_display }}</label>
+            </div>
         </div>
         <div class="col-md-10">
             {{ form.description|bootstrap_inline }}
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
+    <div class="row submit-row">
+        <div class="col-md-12">
+            <a href="{% url 'risk-home' %}" class="btn btn-default">CANCEL</a>
+            <button type="submit" class="btn btn-primary pull-right">SAVE IMPACTS</button>
+        </div>
+    </div>
 </form>
 {% endblock content %}

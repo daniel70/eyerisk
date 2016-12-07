@@ -3,9 +3,10 @@ from collections import OrderedDict
 from pprint import pprint
 import json
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.forms.widgets import CheckboxSelectMultiple
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import permission_required, user_passes_test
+from django.contrib.auth.decorators import permission_required, user_passes_test, login_required
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, get_list_or_404, _get_queryset
 from django.forms import inlineformset_factory, modelformset_factory
@@ -13,6 +14,8 @@ from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
+from risk.forms import UserSettingsForm, CompanySettingsForm, DepartmentAdminForm, DepartmentForm
+from risk.models import Department
 from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, \
     RiskMap, RiskMapValue, Impact
 
@@ -29,7 +32,12 @@ def is_employee(user):
     return hasattr(user, 'employee')
 
 
-# @permission_required('risk.change_selection')
+# @user_passes_test(lambda u: u.is_authenitated())
+def no_company(request):
+    return render(request, template_name='risk/no_company.html')
+
+
+@login_required
 @user_passes_test(is_employee)
 def selection_list(request):
     selection = Selection.objects.filter(company=request.user.employee.company).order_by('-updated')
@@ -37,12 +45,9 @@ def selection_list(request):
     return render(request, template_name='risk/selection_list.html', context=context)
 
 
-# @user_passes_test(lambda u: u.is_authenitated())
-def no_company(request):
-    return render(request, template_name='risk/no_company.html')
-
-
+@login_required
 @user_passes_test(is_employee, login_url='no-company')
+@permission_required('risk.add_selection')
 def selection_create(request):
     """
     When a Selection is created, we also need to associate SelectionDocuments
@@ -64,6 +69,7 @@ def selection_create(request):
     return render(request, template_name='risk/selection_create_form.html', context=context)
 
 
+@login_required
 @user_passes_test(is_employee)
 @permission_required('risk.change_selection')
 def selection_edit(request, pk):
@@ -82,6 +88,8 @@ def selection_edit(request, pk):
     return render(request, template_name='risk/selection_update_form.html', context=context)
 
 
+@login_required
+@user_passes_test(is_employee)
 @permission_required('risk.delete_selection')
 def selection_delete(request, pk):
     selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
@@ -212,6 +220,7 @@ def calculate_response(columns: list):
         column['response'] = 'N' if len(answers) > 1 else answers.pop()
 
 
+@login_required
 @user_passes_test(is_employee, login_url='no-company')
 def scenario_list(request):
     """
@@ -339,6 +348,7 @@ def risk_map_list(request, pk=None):
     return render(request, template_name='risk/risk_map_list.html', context=context)
 
 
+@login_required
 @user_passes_test(is_employee)
 @require_http_methods(["POST", ])
 @permission_required('risk.add_riskmap')
@@ -372,12 +382,7 @@ def risk_map_create(request):
         return HttpResponseRedirect(reverse('risk-map-list', args=[risk_map.pk]))
 
 
-@user_passes_test(is_employee)
-def impact_list(request):
-    formset = ImpactDescriptionFormSet(queryset=Impact.objects.filter(company=request.user.employee.company))
-    context = {'formset': formset}
-    return render(request, template_name='risk/impact_list.html', context=context)
-
+@login_required
 @user_passes_test(is_employee)
 @require_http_methods(["POST", ])
 @permission_required('risk.add_riskmap')
@@ -466,3 +471,91 @@ def get_risk_map_tree(company, pk=None):
             risk_map['ENTERPRISE']['maps'][map.get_risk_type_display().upper()]['maps'][map.name] = map.pk
 
     return risk_map
+
+
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+def impact_list(request):
+    if request.method=="POST":
+        formset = ImpactDescriptionFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, "The impacts were saved successfully.")
+            return HttpResponseRedirect(reverse('risk-home'))
+    else:
+        formset = ImpactDescriptionFormSet(queryset=Impact.objects.filter(company=request.user.employee.company),)
+
+    context = {'formset': formset}
+    return render(request, template_name='risk/impact_list.html', context=context)
+
+
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+def settings(request):
+    user_settings = UserSettingsForm(instance=request.user)
+    company = request.user.employee.company
+    company_settings = CompanySettingsForm(instance=company)
+    impact_settings = ImpactDescriptionFormSet(queryset=Impact.objects.filter(company=company), )
+    # department_settings_form_set = modelformset_factory(model=Department, form=DepartmentAdminForm, extra=0,
+    #                                                     fields=('name', 'manager', 'software'),
+    #                                                     widgets={'software': CheckboxSelectMultiple()})
+    # department_settings = department_settings_form_set(queryset=Department.objects.filter(company=company),)
+    departments = Department.objects.filter(company=company)
+    context = {
+        'user_settings': user_settings,
+        'company_settings': company_settings,
+        'impact_settings': impact_settings,
+        'department_list': departments,
+    }
+    return render(request, template_name='risk/settings.html', context=context)
+
+
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+@permission_required('risk.add_department')
+def department_create(request):
+    if request.method == "POST":
+        form = DepartmentForm(request.POST, request.FILES, instance=Department(company=request.user.employee.company))
+        if form.is_valid():
+            try:
+                form.save()
+                return HttpResponseRedirect(reverse('settings')+'#tab_department')
+            except IntegrityError as e:
+                form.add_error('name', "A department with this name already exists.")
+    else:
+        form = DepartmentForm(instance=Department(company=request.user.employee.company))
+    context = {
+        'form': form,
+    }
+    return render(request, template_name='risk/department_create.html', context=context)
+
+
+@login_required
+@user_passes_test(is_employee)
+@permission_required('risk.change_department')
+def department_edit(request, pk):
+    department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        form = DepartmentForm(request.POST, request.FILES, instance=department)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('settings')+'#tab_department')
+    else:
+        form = DepartmentForm(instance=department)
+
+    context = {'form': form}
+    return render(request, template_name='risk/department_update_form.html', context=context)
+
+
+@login_required
+@user_passes_test(is_employee)
+@permission_required('risk.delete_department')
+def department_delete(request, pk):
+    department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        department.delete()
+        messages.success(request, "The department was deleted successfully")
+        return HttpResponseRedirect(reverse('settings')+'#tab_department')
+
+    context = {'object': department}
+    return render(request, template_name='risk/department_confirm_delete.html', context=context)

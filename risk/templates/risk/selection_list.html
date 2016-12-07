@@ -8,12 +8,12 @@
                 NAME
             </th>
             {% if perms.risk.change_selection %}
-            <th>
+            <th class="col-md-1">
                 EDIT
             </th>
             {% endif %}
             {% if perms.risk.delete_selection %}
-            <th>
+            <th class="col-md-1">
                 DELETE
             </th>
             {% endif %}
@@ -49,7 +49,7 @@
     </tbody>
 </table>
 {% if perms.risk.add_selection %}
-<div class="well well-sm text-right">
+<div class="row text-right submit-row">
     <a class="btn btn-primary" role="button" href="{% url 'selection-add' %}">ADD SELECTION</a>
 </div>
 {% endif %}

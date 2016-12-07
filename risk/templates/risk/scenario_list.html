@@ -36,12 +36,12 @@
                 CATEGORY
             </th>
             {% if perms.risk.change_scenariocategoryanswer %}
-            <th>
+            <th class="col-md-1">
                 EDIT
             </th>
             {% endif %}
             {% if perms.risk.delete_scenariocategoryanswer %}
-            <th>
+            <th class="col-md-1">
                 DELETE
             </th>
             {% endif %}
@@ -86,7 +86,7 @@
     </tbody>
 </table>
 {% if perms.risk.add_scenariocategoryanswer %}
-<div class="well well-sm text-right">
+<div class="row text-right submit-row">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
       ADD SCENARIO
     </button>

@@ -69,7 +69,7 @@ ul.risk-map-list li {
     margin-bottom: 20px;
 }
 
-div.row.odd {
+div.odd {
     background-color: #f9f9f9;
 }
 
@@ -105,13 +105,21 @@ div.row.odd {
     background-color: #F5F79D;
 }
 
-.button-bar {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
 .scenario textarea {
     width: 100%;
     height: 5em;
 }
 /* end of scenario forms */
+
+/* in user settings the tab panes require a padding */
+.tab-pane {
+    padding: 10px;
+}
+
+.submit-row {
+    padding: 12px 14px;
+    background: #f8f8f8;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}

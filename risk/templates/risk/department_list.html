@@ -1,0 +1,58 @@
+<table class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <th>
+                NAME
+            </th>
+            <th>
+                MANAGER
+            </th>
+            {% if perms.risk.change_department %}
+            <th class="col-md-1">
+                EDIT
+            </th>
+            {% endif %}
+            {% if perms.risk.delete_department %}
+            <th class="col-md-1">
+                DELETE
+            </th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for department in department_list %}
+        <tr>
+            <td>
+                {{ department }}
+            </td>
+            <td>
+                {{ department.manager }}
+            </td>
+            {% if perms.risk.change_department %}
+            <td>
+                <a href="{% url 'department-edit' pk=department.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+            {% endif %}
+            {% if perms.risk.delete_department %}
+            <td>
+                <a href="{% url 'department-delete' pk=department.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr>
+            {% if perms.risk.add_department %}
+            <td colspan="4">No departments yet, go ahead and create one!</td>
+            {% else %}
+            <td colspan="4">There are no departments and you don't have the permission to create one!</td>
+            {% endif %}
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+{% if perms.risk.add_department %}
+<div class="row text-right submit-row">
+    <a class="btn btn-primary" role="button" href="{% url 'department-add' %}">ADD DEPARTMENT</a>
+</div>
+{% endif %}

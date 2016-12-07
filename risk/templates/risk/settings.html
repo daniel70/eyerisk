@@ -1,0 +1,107 @@
+{% extends "risk/base.html" %}
+{% load bootstrap %}
+{% block content %}
+<div>
+    <ul id="settings-tabs" class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#user" aria-controls="user" role="tab" data-toggle="tab">User</a>
+        </li>
+        {% if perms.risk.change_company %}
+        <li role="presentation">
+            <a href="#company" aria-controls="company" role="tab" data-toggle="tab">Company</a>
+        </li>
+        {% endif %}
+        {% if perms.risk.change_department %}
+        <li role="presentation">
+            <a href="#department" aria-controls="department" role="tab" data-toggle="tab">Departments</a>
+        </li>
+        {% endif %}
+        {% if perms.risk.change_impact %}
+        <li role="presentation">
+            <a href="#impact" aria-controls="impact" role="tab" data-toggle="tab">Impacts</a>
+        </li>
+        {% endif %}
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="user">
+            <form action method="post" role="form">{% csrf_token %}
+                {{ user_settings|bootstrap }}
+                <div class="form-group submit-row text-right">
+                    <button type="submit" class="btn btn-primary">SAVE USER SETTINGS</button>
+                </div>
+            </form>
+        </div>
+        {% if perms.risk.change_company %}
+        <div role="tabpanel" class="tab-pane" id="company">
+             <form action method="post" role="form">{% csrf_token %}
+                {{ company_settings|bootstrap }}
+                <div class="form-group submit-row text-right">
+                    <button type="submit" class="btn btn-primary">SAVE COMPANY SETTINGS</button>
+                </div>
+             </form>
+        </div>
+        {% endif %}
+        {% if perms.risk.change_department %}
+        <div role="tabpanel" class="tab-pane" id="department">
+            {% include "risk/department_list.html" %}
+        </div>
+        {% endif %}
+        {% if perms.risk.change_impact %}
+        <div role="tabpanel" class="tab-pane" id="impact">
+            <form action method="post" class="form-horizontal">{% csrf_token %}
+                {{ impact_settings.management_form }}
+                <div class="row" style="border-bottom: solid 2px #cccccc; margin-bottom: 20px;">
+                    <div class="col-md-1">
+                        <h5>Type</h5>
+                    </div>
+                    <div class="col-md-1">
+                        <h5>Level</h5>
+                    </div>
+                    <div class="col-md-10">
+                        <h5>Description</h5>
+                    </div>
+                </div>
+                {% for form in impact_settings %}
+                {{ form.id }}
+                <div class="row">
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="control-label">{{ form.instance.get_cia_type_display }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="control-label">{{ form.instance.get_level_display }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        {{ form.description|bootstrap_inline }}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="form-group submit-row text-right">
+                    <button type="submit" class="btn btn-primary">SAVE IMPACT SETTINGS</button>
+                </div>
+             </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script type="text/javascript">
+// http://stackoverflow.com/a/10787789/1548355
+$(function() {
+    var hash = document.location.hash;
+    var prefix = "tab_";
+    if (hash) {
+        $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
+    }
+
+    // Change hash for page-reload
+    $('.nav-tabs a').on('shown', function (e) {
+        window.location.hash = e.target.hash.replace("#", "#" + prefix);
+    });
+})
+</script>
+{% endblock content %}

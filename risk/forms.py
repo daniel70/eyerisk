@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSelect, modelformset_factory, \
     MultipleChoiceField, inlineformset_factory, BaseInlineFormSet, SelectMultiple, HiddenInput, CharField
 from django.forms.models import BaseModelFormSet, ModelChoiceField
 from django.utils.translation import ugettext_lazy as _
 
+from risk.models import Company
 from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType, \
     Project, RiskMap, RiskMapValue, Department, Software, Impact
 
@@ -40,10 +42,10 @@ class ScenarioCategoryAnswerForm(ModelForm):
             'event': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.EVENT_CHOICES),
             'asset': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ASSET_RESOURCE_CHOICES),
             'resource': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ASSET_RESOURCE_CHOICES),
-            'timing': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.TIMING_CHOICES),
-            'duration': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.DURATION_CHOICES),
-            'detection': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.DETECTION_CHOICES),
-            'time_lag': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.TIME_LAG_CHOICES),
+            'timing': RadioSelect(choices=ScenarioCategoryAnswer.TIMING_CHOICES),
+            'duration': RadioSelect(choices=ScenarioCategoryAnswer.DURATION_CHOICES),
+            'detection': RadioSelect(choices=ScenarioCategoryAnswer.DETECTION_CHOICES),
+            'time_lag': RadioSelect(choices=ScenarioCategoryAnswer.TIME_LAG_CHOICES),
         }
 
 
@@ -109,6 +111,7 @@ class BaseRiskMapValueFormSet(BaseModelFormSet):
 
 RiskMapValueFormSet = modelformset_factory(RiskMapValue, form=RiskMapValueForm, formset=BaseRiskMapValueFormSet, extra=0)
 
+
 class DepartmentAdminForm(ModelForm):
     def __init__(self, *args, **kwargs):
         """If there is a software field then filter the list to only show software for this company"""
@@ -119,9 +122,23 @@ class DepartmentAdminForm(ModelForm):
 
     class Meta:
         model = Department
-        fields = []
+        fields = '__all__'
 
-ImpactDescriptionFormSet = modelformset_factory(model=Impact, fields=('description',), extra=0)
+
+class DepartmentForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        """If there is a software field then filter the list to only show software for this company"""
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance', None)
+        if instance and 'software' in self.fields:
+            self.fields['software'].queryset = Software.objects.filter(company=instance.company)
+
+    class Meta:
+        model = Department
+        fields = ['name', 'manager', 'software']
+        widgets = {'software': CheckboxSelectMultiple()}
+
+ImpactDescriptionFormSet = modelformset_factory(model=Impact, fields=('id', 'description',), extra=0)
 
 # class ImpactChangeForm(ModelForm):
 #     """
@@ -136,5 +153,28 @@ ImpactDescriptionFormSet = modelformset_factory(model=Impact, fields=('descripti
 #     class Meta:
 #         model = Impact
 #         fields = ('cia_type', 'level', 'description')
+#
+# ImpactChangeFormSet = modelformset_factory(Impact, ImpactChangeForm, extra=0)
 
 
+class UserSettingsForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].disabled = True
+        self.fields['username'].help_text = ''
+        self.fields['last_login'].disabled = True
+        self.fields['date_joined'].disabled = True
+        self.fields['is_staff'].disabled = True
+        self.fields['is_staff'].help_text = ''
+        self.fields['is_superuser'].disabled = True
+        self.fields['is_superuser'].help_text = ''
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined', 'is_staff', 'is_superuser')
+
+
+class CompanySettingsForm(ModelForm):
+    class Meta:
+        model = Company
+        fields = ('name',)

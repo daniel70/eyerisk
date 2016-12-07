@@ -67,7 +67,11 @@ class Department(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     manager = models.CharField(max_length=50)
-    software = models.ManyToManyField(Software)
+    software = models.ManyToManyField(Software, blank=True)
+
+    class Meta:
+        unique_together = ('company', 'name')
+        ordering = ('company', 'name')
 
     def __str__(self):
         return self.name
@@ -77,6 +81,7 @@ class Process(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     name = models.CharField(max_length=80)
     owner = models.CharField(max_length=50)
+    scope = models.TextField()
 
     class Meta:
         verbose_name_plural = 'Processes'
@@ -563,13 +568,6 @@ def enabler_saved(sender, **kwargs):
     raw = kwargs.pop('raw', None)
     using = kwargs.pop('using', None)
     update_fields = kwargs.pop('update_fields', None)
-
-    print('sender', sender)
-    print('instance', instance)
-    print('created', created)
-    print('raw', raw)
-    print('using', using)
-    print('update_fields', update_fields)
 
     if created:
         for scenario_category_answer in ScenarioCategoryAnswer.objects.filter(scenario_category=instance.scenario_category):

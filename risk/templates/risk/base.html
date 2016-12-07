@@ -85,7 +85,7 @@
                     {% if user.is_superuser %}
                     <li><a href="/admin">ADMIN</a></li>
                     {% endif %}
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ user.username|upper }}</a></li>
+                    <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-user"></span> {{ user.username|upper }}</a></li>
                 <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
               </ul>
             </div>

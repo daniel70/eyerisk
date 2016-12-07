@@ -4,7 +4,7 @@ from django.urls.base import reverse
 from django.conf import settings
 from django.contrib.auth.models import User, Group
 
-from risk.models import Employee
+from risk.models import Employee, Impact
 from .models import Company, RiskMap, RiskMapValue
 
 # riskmap voorbeeld toevoegen bij het aanmaken/wijzigen van risk maps
@@ -29,6 +29,7 @@ class AdminTests(TestCase):
 
 
 class SimpleTest(TestCase):
+    fixtures = ['riskmap.json', 'riskmapvalue.json']
 
     url_names = [
         ['selection-list', [], {}],
@@ -43,6 +44,8 @@ class SimpleTest(TestCase):
         ['scenario-list', [], {}],
         ['scenario-edit', [], {'pk': '1'}],
         ['scenario-delete', [], {'pk': '1'}],
+
+        ['impact-list', [], {}],
     ]
 
     @classmethod
@@ -54,6 +57,8 @@ class SimpleTest(TestCase):
         cls.admin = User.objects.create_superuser(username='adminuser', email='me@eyerisk.nl', password=password)
         cls.admin.set_password(password)
         cls.admin.save()
+
+        cls.company = Company.objects.create(name='ACME')
 
     def test_no_access_as_anonymous(self):
         response = self.client.get('/')
@@ -81,9 +86,11 @@ class SimpleTest(TestCase):
         self.assertEqual(self.client.get('/selection/').status_code, 302)
 
     def test_views_are_accessible_for_admins(self):
+        employee = Employee.objects.create(user=self.admin, company=self.company)
         self.client.force_login(self.admin)
         response = self.client.get(reverse('selection-list'))
         self.assertEqual(response.status_code, 200)
+
 
 class CompanyTests(TestCase):
     """
@@ -135,3 +142,14 @@ class RiskMapTests(TestCase):
             RiskMapValue.objects.filter(risk_map__is_template=True).count(), 10,
             "There are not exactly ten template risk map records"
         )
+
+
+class ImpactTests(TestCase):
+    fixtures = ['riskmap.json', 'riskmapvalue.json']
+
+    def test_empty_database_has_no_impacts(self):
+        self.assertEqual(Impact.objects.count(), 0, "There should be no impacts in a new database")
+
+    def test_impacts_are_created_when_company_is_create(self):
+        company = Company.objects.create(name='ACME')
+        self.assertEqual(company.impact_set.count(), 1, "Impacts should be created when a company is created")

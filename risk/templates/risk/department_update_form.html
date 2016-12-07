@@ -2,10 +2,11 @@
 {% load bootstrap %}
 {% block content %}
 <form action="" method="post" role="form">{% csrf_token %}
-    <legend>SELECTIONS</legend>
+    <legend>DEPARTMENT</legend>
     {{ form|bootstrap }}
     <div class="form-group submit-row">
-      <button type="submit" class="btn btn-primary">ADD SELECTION</button>
+      <a href="{% url 'settings' %}#tab_department" class="btn btn-default">CANCEL</a>
+      <button type="submit" class="btn btn-primary pull-right">SAVE</button>
     </div>
 </form>
 {% endblock content %}
