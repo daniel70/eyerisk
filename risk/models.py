@@ -8,6 +8,15 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 
+def shortener(number: int) -> str:
+    """Return a short version of a large number. 1_000_000 -> 1M"""
+    for scale in ['', 'K', 'M', 'B']:
+        if abs(number) < 1000:
+            return "%i%s" % (number, scale)
+        number /= 1000
+    return "%iT" % (number)
+
+
 class Company(models.Model):
     name = models.CharField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now=True)
@@ -103,7 +112,7 @@ class Project(models.Model):
     PROJECT = 'P'
     CHANGE = 'C'
     PROJECT_TYPE_CHOICES = (
-        (PERIODIC, 'Periodic'),
+        (PERIODIC, 'Company'),
         (PROJECT, 'Project'),
         (CHANGE, 'Change'),
     )
@@ -695,7 +704,7 @@ class RiskMapValue(models.Model):
         (LIKELIHOOD, 'Likelihood'),
     )
 
-    risk_map = models.ForeignKey(RiskMap, on_delete=models.CASCADE)
+    risk_map = models.ForeignKey(RiskMap, related_name='values', on_delete=models.CASCADE)
     axis_type = models.CharField(max_length=1, choices=AXIS_TYPE_CHOICES)
     position = models.IntegerField(validators=[MaxValueValidator(5)])
     rating = models.IntegerField(validators=[MinValueValidator(0)])
@@ -725,6 +734,27 @@ class RiskMapValue(models.Model):
         if self.axis_type == "L" and (self.rating < 1 or self.rating > 100):
             raise ValidationError({'rating': _('Rating of likelihood must be between 1 and 100')})
 
+    def short_rating(self):
+        if self.position == 1:
+            pre = "< "
+        elif self.position == 5:
+            pre = "> "
+        else:
+            previous = RiskMapValue.objects.get(risk_map=self.risk_map, axis_type=self.axis_type,
+                                                   position=self.position-1)
+
+            pre = "€{} - ".format(shortener(previous.rating)) if self.axis_type == "I" else "{}% - ".format(previous.rating)
+
+        short = shortener(self.rating)
+        val = "{}€{}".format(pre, short) if self.axis_type == "I" else "{}{}%".format(pre, short)
+        return val
+
+    # def short_rating(self):
+    #     sign = ">" if self.position == 5 else "<"
+    #     short = shortener(self.rating)
+    #     val = "{} € {}".format(sign, short) if self.axis_type == "I" else "{} {}%".format(sign, short)
+    #     return val
+    #
 
 class Impact(models.Model):
     CIA_TYPE_CHOICES = (

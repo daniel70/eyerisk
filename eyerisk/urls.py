@@ -26,6 +26,7 @@ from risk import api
 
 router = routers.DefaultRouter()
 router.register(r'selection', api.SelectionViewSet, base_name='Selection')
+router.register(r'riskmap', api.RiskMapViewSet, base_name='Risk Map')
 
 
 urlpatterns = [

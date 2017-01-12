@@ -323,15 +323,11 @@
             </div>
         </div>
     {% endfor %}
-
     </div>
-    <div class="row button-bar">
-        <div class="col-md-12">
-            <div class="form-group">
-                <a href="{% url 'scenario-list' %}" class="btn btn-danger">CANCEL</a>
-              <button type="submit" class="btn btn-primary pull-right">SAVE SCENARIO CATEGORY</button>
-            </div>
-        </div>
+    <br />
+    <div class="form-group submit-row">
+        <a href="{% url 'scenario-list' %}" class="btn btn-default">CANCEL</a>
+        <button type="submit" class="btn btn-primary pull-right">SAVE</button>
     </div>
 
 </form>

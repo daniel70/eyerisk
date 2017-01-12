@@ -8,19 +8,18 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required, user_passes_test, login_required
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, get_list_or_404, _get_queryset
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.forms import inlineformset_factory, modelformset_factory
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
-from risk.forms import UserSettingsForm, CompanySettingsForm, DepartmentAdminForm, DepartmentForm
-from risk.models import Department
-from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, \
-    RiskMap, RiskMapValue, Impact
+from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, \
+    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department
 
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
-    RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet
+    RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet, UserSettingsForm, CompanySettingsForm, \
+    DepartmentAdminForm, DepartmentForm
 
 
 def is_employee(user):
@@ -332,7 +331,7 @@ def risk_map_list(request, pk=None):
         else:
             messages.error(request, _('An error occured. The form has NOT been saved.'))
     else:
-        formset = RiskMapValueFormSet(queryset=risk_map.riskmapvalue_set.all())
+        formset = RiskMapValueFormSet(queryset=risk_map.values.all())
 
     risk_map_tree = get_risk_map_tree(request.user.employee.company, pk)
     # risk_map_values = get_list_or_404(RiskMapValue, risk_map=pk)

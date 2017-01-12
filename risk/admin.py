@@ -207,12 +207,20 @@ class ImpactAdmin(admin.ModelAdmin):
     )
 
 
+class ProjectAdmin(admin.ModelAdmin):
+    model = Project
+    list_display = ('__str__', 'type', 'company')
+    list_filter = (
+        ('company', admin.RelatedOnlyFieldListFilter),
+    )
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Software, SoftwareAdmin)
-admin.site.register(Project)
+admin.site.register(Project, ProjectAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Process, ProcessAdmin)
 admin.site.register(Standard, StandardAdmin)

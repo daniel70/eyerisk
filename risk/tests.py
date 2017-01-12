@@ -114,8 +114,8 @@ class CompanyTests(TestCase):
 
     def test_if_ten_risk_map_values_are_created_when_company_is_created(self):
         risk_map = RiskMap.objects.get(company__name='ACME')
-        self.assertEqual(risk_map.riskmapvalue_set.all().count(), 10)
-        self.assertEqual(self.company.riskmap_set.get().riskmapvalue_set.count(), 10,
+        self.assertEqual(risk_map.values.all().count(), 10)
+        self.assertEqual(self.company.riskmap_set.get().values.count(), 10,
                          "There should be exactly ten RiskMapValue records for Company")
 
 
