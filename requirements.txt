@@ -18,7 +18,6 @@ humanize==0.5.1
 Markdown==2.6.7
 phonenumbers==7.7.5
 phonenumberslite==7.7.5
-pkg-resources==0.0.0
 psycopg2==2.6.2
 pycrypto==2.6.1
 PySocks==1.6.1
