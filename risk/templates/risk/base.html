@@ -74,12 +74,6 @@
                   </ul>
                 </li>
                 {% endif %}
-                <!--<li class="dropdown">-->
-                  <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">RISK REGISTER<span class="caret"></span></a>-->
-                  <!--<ul class="dropdown-menu">-->
-                    <!--<li><a href="#">MARK</a></li>-->
-                  <!--</ul>-->
-                <!--</li>-->
               </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_superuser %}
@@ -101,8 +95,10 @@
             {{msg.message}}
         </div>
         {% endfor %}
-
+        {% block content_wrapper %}
         {% block content %}{% endblock content %}
+        {% endblock content_wrapper %}
+
         </div>
         <!-- {{ perms.risk.add_control }} -->
 

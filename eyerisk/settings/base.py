@@ -128,9 +128,9 @@ INTERNAL_IPS = [
 ]
 
 # for 2FA
-LOGIN_URL = reverse_lazy('two_factor:login')
-LOGOUT_URL = reverse_lazy('logout')
-LOGIN_REDIRECT_URL = reverse_lazy('two_factor:profile')
+LOGIN_URL = 'two_factor:login'
+#LOGOUT_URL = reverse_lazy('logout')
+LOGIN_REDIRECT_URL = 'two_factor:profile'
 # TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.fake.Fake'
 TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
 # TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.fake.Fake'
