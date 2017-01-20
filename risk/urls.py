@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^impact/$', impact_list, name='impact-list'),
 
     url(r'^settings/$', settings, name='settings'),
+    url(r'^settings/(user)$', settings, name='user-update'),
+    url(r'^settings/(company)$', settings, name='company-update'),
 
     url(r'^department/create$', department_create, name='department-add'),
     url(r'^department/(?P<pk>\d+)/edit$', department_edit, name='department-edit'),

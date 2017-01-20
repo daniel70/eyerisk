@@ -490,17 +490,28 @@ def impact_list(request):
 
 @login_required
 @user_passes_test(is_employee, login_url='no-company')
-def settings(request):
-    user_settings = UserSettingsForm(instance=request.user)
+def settings(request, tab=''):
     company = request.user.employee.company
+    user_settings = UserSettingsForm(instance=request.user)
     company_settings = CompanySettingsForm(instance=company)
     impact_settings = ImpactDescriptionFormSet(queryset=Impact.objects.filter(company=company), )
-    # department_settings_form_set = modelformset_factory(model=Department, form=DepartmentAdminForm, extra=0,
-    #                                                     fields=('name', 'manager', 'software'),
-    #                                                     widgets={'software': CheckboxSelectMultiple()})
-    # department_settings = department_settings_form_set(queryset=Department.objects.filter(company=company),)
     departments = Department.objects.filter(company=company)
+
+    if request.method == "POST":
+        if tab == 'user':
+            user_settings = UserSettingsForm(request.POST, request.FILES, instance=request.user)
+            if user_settings.is_valid():
+                user_settings.save()
+                return HttpResponseRedirect(reverse('settings') + '#tab_user')
+
+        elif tab == 'company':
+            company_settings = CompanySettingsForm(request.POST, request.FILES ,instance=company)
+            if company_settings.is_valid():
+                company_settings.save()
+                return HttpResponseRedirect(reverse('settings') + '#tab_company')
+
     context = {
+        'tab': tab,
         'user_settings': user_settings,
         'company_settings': company_settings,
         'impact_settings': impact_settings,

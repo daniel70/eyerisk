@@ -25,16 +25,18 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="user">
-            <form action method="post" role="form">{% csrf_token %}
+            <form action="user" method="post" role="form">{% csrf_token %}
                 {{ user_settings|bootstrap }}
+                {% if perms.auth.change_user %}
                 <div class="form-group submit-row text-right">
                     <button type="submit" class="btn btn-primary">SAVE USER SETTINGS</button>
                 </div>
+                {% endif %}
             </form>
         </div>
         {% if perms.risk.change_company %}
         <div role="tabpanel" class="tab-pane" id="company">
-             <form action method="post" role="form">{% csrf_token %}
+             <form action="company" method="post" role="form">{% csrf_token %}
                 {{ company_settings|bootstrap }}
                 <div class="form-group submit-row text-right">
                     <button type="submit" class="btn btn-primary">SAVE COMPANY SETTINGS</button>
@@ -92,7 +94,11 @@
 <script type="text/javascript">
 // http://stackoverflow.com/a/10787789/1548355
 $(function() {
+    {% if tab == '' %}
     var hash = document.location.hash;
+    {% else %}
+    var hash = '#tab_{{ tab }}';
+    {% endif %}
     var prefix = "tab_";
     if (hash) {
         $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
