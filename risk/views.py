@@ -34,6 +34,9 @@ def no_company(request):
     return render(request, template_name='risk/no_company.html')
 
 
+def home(request):
+    return render(request, template_name='risk/home.html')
+
 @login_required
 @user_passes_test(is_employee)
 def selection_list(request):

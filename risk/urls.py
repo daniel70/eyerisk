@@ -1,11 +1,11 @@
 import django.contrib.auth.urls
 from django.conf.urls import url, include
-from .views import riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete,\
+from .views import home, riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete,\
     selection_create, selection_edit, selection_response, risk_map_list, risk_map_create, risk_map_create_category, \
     no_company, risk_map_delete, impact_list, settings, department_create, department_edit, department_delete
 
 urlpatterns = [
-    url(r'^$', selection_list, name='risk-home'),
+    url(r'^$', home, name='risk-home'),
     url(r'^no_company$', no_company, name='no-company'),
     url(r'^selection/$', selection_list, name='selection-list'),
     url(r'^selection/create$', selection_create, name='selection-add'),
