@@ -13,10 +13,8 @@ from django.forms import inlineformset_factory, modelformset_factory
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
-
 from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, \
     EnablerAnswer, RiskMap, RiskMapValue, Impact, Department
-
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
     RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet, UserSettingsForm, CompanySettingsForm, \
     DepartmentAdminForm, DepartmentForm
