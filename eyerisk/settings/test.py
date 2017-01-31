@@ -1,5 +1,6 @@
 from .base import *
 from .secrets import *
+ALLOWED_HOSTS = ["*"]
 
 # debug toolbar settings
 DEBUG = True

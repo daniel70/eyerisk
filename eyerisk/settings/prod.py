@@ -1,7 +1,7 @@
 from .base import *
 
 try:
-    DEBUG=os.environ['DEBUG']
+    DEBUG = (os.environ['DEBUG'] == "True")
 except:
     DEBUG = False
 
