@@ -1,4 +1,5 @@
 {% load static %}
+{% load bootstrap %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,5 +8,6 @@
 </head>
 <body>
 <img src="{% static 'risk/images/404.png' %}" border="0" />
+<p>click <a href="{% url 'risk-home' %}" >here</a> to return to the homepage</p>
 </body>
 </html>
