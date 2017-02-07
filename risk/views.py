@@ -33,12 +33,13 @@ def is_employee(user):
 def no_company(request):
     return render(request, template_name='risk/no_company.html')
 
-
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
 def home(request):
     return render(request, template_name='risk/home.html')
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 def selection_list(request):
     selection = Selection.objects.filter(company=request.user.employee.company).order_by('-updated')
     context = {'selection_list': selection}
@@ -46,7 +47,7 @@ def selection_list(request):
 
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 def selection_view(request, pk):
     selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
     tree = get_control_selection(pk)
@@ -79,7 +80,7 @@ def selection_create(request):
 
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @permission_required('risk.change_selection')
 def selection_edit(request, pk):
     selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
@@ -98,7 +99,7 @@ def selection_edit(request, pk):
 
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @permission_required('risk.delete_selection')
 def selection_delete(request, pk):
     selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
@@ -111,7 +112,7 @@ def selection_delete(request, pk):
     return render(request, template_name='risk/selection_confirm_delete.html', context=context)
 
 
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 def selection_response(request, pk):
     if request.method == "POST":
         level = request.POST['level']
@@ -254,7 +255,7 @@ def scenario_list(request):
     return render(request, template_name='risk/scenario_list.html', context=context)
 
 
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @permission_required('risk.change_scenariocategoryanswer')
 def scenario_edit(request, pk):
     # hardcoded for now
@@ -325,7 +326,7 @@ def riskmaps(request):
     return render(request, template_name='risk/riskmaps.html')
 
 
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 def risk_map_list(request, pk=None):
 
     if pk is None:
@@ -358,7 +359,7 @@ def risk_map_list(request, pk=None):
 
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @require_http_methods(["POST", ])
 @permission_required('risk.add_riskmap')
 def risk_map_create(request):
@@ -392,7 +393,7 @@ def risk_map_create(request):
 
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @require_http_methods(["POST", ])
 @permission_required('risk.add_riskmap')
 def risk_map_create_category(request):
@@ -419,7 +420,7 @@ def risk_map_create_category(request):
                 return render(request, template_name='risk/risk_map_list.html', context=context)
 
 
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @permission_required('risk.delete_riskmap')
 def risk_map_delete(request, pk):
     risk_map = get_object_or_404(RiskMap, pk=pk, company=request.user.employee.company)
@@ -551,7 +552,7 @@ def department_create(request):
 
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @permission_required('risk.change_department')
 def department_edit(request, pk):
     department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
@@ -568,7 +569,7 @@ def department_edit(request, pk):
 
 
 @login_required
-@user_passes_test(is_employee)
+@user_passes_test(is_employee, login_url='no-company')
 @permission_required('risk.delete_department')
 def department_delete(request, pk):
     department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
