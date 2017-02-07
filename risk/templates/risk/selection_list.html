@@ -7,6 +7,9 @@
             <th>
                 NAME
             </th>
+            <th class="col-md-1">
+                VIEW
+            </th>
             {% if perms.risk.change_selection %}
             <th class="col-md-1">
                 EDIT
@@ -25,6 +28,9 @@
             <td>
                 {{ selection }}
             </td>
+            <td>
+                <a href="{% url 'selection-view' pk=selection.pk %}"><span class="glyphicon glyphicon-eye-open"></span></a>
+            </td>
             {% if perms.risk.change_selection %}
             <td>
                 <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -39,9 +45,9 @@
         {% empty %}
         <tr>
             {% if perms.risk.add_selection %}
-            <td colspan="3">No selections yet, go ahead and create one!</td>
+            <td colspan="4">No selections yet, go ahead and create one!</td>
             {% else %}
-            <td colspan="3">There are no selections and you don't have the permission to create one!</td>
+            <td colspan="4">There are no selections and you don't have the permission to create one!</td>
             {% endif %}
         </tr>
 

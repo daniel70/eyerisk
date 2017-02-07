@@ -46,6 +46,15 @@ def selection_list(request):
 
 
 @login_required
+@user_passes_test(is_employee)
+def selection_view(request, pk):
+    selection = get_object_or_404(Selection, pk=pk, company=request.user.employee.company)
+    tree = get_control_selection(pk)
+    context = {'tree': tree,}
+    return render(request, template_name='risk/selection_view.html', context=context)
+
+
+@login_required
 @user_passes_test(is_employee, login_url='no-company')
 @permission_required('risk.add_selection')
 def selection_create(request):
@@ -84,7 +93,7 @@ def selection_edit(request, pk):
 
     tree = get_control_selection(pk)
 
-    context = {'form': form, 'tree': tree, 'json': json.dumps(tree)}
+    context = {'form': form, 'tree': tree, 'json': json.dumps(tree)}  #TODO: do we really need the json?
     return render(request, template_name='risk/selection_update_form.html', context=context)
 
 

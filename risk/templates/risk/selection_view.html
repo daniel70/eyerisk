@@ -1,0 +1,122 @@
+{% extends "risk/base.html" %}
+{% load risk_tags %}
+{% load bootstrap %}
+{% block content %}
+{% if tree %}
+
+    <div class="row">
+        <div class="col-xs-4 col-md-4">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Export to...
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#">CSV</a></li>
+                <li><a href="#">Excel</a></li>
+                <li><a href="#">PDF</a></li>
+              </ul>
+            </div>
+        </div>
+
+        <div class="col-xs-4 col-md-4">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Filter by...
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#">Accepted</a></li>
+                <li><a href="#">Mitigated</a></li>
+                <li><a href="#">Transferred</a></li>
+                <li><a href="#">Unselected</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Clear Filter</a></li>
+              </ul>
+            </div>
+        </div>
+
+        <div class="col-xs-4 col-md-4">
+            <div class="btn-group bnt-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success" alt="Accept">Accept</button>
+                </div>
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-info" alt="Mitigate">Mitigate</button>
+                </div>
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-warning" alt="Transfer">Transfer</button>
+                </div>
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn" alt="No selection">Negate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group list-group-root well">
+    {% for pk, standard in tree.items %}
+        <a href="#list-group-standard-{{ pk }}" class="list-group-item {{ standard.response|response }}" data-toggle="collapse">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    {{ standard.text }}
+                </div>
+            </div>
+        </a>
+        <div class="list-group" id="list-group-standard-{{ pk }}">
+        {% for pk, domain in standard.nodes.items %}
+            <a href="#list-group-domain-{{ pk }}" class="list-group-item {{ domain.response|response }}" data-toggle="collapse">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    {{ domain.text }}
+                </div>
+            </div>
+            </a>
+            <div class="list-group" id="list-group-domain-{{ pk }}">
+            {% for pk, process in domain.nodes.items %}
+                <a href="#list-group-process-{{ pk }}" class="list-group-item {{ process.response|response }}" data-toggle="collapse">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                        {{ process.text }}
+                    </div>
+                </div>
+                </a>
+                <div class="list-group" id="list-group-process-{{ pk }}">
+                {% for pk, practice in process.nodes.items %}
+                    <a href="#list-group-practice-{{ pk }}" class="list-group-item {{ practice.response|response }}" data-toggle="collapse">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                            {{ practice.text }}
+                        </div>
+                    </div>
+                    </a>
+                    <div class="list-group collapse" id="list-group-practice-{{ pk }}">
+                    {% for pk, activity in practice.nodes.items %}
+                        <a href="#list-group-activity-{{ pk }}" class="list-group-item {{ activity.response|response }}" data-toggle="collapse">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                <!--<i class="glyphicon glyphicon-chevron-right"></i>-->
+                                {{ activity.text }}
+                            </div>
+                        </div>
+                        </a>
+                    {% endfor %}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock content %}
