@@ -1,7 +1,8 @@
+import json
+import xlwt
 from datetime import datetime as dt
 from collections import OrderedDict
-from pprint import pprint
-import json
+from django.utils.text import slugify
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.forms.widgets import CheckboxSelectMultiple
 from django.http import HttpResponse
@@ -580,3 +581,64 @@ def department_delete(request, pk):
 
     context = {'object': department}
     return render(request, template_name='risk/department_confirm_delete.html', context=context)
+
+
+def selection_export(request, pk):
+
+    selection = get_object_or_404(Selection, pk=pk)
+    selected_controls = ControlSelection.objects.filter(selection=selection).select_related(
+        'control__controlpractice__controlprocess__controldomain__standard'
+    ).order_by(
+        'control__controlpractice__controlprocess__controldomain__standard__id',
+        'control__controlpractice__controlprocess__controldomain__ordering',
+        'control__controlpractice__controlprocess__ordering',
+        'control__controlpractice__ordering',
+        'control__ordering',
+    )
+    filename = slugify(selection.name) + ".xls"
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('selection')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = [
+        'Standard Name',
+        'Domain',
+        'Process',
+        'Practice',
+        'Activity',
+        'Response',
+    ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    # rows = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
+    for cs in selected_controls:
+        row_num += 1
+        ws.write(row_num, 0, cs.control.controlpractice.controlprocess.controldomain.standard.name, font_style)
+        ws.write(row_num, 1, cs.control.controlpractice.controlprocess.controldomain.domain, font_style)
+        ws.write(row_num, 2, cs.control.controlpractice.controlprocess.process_name, font_style)
+        ws.write(row_num, 3, cs.control.controlpractice.practice_name, font_style)
+        ws.write(row_num, 4, cs.control.activity, font_style)
+        ws.write(row_num, 5, cs.get_response_display(), font_style)
+
+    ws.col(0).width = 5000
+    ws.col(1).width = 10000
+    ws.col(2).width = 10000
+    ws.col(3).width = 10000
+    ws.col(4).width = 23000
+    ws.col(5).width = 3000
+
+    wb.save(response)
+    return response

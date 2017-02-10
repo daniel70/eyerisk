@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from .views import home, riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete,\
     selection_create, selection_edit, selection_response, risk_map_list, risk_map_create, risk_map_create_category, \
     no_company, risk_map_delete, impact_list, settings, department_create, department_edit, department_delete, \
-    selection_view
+    selection_view, selection_export
 
 urlpatterns = [
     url(r'^$', home, name='risk-home'),
@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^selection/(?P<pk>\d+)/edit$', selection_edit, name='selection-edit'),
     url(r'^selection/(?P<pk>\d+)/delete$', selection_delete, name='selection-delete'),
     url(r'^selection/(?P<pk>\d+)/response$', selection_response, name='selection-response'),
+    url(r'^selection/(?P<pk>\d+)/export$', selection_export, name='selection-export'),
 
     url(r'^risk_maps/$', riskmaps, name='riskmaps'), #CAN BE DELETED
     url(r'^risk_map/$', risk_map_list, name='risk-map-list'),

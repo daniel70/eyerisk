@@ -7,12 +7,12 @@
             <th>
                 NAME
             </th>
-            <th class="col-md-1">
-                VIEW
-            </th>
             {% if perms.risk.change_selection %}
             <th class="col-md-1">
                 EDIT
+            </th>
+            <th class="col-md-1">
+                EXPORT
             </th>
             {% endif %}
             {% if perms.risk.delete_selection %}
@@ -28,12 +28,12 @@
             <td>
                 {{ selection }}
             </td>
-            <td>
-                <a href="{% url 'selection-view' pk=selection.pk %}"><span class="glyphicon glyphicon-eye-open"></span></a>
-            </td>
             {% if perms.risk.change_selection %}
             <td>
                 <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+            <td>
+                <a href="{% url 'selection-export' pk=selection.pk %}"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
             </td>
             {% endif %}
             {% if perms.risk.delete_selection %}

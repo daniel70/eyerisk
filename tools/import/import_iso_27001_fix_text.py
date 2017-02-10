@@ -4,20 +4,14 @@ import unicodedata
 import os
 import sys
 
-##r1 = "1. Analyse and identify the internal and external environmental factors (legal, regulatory and contractual obligations) and trends in the business environment that may influence governance design."
-##print(r1.encode())
-##print("\n")
-##print(re.sub(r' (\w{1})\)\s+', ' \n\\1) ', unicodedata.normalize("NFKD", r1)).encode())
-##
-##sys.exit()
-
 #risk_controlactivity, 1215
 url = os.environ['DATABASE_URL']
-upd_sql = """
-    UPDATE risk_controlactivity
-    SET activity = ?, updated = current_timestamp
-    WHERE id = ?
-"""
+upd_sql = "UPDATE risk_controlactivity SET activity = %s, updated = current_timestamp WHERE id = %s"
+upd_en_sql = "UPDATE risk_controlactivity SET activity_en = %s, updated = current_timestamp WHERE id = %s"
+upd_nl_sql = "UPDATE risk_controlactivity SET activity_nl = %s, updated = current_timestamp WHERE id = %s"
+upd_help_sql = "UPDATE risk_controlactivity SET activity_help = %s, updated = current_timestamp WHERE id = %s"
+upd_help_en_sql = "UPDATE risk_controlactivity SET activity_help_en = %s, updated = current_timestamp WHERE id = %s"
+upd_help_nl_sql = "UPDATE risk_controlactivity SET activity_help_nl = %s, updated = current_timestamp WHERE id = %s"
 
 with psycopg2.connect(url) as conn:
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -27,19 +21,80 @@ with psycopg2.connect(url) as conn:
         act_org = row['activity']
         if act_org == "{}":
             print("emptying record", row['id'])
+            cur.execute(upd_sql, ['', row['id']])
             continue
         
         act_new = re.sub(r' (\w{1})\)\s+', ' \n\\1) ', unicodedata.normalize("NFKD", act_org))
         if act_new != act_org:
             print("updating record", row['id'])
+            cur.execute(upd_sql, [act_new, row['id']])
 
-##        
-##t = "An organization should ensure that: a)     an adequate management structure is in place to prepare for, mitigate and respond to a disruptive event using personnel with the necessary authority, experience and competence; b)    incident response personnel with the necessary responsibility, authority and competence to manage an incident and maintain information security are nominated; c)     documented plans, response and recovery procedures are developed and approved, detailing how the organization will manage a disruptive event and will maintain its information security to a predetermined level, based on management-approved information security continuity objectives (see 17.1.1 ). According to the information security continuity requirements, the organization should establish, document, implement and maintain: a)     information security controls within business continuity or disaster recovery processes, procedures and supporting systems and tools; b)    processes, procedures and implementation changes to maintain existing information security controls during an adverse situation; c)     compensating controls for information security controls that cannot be maintained during an adverse situation."
-##
-##print("before\n")
-##print(t.encode())
-##
-##print("\nafter\n")
-##u = unicodedata.normalize("NFKD", t)
-##r = re.sub(r' (\w+)\)\s+', ' \n\\1) ', u)
-##print(r)
+        #activity_en
+        act_en_org = row['activity_en']
+        if act_en_org == "{}":
+            print("emptying record", row['id'])
+            cur.execute(upd_en_sql, ['', row['id']])
+            continue
+        
+        act_en_new = re.sub(r' (\w{1})\)\s+', ' \n\\1) ', unicodedata.normalize("NFKD", act_en_org))
+        if act_en_new != act_en_org:
+            print("updating record", row['id'])
+            cur.execute(upd_en_sql, [act_en_new, row['id']])
+
+        #activity_nl
+        act_nl_org = row['activity_nl']
+        if act_nl_org is None:
+            continue
+        
+        if act_nl_org == "{}":
+            print("emptying record", row['id'])
+            cur.execute(upd_nl_sql, ['', row['id']])
+            continue
+
+        act_nl_new = re.sub(r' (\w{1})\)\s+', ' \n\\1) ', unicodedata.normalize("NFKD", act_nl_org))
+        if act_nl_new != act_nl_org:
+            print("updating record", row['id'])
+            cur.execute(upd_nl_sql, [act_nl_new, row['id']])
+
+        #activity_help
+        act_help_org = row['activity_help']
+        if act_help_org == "{}":
+            print("emptying record", row['id'])
+            cur.execute(upd_help_sql, ['', row['id']])
+            continue
+        
+        act_help_new = re.sub(r' (\w{1})\)\s+', ' \n\\1) ', unicodedata.normalize("NFKD", act_help_org))
+        if act_help_new != act_help_org:
+            print("updating record", row['id'])
+            cur.execute(upd_help_sql, [act_help_new, row['id']])
+
+        #activity_help_en
+        act_help_en_org = row['activity_help_en']
+        if act_help_en_org == "{}":
+            print("emptying record", row['id'])
+            cur.execute(upd_help_en_sql, ['', row['id']])
+            continue
+        
+        act_help_en_new = re.sub(r' (\w{1})\)\s+', ' \n\\1) ', unicodedata.normalize("NFKD", act_help_en_org))
+        if act_help_en_new != act_help_en_org:
+            print("updating record", row['id'])
+            cur.execute(upd_help_en_sql, [act_help_en_new, row['id']])
+
+        #activity_help_nl
+        act_help_nl_org = row['activity_help_nl']
+        if act_help_nl_org is None:
+            continue
+        
+        if act_help_nl_org == "{}":
+            print("emptying record", row['id'])
+            cur.execute(upd_help_nl_sql, ['', row['id']])
+            continue
+
+        act_help_nl_new = re.sub(r' (\w{1})\)\s+', ' \n\\1) ', unicodedata.normalize("NFKD", act_help_nl_org))
+        if act_help_nl_new != act_help_nl_org:
+            print("updating record", row['id'])
+            cur.execute(upd_help_nl_sql, [act_help_nl_new, row['id']])
+
+    conn.commit()
+
+
