@@ -174,7 +174,7 @@ def get_control_selection(pk):
         'control__ordering',
     )
 
-    tree = {}
+    tree = OrderedDict()
     if not selected_controls:
         return tree
 
@@ -584,7 +584,12 @@ def department_delete(request, pk):
 
 
 def selection_export(request, pk):
-
+    """
+    Export the selection data to an excel file
+    :param request:
+    :param pk:
+    :return:
+    """
     selection = get_object_or_404(Selection, pk=pk)
     selected_controls = ControlSelection.objects.filter(selection=selection).select_related(
         'control__controlpractice__controlprocess__controldomain__standard'
