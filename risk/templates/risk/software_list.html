@@ -1,0 +1,58 @@
+<table class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <th>
+                NAME
+            </th>
+            <th>
+                DESCRIPTION
+            </th>
+            {% if perms.risk.change_software %}
+            <th class="col-md-1">
+                EDIT
+            </th>
+            {% endif %}
+            {% if perms.risk.delete_software %}
+            <th class="col-md-1">
+                DELETE
+            </th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for software in software_list %}
+        <tr>
+            <td>
+                {{ software }}
+            </td>
+            <td>
+                {{ software.description }}
+            </td>
+            {% if perms.risk.change_software %}
+            <td>
+                <a href="{% url 'software-edit' pk=software.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+            {% endif %}
+            {% if perms.risk.delete_software %}
+            <td>
+                <a href="{% url 'software-delete' pk=software.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr>
+            {% if perms.risk.add_software %}
+            <td colspan="4">No software yet, go ahead and create one!</td>
+            {% else %}
+            <td colspan="4">There is no software and you don't have the permission to create one!</td>
+            {% endif %}
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+{% if perms.risk.add_software %}
+<div class="row text-right submit-row">
+    <a class="btn btn-primary" role="button" href="{% url 'department-add' %}">ADD SOFTWARE</a>
+</div>
+{% endif %}

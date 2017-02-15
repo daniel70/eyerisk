@@ -138,6 +138,13 @@ class DepartmentForm(ModelForm):
         fields = ['name', 'manager', 'software']
         widgets = {'software': CheckboxSelectMultiple()}
 
+
+class SoftwareForm(ModelForm):
+    class Meta:
+        model = Software
+        fields = ['name', 'description', 'is_saas']
+
+
 ImpactDescriptionFormSet = modelformset_factory(model=Impact, fields=('id', 'description',), extra=0)
 
 # class ImpactChangeForm(ModelForm):

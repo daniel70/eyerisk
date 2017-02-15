@@ -16,6 +16,11 @@
             <a href="#department" aria-controls="department" role="tab" data-toggle="tab">Departments</a>
         </li>
         {% endif %}
+        {% if perms.risk.change_software %}
+        <li role="presentation">
+            <a href="#software" aria-controls="software" role="tab" data-toggle="tab">Software</a>
+        </li>
+        {% endif %}
         {% if perms.risk.change_impact %}
         <li role="presentation">
             <a href="#impact" aria-controls="impact" role="tab" data-toggle="tab">Impacts</a>
@@ -47,6 +52,11 @@
         {% if perms.risk.change_department %}
         <div role="tabpanel" class="tab-pane" id="department">
             {% include "risk/department_list.html" %}
+        </div>
+        {% endif %}
+        {% if perms.risk.change_software %}
+        <div role="tabpanel" class="tab-pane" id="software">
+            {% include "risk/software_list.html" %}
         </div>
         {% endif %}
         {% if perms.risk.change_impact %}

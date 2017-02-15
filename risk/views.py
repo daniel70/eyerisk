@@ -15,10 +15,10 @@ from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, \
-    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department
+    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department, Software
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
     RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet, UserSettingsForm, CompanySettingsForm, \
-    DepartmentAdminForm, DepartmentForm
+    DepartmentAdminForm, DepartmentForm, SoftwareForm
 
 
 def is_employee(user):
@@ -506,8 +506,9 @@ def settings(request, tab=''):
     company = request.user.employee.company
     user_settings = UserSettingsForm(instance=request.user)
     company_settings = CompanySettingsForm(instance=company)
-    impact_settings = ImpactDescriptionFormSet(queryset=Impact.objects.filter(company=company), )
     departments = Department.objects.filter(company=company)
+    software = Software.objects.filter(company=company)
+    impact_settings = ImpactDescriptionFormSet(queryset=Impact.objects.filter(company=company), )
 
     if request.method == "POST":
         if tab == 'user':
@@ -528,6 +529,7 @@ def settings(request, tab=''):
         'company_settings': company_settings,
         'impact_settings': impact_settings,
         'department_list': departments,
+        'software_list': software,
     }
     return render(request, template_name='risk/settings.html', context=context)
 
@@ -583,12 +585,60 @@ def department_delete(request, pk):
     return render(request, template_name='risk/department_confirm_delete.html', context=context)
 
 
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+@permission_required('risk.add_department')
+def software_create(request):
+    if request.method == "POST":
+        form = SoftwareForm(request.POST, request.FILES, instance=Software(company=request.user.employee.company))
+        if form.is_valid():
+            try:
+                form.save()
+                return HttpResponseRedirect(reverse('settings')+'#tab_software')
+            except IntegrityError as e:
+                form.add_error('name', "Software with this name already exists.")
+    else:
+        form = SoftwareForm(instance=Software(company=request.user.employee.company))
+    context = {
+        'form': form,
+    }
+    return render(request, template_name='risk/software_create.html', context=context)
+
+
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+@permission_required('risk.change_department')
+def software_edit(request, pk):
+    department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        form = DepartmentForm(request.POST, request.FILES, instance=department)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('settings')+'#tab_department')
+    else:
+        form = DepartmentForm(instance=department)
+
+    context = {'form': form}
+    return render(request, template_name='risk/department_update_form.html', context=context)
+
+
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+@permission_required('risk.delete_department')
+def software_delete(request, pk):
+    department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
+    if request.method == "POST":
+        department.delete()
+        messages.success(request, "The department was deleted successfully")
+        return HttpResponseRedirect(reverse('settings')+'#tab_department')
+
+    context = {'object': department}
+    return render(request, template_name='risk/department_confirm_delete.html', context=context)
+
+
 def selection_export(request, pk):
     """
     Export the selection data to an excel file
-    :param request:
-    :param pk:
-    :return:
     """
     selection = get_object_or_404(Selection, pk=pk)
     selected_controls = ControlSelection.objects.filter(selection=selection).select_related(

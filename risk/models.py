@@ -62,7 +62,7 @@ class Software(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True)
-    is_saas = models.BooleanField(default=False)
+    is_saas = models.BooleanField('Is SAAS', default=False)
 
     class Meta:
         verbose_name_plural = 'Software'
@@ -312,7 +312,7 @@ class ScenarioCategory(models.Model):
         verbose_name_plural = 'scenario categories'
 
     def __str__(self):
-        return self.name
+        return "{} - {}".format(self.nr, self.name)
 
 
 @receiver(m2m_changed, sender=ScenarioCategory.risk_types.through)

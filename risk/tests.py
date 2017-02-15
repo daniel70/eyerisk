@@ -71,16 +71,6 @@ class SimpleTest(TestCase):
         user = auth.get_user(self.client)
         self.assertFalse(user.is_authenticated(), "Client with invalid credentials should not be authenticated")
 
-    def test_views_redirect_to_login_for_unauthorized_client(self):
-        self.assertEqual(self.client.get(reverse('risk-map-create')).status_code, 302)
-        self.assertEqual(self.client.get(reverse('risk-map-create-category')).status_code, 302)
-
-        login_url = settings.LOGIN_URL
-        for name, args, kwargs in SimpleTest.url_names:
-            url = reverse(name, args=args, kwargs=kwargs)
-            expected_url = "%s?next=%s" % (login_url, url)
-            self.assertRedirects(self.client.get(url, follow=True), expected_url=expected_url)
-
     def test_views_are_invalid_for_client_without_company(self):
         self.client.force_login(self.user)
         self.assertEqual(self.client.get('/selection/').status_code, 302)
