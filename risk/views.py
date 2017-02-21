@@ -95,7 +95,7 @@ def selection_edit(request, pk):
 
     tree = get_control_selection(pk)
 
-    context = {'form': form, 'tree': tree, 'json': json.dumps(tree)}  #TODO: do we really need the json?
+    context = {'form': form, 'tree': tree}  #, 'json': json.dumps(tree) #TODO: do we really need the json?
     return render(request, template_name='risk/selection_update_form.html', context=context)
 
 
@@ -178,43 +178,43 @@ def get_control_selection(pk):
     if not selected_controls:
         return tree
 
-    a = None; b = None; c = None; d = None
+    a = OrderedDict(); b = OrderedDict(); c = OrderedDict(); d = OrderedDict()
     for cs in selected_controls:
 
         if cs.control.controlpractice.controlprocess.controldomain.standard.id not in tree:
             if a:
                 calculate_response([d, c, b, a])
 
-            a = tree[cs.control.controlpractice.controlprocess.controldomain.standard.id] = {}
-            a['nodes'] = {}
+            a = tree[cs.control.controlpractice.controlprocess.controldomain.standard.id] = OrderedDict()
+            a['nodes'] = OrderedDict()
             a['text'] = cs.control.controlpractice.controlprocess.controldomain.standard.name
 
         if cs.control.controlpractice.controlprocess.controldomain.id not in a['nodes']:
             if b:
                 calculate_response([d, c, b])
-
-            b = a['nodes'][cs.control.controlpractice.controlprocess.controldomain.id] = {}
-            b['nodes'] = {}
+            print(cs.control.controlpractice.controlprocess.controldomain)
+            b = a['nodes'][cs.control.controlpractice.controlprocess.controldomain.id] = OrderedDict()
+            b['nodes'] = OrderedDict()
             b['text'] = cs.control.controlpractice.controlprocess.controldomain.domain
 
         if cs.control.controlpractice.controlprocess.id not in b['nodes']:
             if c:
                 calculate_response([d, c])
 
-            c = b['nodes'][cs.control.controlpractice.controlprocess.id] = {}
-            c['nodes'] = {}
-            c['text'] = cs.control.controlpractice.controlprocess.process_name
+            c = b['nodes'][cs.control.controlpractice.controlprocess.id] = OrderedDict()
+            c['nodes'] = OrderedDict()
+            c['text'] = cs.control.controlpractice.controlprocess #.process_name, sharuga 20170221
 
         if cs.control.controlpractice.id not in c['nodes']:
             if d:
                 calculate_response([d])
 
-            d = c['nodes'][cs.control.controlpractice.id] = {}
-            d['nodes'] = {}
-            d['text'] = cs.control.controlpractice.practice_name
+            d = c['nodes'][cs.control.controlpractice.id] = OrderedDict()
+            d['nodes'] = OrderedDict()
+            d['text'] = cs.control.controlpractice  #.practice_name, sharuga 20170221
 
         if cs.control.id not in d['nodes']:
-            e = d['nodes'][cs.control.id] = {}
+            e = d['nodes'][cs.control.id] = OrderedDict()
             e['text'] = cs.control.activity
             e['response_id'] = cs.id
             e['response'] = cs.response

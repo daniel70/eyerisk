@@ -173,7 +173,7 @@ class ControlProcess(models.Model):
     process_purpose = models.TextField(blank=True)
 
     def __str__(self):
-        return '{0}. {1}'.format(self.process_id, self.process_name)
+        return '{0} - {1}'.format(self.process_id, self.process_name)
 
     class Meta:
         ordering = ['controldomain__standard', 'controldomain__ordering', 'ordering']
@@ -188,7 +188,7 @@ class ControlPractice(models.Model):
     practice_governance = models.TextField(blank=True)  # code_text
 
     def __str__(self):
-        return '{0}. {1}'.format(self.practice_id, self.practice_name)
+        return '{0} - {1}'.format(self.practice_id, self.practice_name)
 
     class Meta:
         ordering = ['controlprocess__controldomain__standard',
