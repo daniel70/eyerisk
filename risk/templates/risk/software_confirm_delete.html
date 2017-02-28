@@ -1,0 +1,10 @@
+{% extends "risk/base.html" %}
+{% load bootstrap %}
+{% block content %}
+<form action="" method="post" role="form">{% csrf_token %}
+    <h3>Are you sure?</h3>
+    <p>Are you sure you want to delete the software <b>"{{ object }}"</b>?</p>
+    <button type="submit" class="btn btn-danger">Yes, I'm sure</button>
+    <a href="{% url 'settings' %}#tab_software" class="btn btn-default" role="button">No, take me back</a>
+</form>
+{% endblock content %}

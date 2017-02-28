@@ -13,8 +13,8 @@
     {{ process_enabler_answer_formset.management_form }}
     {{ enabler_answer_formset.management_form }}
 
-    <div class="scenario">
-    <div class="row scenario-title text-center">
+    <div class="cobit">
+    <div class="row cobit-title text-center">
         <div class="col-md-12">
             Risk Scenario Category {{form.instance.scenario_category.nr}}: {{form.instance.scenario_category.name}}
         </div>
@@ -25,7 +25,7 @@
             {{form.instance.scenario_category.risk_scenario}}
         </div>
     </div>
-    <div class="row scenario-divider">
+    <div class="row cobit-divider">
         <div class="col-md-12">
             Risk Scenario Components
         </div>
@@ -176,14 +176,14 @@
     {% endwith %}
 
 
-    <div class="row scenario-divider">
+    <div class="row cobit-divider">
         <div class="col-md-12">
             Risk Type<br>
             <small>Describe the consequences resulting from the event.
             Include whether the risk type is primary or secondary.</small>
         </div>
     </div>
-    <div class="row scenario-header">
+    <div class="row cobit-header">
         <div class="col-md-4 text-center">
             Risk Type
         </div>
@@ -212,12 +212,12 @@
         </div>
     {% endfor %}
 
-    <div class="row scenario-divider">
+    <div class="row cobit-divider">
         <div class="col-md-12">
             Process Enabler
         </div>
     </div>
-    <div class="row scenario-header">
+    <div class="row cobit-header">
         <div class="col-md-1 text-center">
             Reference
         </div>
@@ -272,12 +272,12 @@
 
     {% for enabler_answer_form in enabler_answer_formset %}
         {% ifchanged enabler_answer_form.instance.enabler.type %}
-        <div class="row scenario-divider">
+        <div class="row cobit-divider">
             <div class="col-md-12">
                 {{ enabler_answer_form.instance.enabler.get_type_display}}
             </div>
         </div>
-        <div class="row scenario-header">
+        <div class="row cobit-header">
             <div class="col-md-3 text-center">
                 Reference
             </div>

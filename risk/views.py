@@ -15,10 +15,10 @@ from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, \
-    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department, Software
+    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department, Software, Register
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
     RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet, UserSettingsForm, CompanySettingsForm, \
-    DepartmentAdminForm, DepartmentForm, SoftwareForm
+    DepartmentAdminForm, DepartmentForm, SoftwareForm, RegisterForm
 
 
 def is_employee(user):
@@ -192,7 +192,6 @@ def get_control_selection(pk):
         if cs.control.controlpractice.controlprocess.controldomain.id not in a['nodes']:
             if b:
                 calculate_response([d, c, b])
-            print(cs.control.controlpractice.controlprocess.controldomain)
             b = a['nodes'][cs.control.controlpractice.controlprocess.controldomain.id] = OrderedDict()
             b['nodes'] = OrderedDict()
             b['text'] = cs.control.controlpractice.controlprocess.controldomain.domain
@@ -203,7 +202,7 @@ def get_control_selection(pk):
 
             c = b['nodes'][cs.control.controlpractice.controlprocess.id] = OrderedDict()
             c['nodes'] = OrderedDict()
-            c['text'] = cs.control.controlpractice.controlprocess #.process_name, sharuga 20170221
+            c['text'] = cs.control.controlpractice.controlprocess
 
         if cs.control.controlpractice.id not in c['nodes']:
             if d:
@@ -211,7 +210,7 @@ def get_control_selection(pk):
 
             d = c['nodes'][cs.control.controlpractice.id] = OrderedDict()
             d['nodes'] = OrderedDict()
-            d['text'] = cs.control.controlpractice  #.practice_name, sharuga 20170221
+            d['text'] = cs.control.controlpractice
 
         if cs.control.id not in d['nodes']:
             e = d['nodes'][cs.control.id] = OrderedDict()
@@ -587,7 +586,7 @@ def department_delete(request, pk):
 
 @login_required
 @user_passes_test(is_employee, login_url='no-company')
-@permission_required('risk.add_department')
+@permission_required('risk.add_software')
 def software_create(request):
     if request.method == "POST":
         form = SoftwareForm(request.POST, request.FILES, instance=Software(company=request.user.employee.company))
@@ -607,33 +606,33 @@ def software_create(request):
 
 @login_required
 @user_passes_test(is_employee, login_url='no-company')
-@permission_required('risk.change_department')
+@permission_required('risk.change_software')
 def software_edit(request, pk):
-    department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
+    software = get_object_or_404(Software, pk=pk, company=request.user.employee.company)
     if request.method == "POST":
-        form = DepartmentForm(request.POST, request.FILES, instance=department)
+        form = SoftwareForm(request.POST, request.FILES, instance=software)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('settings')+'#tab_department')
+            return HttpResponseRedirect(reverse('settings')+'#tab_software')
     else:
-        form = DepartmentForm(instance=department)
+        form = SoftwareForm(instance=software)
 
-    context = {'form': form}
-    return render(request, template_name='risk/department_update_form.html', context=context)
+    context = { 'form': form }
+    return render(request, template_name='risk/software_update_form.html', context=context)
 
 
 @login_required
 @user_passes_test(is_employee, login_url='no-company')
-@permission_required('risk.delete_department')
+@permission_required('risk.delete_software')
 def software_delete(request, pk):
-    department = get_object_or_404(Department, pk=pk, company=request.user.employee.company)
+    software = get_object_or_404(Software, pk=pk, company=request.user.employee.company)
     if request.method == "POST":
-        department.delete()
-        messages.success(request, "The department was deleted successfully")
-        return HttpResponseRedirect(reverse('settings')+'#tab_department')
+        software.delete()
+        messages.success(request, "The software was deleted successfully")
+        return HttpResponseRedirect(reverse('settings')+'#tab_software')
 
-    context = {'object': department}
-    return render(request, template_name='risk/department_confirm_delete.html', context=context)
+    context = {'object': software}
+    return render(request, template_name='risk/software_confirm_delete.html', context=context)
 
 
 def selection_export(request, pk):
@@ -697,3 +696,9 @@ def selection_export(request, pk):
 
     wb.save(response)
     return response
+
+def register_list(request):
+    register = get_object_or_404(Register, pk=1)
+    form = RegisterForm(instance=register)
+    context = {'form': form}
+    return render(request, template_name='risk/register_update_form.html', context=context)

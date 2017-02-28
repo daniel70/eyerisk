@@ -78,35 +78,35 @@ div.odd {
 
 
 /* start of scenario forms */
-.scenario .row {
+.cobit .row {
     /*outline: 1px solid black;*/
     border: 1px solid black;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-.scenario .row + .row {
+.cobit .row + .row {
     /* prevent double black lines in grid */
     border-top: 0px;
 }
 
-.scenario-title {
+.cobit-title {
     font-weight: bold;
     color: white;
     background-color: #17365D;
 }
 
-.scenario-divider {
+.cobit-divider {
     font-weight: bold;
     background-color: #FFC000;
 }
 
-.scenario-header {
+.cobit-header {
     font-weight: bold;
     background-color: #F5F79D;
 }
 
-.scenario textarea {
+.cobit textarea {
     width: 100%;
     height: 5em;
 }

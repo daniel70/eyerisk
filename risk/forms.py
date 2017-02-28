@@ -5,7 +5,7 @@ from django.forms import ModelForm, TextInput, CheckboxSelectMultiple, RadioSele
 from django.forms.models import BaseModelFormSet, ModelChoiceField
 from django.utils.translation import ugettext_lazy as _
 
-from risk.models import Company
+from risk.models import Company, Register
 from .models import Selection, ControlSelection, ScenarioCategory, ScenarioCategoryAnswer, RiskTypeAnswer, RiskType, \
     Project, RiskMap, RiskMapValue, Department, Software, Impact
 
@@ -185,3 +185,13 @@ class CompanySettingsForm(ModelForm):
     class Meta:
         model = Company
         fields = ('name',)
+
+class RegisterForm(ModelForm):
+    class Meta:
+        model = Register
+        fields = '__all__'
+        widgets = {
+            'risk_category': RadioSelect(choices=Register.RISK_CATEGORY_CHOICES),
+            'risk_classification': RadioSelect(choices=Register.RISK_CLASSIFICATION_CHOICES),
+            'risk_response': RadioSelect(choices=Register.RISK_RESPONSE_CHOICES),
+        }

@@ -7,6 +7,9 @@
             <th>
                 DESCRIPTION
             </th>
+            <th>
+                SAAS
+            </th>
             {% if perms.risk.change_software %}
             <th class="col-md-1">
                 EDIT
@@ -28,6 +31,13 @@
             <td>
                 {{ software.description }}
             </td>
+            <td>
+                {% if software.is_saas %}
+                <span class="glyphicon glyphicon-ok"></span>
+                {% else %}
+                <span class="glyphicon glyphicon-remove"></span>
+                {% endif %}
+            </td>
             {% if perms.risk.change_software %}
             <td>
                 <a href="{% url 'software-edit' pk=software.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -42,9 +52,9 @@
         {% empty %}
         <tr>
             {% if perms.risk.add_software %}
-            <td colspan="4">No software yet, go ahead and create one!</td>
+            <td colspan="5">No software yet, go ahead and create one!</td>
             {% else %}
-            <td colspan="4">There is no software and you don't have the permission to create one!</td>
+            <td colspan="5">There is no software and you don't have the permission to create one!</td>
             {% endif %}
         </tr>
 
@@ -53,6 +63,6 @@
 </table>
 {% if perms.risk.add_software %}
 <div class="row text-right submit-row">
-    <a class="btn btn-primary" role="button" href="{% url 'department-add' %}">ADD SOFTWARE</a>
+    <a class="btn btn-primary" role="button" href="{% url 'software-add' %}">ADD SOFTWARE</a>
 </div>
 {% endif %}

@@ -67,6 +67,7 @@ class Software(models.Model):
     class Meta:
         verbose_name_plural = 'Software'
         unique_together = ('company', 'name')
+        ordering = ('name', )
 
     def __str__(self):
         return self.name
@@ -103,6 +104,8 @@ class Employee(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user.get_full_name() or self.user.get_username()
 
 class Project(models.Model):
     """
@@ -559,7 +562,7 @@ class Enabler(models.Model):
     )
     scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
     type = models.IntegerField(choices=ENABLER_CHOICES)
-    reference = models.CharField(max_length=50, blank=False)
+    reference = models.CharField(max_length=150, blank=False)
     contribution_to_response = models.TextField()
 
     def __str__(self):
@@ -782,3 +785,38 @@ class Impact(models.Model):
 
     def __str__(self):
         return self.description
+
+
+class Register(models.Model):
+    RISK_CATEGORY_CHOICES = (
+        ('S', _('Strategic')),
+        ('D', _('Project Delivery')),
+        ('O', _('Operational')),
+    )
+
+    RISK_CLASSIFICATION_CHOICES = (
+        (2, _('Low')),
+        (3, _('Medium')),
+        (4, _('High')),
+        (5, _('Very High')),
+    )
+
+    ACCEPT = 'A'
+    MITIGATE = 'M'
+    TRANSFER = 'T'
+    AVOID = 'O'
+    RISK_RESPONSE_CHOICES = (
+        (ACCEPT, _('Accept')),
+        (MITIGATE, _('Mitigate')),
+        (TRANSFER, _('Transfer')),
+        (AVOID, _('Avoid')),
+    )
+
+    risk_statement = models.CharField(max_length=150, blank=True)
+    risk_owner = models.ForeignKey(to=Employee, on_delete=models.CASCADE)
+    last_assessment = models.DateField(_('Date of last risk assessment'))
+    next_assessment = models.DateField(_('Due date for update of risk assessment'))
+    risk_category = models.CharField(max_length=1, choices=RISK_CATEGORY_CHOICES, blank=False, default='')
+    risk_classification = models.IntegerField(choices=RISK_CLASSIFICATION_CHOICES, blank=False, default=0)
+    risk_response = models.CharField(max_length=1, choices=RISK_RESPONSE_CHOICES, blank=False, default='A')
+
