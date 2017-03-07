@@ -348,6 +348,7 @@ def process_enablers_changed(sender, **kwargs):
     All of the ScenarioCategoryAnswers that are linked to this ScenarioCategory need to have these new process enablers
     created as ProcessEnablerAnswer so that they can be answered.
     """
+
     action = kwargs.pop('action', None)         # pre_add | post_add | pre_remove | post_remove
     instance = kwargs.pop('instance', None)     # the instance of ScenarioCategory
     pk_set = kwargs.pop('pk_set', None)         # {1, 2, 3}

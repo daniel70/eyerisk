@@ -146,3 +146,18 @@ Interactive visualization library --> Bokeh
 
 De impact wordt uitgebreid met een Data / RTO RPO en Privacy component
 impact en omschrijving zijn hetzelfde
+
+=========================================================================================
+Copy database from Heroku to local machine
+=========================================================================================
+1. create a local backup of the heroku database
+$ export HEROKU_URL=`heroku config:get DATABASE_URL --app eyerisk`
+$ pg_dump -Fc $HEROKU_URL > heroku.db
+
+2. create a new database 'heroku' with an owner 'eyerisk'
+createdb --owner=eyerisk -h localhost -U eyerisk heroku
+
+3. restore the database in 'heroku' with all ownership assigned to 'eyerisk'
+pg_restore --no-owner --role=eyerisk -d heroku -h localhost -U eyerisk heroku.db
+
+That's all folks

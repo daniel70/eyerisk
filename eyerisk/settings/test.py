@@ -12,4 +12,4 @@ INSTALLED_APPS += [
 MIDDLEWARE_CLASSES.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 # end debug toolbar settings
 
-DATABASES = {'default': dj_database_url.parse(url='postgres://eyerisk:waterzeug@localhost/eyerisk', conn_max_age=600)}
+#DATABASES = {'default': dj_database_url.parse(url='postgres://eyerisk:waterzeug@localhost/eyerisk', conn_max_age=600)}
