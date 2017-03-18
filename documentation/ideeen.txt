@@ -161,3 +161,8 @@ createdb --owner=eyerisk -h localhost -U eyerisk heroku
 pg_restore --no-owner --role=eyerisk -d heroku -h localhost -U eyerisk heroku.db
 
 That's all folks
+
+=========================================================================================
+Scherm Analogie bedacht door Sharuga
+=========================================================================================
+Boek --> Action
