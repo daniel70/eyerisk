@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from .views import home, riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete, \
     selection_create, selection_edit, selection_response, risk_map_list, risk_map_create, risk_map_create_category, \
     no_company, risk_map_delete, impact_list, settings, department_create, department_edit, department_delete, \
-    selection_view, selection_export, software_create, software_edit, software_delete, register_list, raci_view
+    selection_view, selection_export, software_create, software_edit, software_delete, register_list, raci_view, vue
 
 urlpatterns = [
     url(r'^$', home, name='risk-home'),
@@ -44,4 +44,6 @@ urlpatterns = [
     url(r'^register/$', register_list, name='register-list'),
     url(r'^raci/(?P<pk>\d+)/view$', raci_view, name='raci-view'),
 
+    url(r'^vue/$', vue, name='vue'),
 ]
+

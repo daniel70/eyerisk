@@ -737,3 +737,8 @@ def raci_view(request, pk):
     context = {'headers': headers, 'rows': rows}
     return render(request, template_name='risk/raci_view.html', context=context)
 
+
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+def vue(request):
+    return render(request, template_name='risk/vue.html')
