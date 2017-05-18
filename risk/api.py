@@ -27,3 +27,4 @@ class RiskMapViewSet(viewsets.ModelViewSet):
         risk_map = get_object_or_404(self.get_queryset(), pk=pk)
         serializer = RiskMapAndValuesSerializer(risk_map)
         return Response(serializer.data)
+

@@ -1,6 +1,6 @@
-{% load bootstrap %}
+{% load bootstrap3 %}
 {% load i18n %}
 {{ wizard.management_form }}
 <div class="form-horizontal">
-    {{ wizard.form | bootstrap_horizontal }}
+    {% bootstrap_form wizard.form layout='horizontal' %}
 </div>

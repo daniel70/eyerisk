@@ -1,5 +1,5 @@
 {% extends "risk/base.html" %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 
 {% block content %}
 <form action method="post" class="form-horizontal">{% csrf_token %}
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="col-md-10">
-            {{ form.description|bootstrap_inline }}
+            {% bootstrap_field form.description show_label=False %}
         </div>
     </div>
     {% endfor %}

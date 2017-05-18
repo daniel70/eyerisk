@@ -1,5 +1,5 @@
 {% extends "risk/base.html" %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 {% block content %}
 <div>
     <ul id="settings-tabs" class="nav nav-tabs" role="tablist">
@@ -31,7 +31,7 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="user">
             <form action="user" method="post" role="form">{% csrf_token %}
-                {{ user_settings|bootstrap }}
+                {% bootstrap_form user_settings %}
                 {% if perms.auth.change_user %}
                 <div class="form-group submit-row text-right">
                     <button type="submit" class="btn btn-primary">SAVE USER SETTINGS</button>
@@ -42,7 +42,7 @@
         {% if perms.risk.change_company %}
         <div role="tabpanel" class="tab-pane" id="company">
              <form action="company" method="post" role="form">{% csrf_token %}
-                {{ company_settings|bootstrap }}
+                {% bootstrap_form company_settings %}
                 <div class="form-group submit-row text-right">
                     <button type="submit" class="btn btn-primary">SAVE COMPANY SETTINGS</button>
                 </div>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="col-md-10">
-                        {{ form.description|bootstrap_inline }}
+                        {% bootstrap_field form.description show_label=False %}
                     </div>
                 </div>
                 {% endfor %}

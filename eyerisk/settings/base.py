@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'otp_yubikey',
     'two_factor',
-    'bootstrapform',
+    # 'bootstrapform',
+    'bootstrap3',
     'rest_framework',
     'crispy_forms',
 ]

@@ -107,6 +107,7 @@ class Employee(models.Model):
     def __str__(self):
         return self.user.get_full_name() or self.user.get_username()
 
+
 class Project(models.Model):
     """
     A project acts as a container for Scenario's bla bla
@@ -181,6 +182,14 @@ class ControlProcess(models.Model):
     class Meta:
         ordering = ['controldomain__standard', 'controldomain__ordering', 'ordering']
         verbose_name_plural = 'Control processes'
+
+    @property
+    def has_raci(self):
+        """
+        Does this process have a raci model attached?
+        This is only for Cobit practices.
+        """
+        return self.controlpractice_set.filter(controlpracticeraci__isnull=False).exists()
 
 
 class ControlPractice(models.Model):
@@ -304,6 +313,9 @@ class RiskType(models.Model):
 
 
 class ScenarioCategory(models.Model):
+    """
+    These are the 20 standard Cobit scenarios plus any company specific scenarios
+    """
     nr = models.CharField(max_length=4, primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     risk_scenario = models.TextField(blank=True)
@@ -760,6 +772,7 @@ class RiskMapValue(models.Model):
     #     return val
     #
 
+
 class Impact(models.Model):
     CIA_TYPE_CHOICES = (
         ('C', _('Confidentiality')),
@@ -821,3 +834,46 @@ class Register(models.Model):
     risk_classification = models.IntegerField(choices=RISK_CLASSIFICATION_CHOICES, blank=False, default=0)
     risk_response = models.CharField(max_length=1, choices=RISK_RESPONSE_CHOICES, blank=False, default='A')
 
+
+class ControlPracticeRACI(models.Model):
+    RACI_CHOICES = (
+        ('', _('No choice')),
+        ('R', _('Responsible')),
+        ('A', _('Accountable')),
+        ('C', _('Consulted')),
+        ('I', _('Informed')),
+    )
+
+    controlpractice = models.OneToOneField(ControlPractice, on_delete=models.CASCADE, primary_key=True)
+    board = models.CharField(_('Board'), max_length=1, blank=True, choices=RACI_CHOICES)
+    chief_executive_officer = models.CharField(_('Chief Executive Officer'), max_length=1, blank=True, choices=RACI_CHOICES)
+    chief_financial_officer = models.CharField(_('Chief Financial Officer'), max_length=1, blank=True, choices=RACI_CHOICES)
+    chief_operating_officer = models.CharField(_('Chief Operating Officer'), max_length=1, blank=True, choices=RACI_CHOICES)
+    business_executives = models.CharField(_('Business Executives'), max_length=1, blank=True, choices=RACI_CHOICES)
+    business_process_owners = models.CharField(_('Business Process Owners'), max_length=1, blank=True, choices=RACI_CHOICES)
+    strategy_executive_committee = models.CharField(_('Strategy Executive Committee'), max_length=1, blank=True, choices=RACI_CHOICES)
+    steering_committee = models.CharField(_('Steering Committee'), max_length=1, blank=True, choices=RACI_CHOICES)
+    project_management_office = models.CharField(_('Project Management Office'), max_length=1, blank=True, choices=RACI_CHOICES)
+    value_management_office = models.CharField(_('Value Management Office'), max_length=1, blank=True, choices=RACI_CHOICES)
+    chief_risk_officer = models.CharField(_('Chief Risk Officer'), max_length=1, blank=True, choices=RACI_CHOICES)
+    chief_information_security_officer = models.CharField(_('Chief Information Security Officer'), max_length=1, blank=True, choices=RACI_CHOICES)
+    architecture_board = models.CharField(_('Architecture Board'), max_length=1, blank=True, choices=RACI_CHOICES)
+    enterprice_risk_committee = models.CharField(_('Enterprice Risk Committee'), max_length=1, blank=True, choices=RACI_CHOICES)
+    head_human_resources = models.CharField(_('Head Human Resources'), max_length=1, blank=True, choices=RACI_CHOICES)
+    compliance = models.CharField(_('Compliance'), max_length=1, blank=True, choices=RACI_CHOICES)
+    audit = models.CharField(_('Audit'), max_length=1, blank=True, choices=RACI_CHOICES)
+    chief_information_officer = models.CharField(_('Chief Information Officer'), max_length=1, blank=True, choices=RACI_CHOICES)
+    head_architect = models.CharField(_('Head Architect'), max_length=1, blank=True, choices=RACI_CHOICES)
+    head_development = models.CharField(_('Head Development'), max_length=1, blank=True, choices=RACI_CHOICES)
+    head_it_operations = models.CharField(_('Head IT Operations'), max_length=1, blank=True, choices=RACI_CHOICES)
+    head_it_administration = models.CharField(_('Head IT Administration'), max_length=1, blank=True, choices=RACI_CHOICES)
+    service_manager = models.CharField(_('Service Manager'), max_length=1, blank=True, choices=RACI_CHOICES)
+    information_security_manager = models.CharField(_('Information Security Manager'), max_length=1, blank=True, choices=RACI_CHOICES)
+    business_continuity_manager = models.CharField(_('Business Continuity Manager'), max_length=1, blank=True, choices=RACI_CHOICES)
+    privacy_officer = models.CharField(_('Privacy Officer'), max_length=1, blank=True, choices=RACI_CHOICES)
+
+    def __str__(self):
+        return "RACI: {}".format(self.controlpractice.practice_id)
+
+    class Meta:
+        verbose_name_plural = 'Practice RACIs'

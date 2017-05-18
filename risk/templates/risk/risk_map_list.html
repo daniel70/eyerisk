@@ -1,5 +1,5 @@
 {% extends "risk/base.html" %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 {% block content %}
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -12,7 +12,7 @@
         <form class="form" method="post" action="{% url 'risk-map-create-category' %}">
             {% csrf_token %}
             <div class="modal-body">
-                {{ risk_form|bootstrap }}
+                {% bootstrap_form risk_form %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
@@ -79,11 +79,11 @@
             </div>
             <div class="row {% cycle 'even' 'odd' %}">
                 <div class="col-md-3">
-                    {{ form.rating|bootstrap }}
-                    {{ form.descriptor|bootstrap }}
+                    {% bootstrap_field form.rating %}
+                    {% bootstrap_field form.descriptor %}
                 </div>
                 <div class="col-md-9">
-                    {{ form.definition|bootstrap }}
+                    {% bootstrap_field form.definition %}
                 </div>
             </div>
         {% endfor %}

@@ -1,0 +1,27 @@
+{% extends "risk/base.html" %}
+{% block content %}
+    {% if rows %}
+    <table class="raci-table">
+        <thead>
+            <tr>
+                <th>Key Governance Practice</th>
+                {% for key, value in headers.items %}
+                <th class="vertical-text"><div><span>{{value}}</span></div></th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for raci_row in rows %}
+            <tr>
+                <td><b>{{ raci_row.id }}</b><br>{{ raci_row.name }}</td>
+                {% for val in raci_row.values %}
+                <td>{{ val }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    No RACI records exist.
+    {% endif %}
+{% endblock content %}

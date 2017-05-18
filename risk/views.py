@@ -1,7 +1,7 @@
 import json
 import xlwt
 from datetime import datetime as dt
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.forms.widgets import CheckboxSelectMultiple
@@ -14,8 +14,8 @@ from django.forms import inlineformset_factory, modelformset_factory
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
-from .models import Selection, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, \
-    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department, Software, Register
+from .models import Selection, ControlProcess, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, \
+    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department, Software, Register, ControlPracticeRACI
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
     RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet, UserSettingsForm, CompanySettingsForm, \
     DepartmentAdminForm, DepartmentForm, SoftwareForm, RegisterForm
@@ -697,8 +697,43 @@ def selection_export(request, pk):
     wb.save(response)
     return response
 
+
 def register_list(request):
     register = get_object_or_404(Register, pk=1)
     form = RegisterForm(instance=register)
     context = {'form': form}
     return render(request, template_name='risk/register_update_form.html', context=context)
+
+
+@login_required
+@user_passes_test(is_employee, login_url='no-company')
+@permission_required('risk.delete_software')
+def raci_view(request, pk):
+    """
+    A RACI view is based on a control process.
+    This process *can* have several control practices (if it is a Cobit process)
+    These practices *can* have a RACI.
+    """
+    headers = OrderedDict()
+    # header = namedtuple("header", "name verbose_name")
+    for field in ControlPracticeRACI._meta.get_fields():
+        if not field.one_to_one:
+            headers[field.name] = field.verbose_name.title()
+            # headers.append(header(field.name, field.verbose_name))
+
+    process = get_object_or_404(ControlProcess, pk=pk)
+
+    rows = []
+    if process.has_raci:
+        practices = process.controlpractice_set.select_related('controlpracticeraci')
+        raci_row = namedtuple('raci_row', 'id name values')
+        for practice in practices:
+            values = []
+            for key in headers.keys():
+                values.append(getattr(practice.controlpracticeraci, key))
+
+            rows.append(raci_row(practice.practice_id, practice.practice_name, values))
+
+    context = {'headers': headers, 'rows': rows}
+    return render(request, template_name='risk/raci_view.html', context=context)
+

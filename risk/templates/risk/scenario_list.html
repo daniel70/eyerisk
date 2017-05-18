@@ -1,5 +1,5 @@
 {% extends "risk/base.html" %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 {% block content %}
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -12,7 +12,7 @@
         <form class="form" method="post" action="">
             {% csrf_token %}
             <div class="modal-body">
-                {{ form|bootstrap }}
+                {% bootstrap_form form %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>

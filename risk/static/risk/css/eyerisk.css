@@ -124,3 +124,33 @@ div.odd {
     border-radius: 4px;
     margin-bottom: 20px;
 }
+
+/* for use in the raci template */
+table.raci-table thead tr {
+    vertical-align: bottom;
+}
+
+table.raci-table th.vertical-text {
+    height: 250px;
+    max-width: 31px;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    background-color: #bbc2db;
+}
+
+table.raci-table tbody tr td:not(:first-child) {
+    text-align: center;
+}
+
+.vertical-text > div {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    /*color: #ed217c;*/
+}
+
+table.raci-table th, table.raci-table td {
+    border:2px solid #000000;
+}

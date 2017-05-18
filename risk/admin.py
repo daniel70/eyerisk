@@ -8,7 +8,7 @@ from .forms import ScenarioCategoryForm, ScenarioCategoryAnswerAdminForm, Depart
 from .models import Standard, ControlDomain, ControlPractice, ControlProcess, ControlActivity,\
     Selection, Employee, Company, Scenario, ScenarioCategory, Enabler, RiskType, \
     ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, EnablerAnswer, Project, RiskMap, RiskMapValue, \
-    Software, Department, Process, Impact, Register
+    Software, Department, Process, Impact, Register, ControlPracticeRACI
 
 
 class EmployeeInline(admin.StackedInline):
@@ -235,6 +235,7 @@ admin.site.register(Scenario, ScenarioAdmin)
 admin.site.register(RiskMap, RiskMapAdmin)
 admin.site.register(Impact, ImpactAdmin)
 admin.site.register(Register)
+admin.site.register(ControlPracticeRACI)
 
 #no need to clutter the admin with these inlines
 admin.site.register(Enabler)
