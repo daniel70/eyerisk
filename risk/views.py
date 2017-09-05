@@ -299,7 +299,6 @@ def scenario_edit(request, pk):
         process_enabler_answer_formset = process_enabler_answer_factory(instance=sca)
         enabler_answer_formset = enabler_answer_factory(instance=sca)
 
-
     context = {
         'form': form,
         'risk_type_answer_formset': risk_type_answer_formset,
