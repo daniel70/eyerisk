@@ -6,11 +6,38 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from random import randint
+
+
+def select_avatar_color():
+    """Select a random color for a users avator"""
+    avatar_colors = [
+        "#f44336",
+        "#e91e63",
+        "#9c27b0",
+        "#673ab7",
+        "#3f51b5",
+        "#2196f3",
+        "#03a9f4",
+        "#00bcd4",
+        "#009688",
+        "#4caf50",
+        "#8bc34a",
+        "#cddc39",
+        "#ffeb3b",
+        "#ffc107",
+        "#ff9800",
+        "#ff5722",
+        "#795548",
+        "#9e9e9e",
+        "#607d8b",
+    ]
+    return avatar_colors[randint(0, len(avatar_colors)-1)]
 
 
 def shortener(number: int) -> str:
     """Return a short version of a large number. 1_000_000 -> 1M"""
-    for scale in ['', 'K', 'M', 'B']:
+    for scale in ['', 'K', 'M', 'G']:
         if abs(number) < 1000:
             return "%i%s" % (number, scale)
         number /= 1000
@@ -613,7 +640,8 @@ class EnablerAnswer(models.Model):
     effect_on_frequency = models.CharField(max_length=1, choices=EFFECTS, blank=True)
     effect_on_impact = models.CharField(max_length=1, choices=EFFECTS, blank=True)
     essential_control = models.CharField(max_length=1, choices=[('Y', 'Y'), ('N', 'N')], blank=True)
-
+    percentage_complete = models.IntegerField('% complete', default=0,
+                                              validators=(MinValueValidator(0), MaxValueValidator(100)))
     class Meta:
         unique_together = ('enabler', 'scenario_category_answer')
 
@@ -635,6 +663,8 @@ class ProcessEnablerAnswer(models.Model):
     effect_on_frequency = models.CharField(max_length=1, choices=EFFECTS, blank=True)
     effect_on_impact = models.CharField(max_length=1, choices=EFFECTS, blank=True)
     essential_control = models.CharField(max_length=1, choices=[('Y', 'Yes'), ('N', 'No')], blank=True)
+    percentage_complete = models.IntegerField('% complete', default=0,
+                                              validators=(MinValueValidator(0), MaxValueValidator(100)))
 
     class Meta:
         unique_together = ('control_practice', 'scenario_category_answer')

@@ -260,16 +260,19 @@ def scenario_list(request):
 def scenario_edit(request, pk):
     # hardcoded for now
     sca = get_object_or_404(ScenarioCategoryAnswer, pk=pk, project__company=request.user.employee.company)
-    risk_type_answer_factory = inlineformset_factory(ScenarioCategoryAnswer, RiskTypeAnswer, fields=('description',),
-                                                  extra=0, can_delete=False)
+    risk_type_answer_factory = inlineformset_factory(
+        ScenarioCategoryAnswer, RiskTypeAnswer,
+        fields=('description',),
+        extra=0, can_delete=False
+    )
     process_enabler_answer_factory = inlineformset_factory(
         ScenarioCategoryAnswer, ProcessEnablerAnswer,
-        fields=('effect_on_frequency', 'effect_on_impact', 'essential_control'),
+        fields=('effect_on_frequency', 'effect_on_impact', 'essential_control', 'percentage_complete'),
         extra=0, can_delete=False
     )
     enabler_answer_factory = inlineformset_factory(
         ScenarioCategoryAnswer, EnablerAnswer,
-        fields=('effect_on_frequency', 'effect_on_impact', 'essential_control'),
+        fields=('effect_on_frequency', 'effect_on_impact', 'essential_control', 'percentage_complete'),
         extra=0, can_delete=False
     )
 

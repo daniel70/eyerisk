@@ -163,6 +163,12 @@ pg_restore --no-owner --role=eyerisk -d heroku -h localhost -U eyerisk heroku.db
 That's all folks
 
 =========================================================================================
+Copy database table from Heroku to local machine
+=========================================================================================
+
+pg_dump -at risk_risktype $HEROKU_POSTGRESQL_COPPER_URL | psql $DATABASE_URL
+
+=========================================================================================
 Scherm Analogie bedacht door Sharuga
 =========================================================================================
 Boek --> Action

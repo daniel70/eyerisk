@@ -1,5 +1,6 @@
 {% extends "risk/base.html" %}
 {% load staticfiles %}
+{% load bootstrap3 %}
 {% block content %}
 {{ form.non_field_errors }}
 
@@ -287,21 +288,28 @@
         <div class="col-md-1 text-center">
             Reference
         </div>
-        <div class="col-md-2 text-center">
+        <div class="col-md-3 text-center">
             Title Description
         </div>
-        <div class="col-md-6 text-center">
-            Governance and Management Practices
-        </div>
-        <div class="col-md-1 text-center">
-            <abbr title="High / Medium / Low">Effect on Frequency</abbr>
-        </div>
-        <div class="col-md-1 text-center">
-            <abbr title="High / Medium / Low">Effect on Impact</abbr>
+
+        <!-- md-1 is too small and md-2 is too big, so we split an md-3 in two -->
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <abbr title="High / Medium / Low">Effect on Frequency</abbr>
+                </div>
+                <div class="col-md-6 text-center">
+                    <abbr title="High / Medium / Low">Effect on Impact</abbr>
+                </div>
+            </div>
         </div>
         <div class="col-md-1 text-center">
             <abbr title="Yes / No">Essential Control</abbr>
         </div>
+        <div class="col-md-1 text-center">
+            % Complete
+        </div>
+
     </div>
 
     {% for process_enabler_answer_form in process_enabler_answer_formset %}
@@ -312,28 +320,61 @@
             <div class="col-md-1">
                 {{ process_enabler_answer_form.instance.control_practice.practice_id }}
             </div>
-            <div class="col-md-2">
-                {{ process_enabler_answer_form.instance.control_practice.practice_name }}
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-10">
+                        {{ process_enabler_answer_form.instance.control_practice.practice_name }}
+                    </div>
+                    <div class="col-md-2">
+                    <button type="button" class="btn btn-default" aria-label="Collapse" data-toggle="collapse"
+                        data-target="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"
+                        aria-controls="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"
+                        aria-expanded="false">
+                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    </button>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                {{ process_enabler_answer_form.instance.control_practice.practice_governance }}
+            <!-- md-1 is too small and md-2 is too big, so we split an md-3 in two -->
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {% bootstrap_field process_enabler_answer_form.effect_on_frequency show_label=False %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {% bootstrap_field process_enabler_answer_form.effect_on_impact show_label=False %}
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div class="col-md-1">
                 <div class="form-group">
-                    {{ process_enabler_answer_form.effect_on_frequency }}
+                    {% bootstrap_field process_enabler_answer_form.essential_control show_label=False %}
                 </div>
             </div>
             <div class="col-md-1">
                 <div class="form-group">
-                    {{ process_enabler_answer_form.effect_on_impact }}
-                </div>
-            </div>
-            <div class="col-md-1">
-                <div class="form-group">
-                    {{ process_enabler_answer_form.essential_control }}
+                    {% bootstrap_field process_enabler_answer_form.percentage_complete show_label=False %}
                 </div>
             </div>
         </div>
+        <div class="collapse" id="governance_{{ process_enabler_answer_form.instance.control_practice.pk }}">
+            <div class="row">
+                <div class="col-md-5 text-center">
+                    Governance and Management Practices
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    {{ process_enabler_answer_form.instance.control_practice.practice_governance }}
+                </div>
+            </div>
+        </div>
+
     {% endfor %}
 
     {% for enabler_answer_form in enabler_answer_formset %}
@@ -395,6 +436,5 @@
         <a href="{% url 'scenario-list' %}" class="btn btn-default">CANCEL</a>
         <button type="submit" class="btn btn-primary pull-right">SAVE</button>
     </div>
-
 </form>
 {% endblock content %}

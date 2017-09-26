@@ -186,6 +186,7 @@ class CompanySettingsForm(ModelForm):
         model = Company
         fields = ('name',)
 
+
 class RegisterForm(ModelForm):
     class Meta:
         model = Register
