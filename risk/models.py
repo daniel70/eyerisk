@@ -2,14 +2,14 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.db.models.signals import m2m_changed, post_save, post_delete
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.conf import settings
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from random import randint
 
 
-def select_avatar_color():
+def get_avatar_color():
     """Select a random color for a users avator"""
     avatar_colors = [
         "#f44336",
@@ -130,6 +130,18 @@ class Process(models.Model):
 class Employee(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    initials = models.CharField(max_length=2, default="", validators=[
+        RegexValidator(regex="^[A-Z]{2}$", message="Must be exactly 2 alphanumeric uppercase characters (e.g. 'DM')")
+    ])
+    avatar_color = models.CharField(max_length=7, default=get_avatar_color)
+
+    # def save(self, *args, **kwargs):
+    #     if not self.id and not self.initials:
+    #         name = self.user.get_full_name() or self.user.get_username()
+    #         if name:
+    #             self.initials = "{}{}".format(name.split()[0][0].upper(), name.split()[-1][0].upper())
+    #     return super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.user.get_full_name() or self.user.get_username()
