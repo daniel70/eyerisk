@@ -167,14 +167,14 @@
         <div class="container-fluid">
             <div id="navigation">
                 <!-- Navigation Menu-->
-                <ul class="navigation-menu">
+                <ul class="navigation-menu d-lg-flex justify-content-between">
 
                     <li class="has-submenu">
-                        <a href="{% url 'risk-home' %}"><i class="ti-home"></i>Home</a>
+                        <a href="{% url 'risk-home' %}"><i class="ion-ios7-home-outline"></i>Home</a>
                     </li>
 
                     <li class="has-submenu">
-                        <a href="#"><i class="ion-document-text"></i>Risk assessment</a>
+                        <a href="#"><i class="ion-document"></i>Risk assessment</a>
                         <ul class="submenu">
                             <li><a href="{% static 'yellow-horiontal/assets/ui-buttons.html' %}">Buttons</a></li>
                             <li><a href="ui-cards.html">Cards</a></li>
@@ -191,26 +191,30 @@
                     </li>
 
                     <li class="has-submenu">
-                        <a href="#"><i class="ti-dashboard"></i>Dashboard</a>
+                        <a href="#"><i class="ion-stats-bars"></i>Dashboard</a>
                         <ul class="submenu">
                         </ul>
-                            </li>
-
-                            <li class="has-submenu">
-                                <a href="#"><i class="ti-rss-alt"></i>Radar</a>
-                                <ul class="submenu">
-                                    <li><a href="form-elements.html">General Elements</a></li>
-                                    <li><a href="form-advanced.html">Advanced Form</a></li>
-                                </ul>
-                            </li>
-                    <li>
-                      <form class="form-inline">
-                          <button class="btn btn-outline my-2 my-sm-0 mr-auto" type="submit"><i class="ti-search"></i></button>
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-  </form>
                     </li>
+
+                    <li class="has-submenu">
+                        <a href="#"><i class="ion-ionic"></i>Radar</a>
+                        <ul class="submenu">
+                            <li><a href="form-elements.html">General Elements</a></li>
+                            <li><a href="form-advanced.html">Advanced Form</a></li>
                         </ul>
-                        <!-- End navigation menu -->
+                    </li>
+
+                    <li class="align-self-center ml-auto">
+                        <form class="form-inline">
+                            <div class="input-group">
+                                <button class="btn btn-outline my-2 my-sm-0" type="submit"><i class="ion-ios7-search-strong"></i>
+                                </button>
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                            </div>
+                        </form>
+                    </li>
+                            </ul>
+                <!-- End navigation menu -->
             </div> <!-- end #navigation -->
         </div> <!-- end container -->
     </div> <!-- end navbar-custom -->
