@@ -285,7 +285,7 @@ def scenario_edit(request, pk):
         if form.is_valid() \
                 and risk_type_answer_formset.is_valid() \
                 and process_enabler_answer_formset.is_valid() \
-                and enabler_answer_formset.is_valid:
+                and enabler_answer_formset.is_valid():
             form.save()
             risk_type_answer_formset.save()
             process_enabler_answer_formset.save()

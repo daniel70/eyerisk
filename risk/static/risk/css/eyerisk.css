@@ -153,3 +153,27 @@ table.raci-table tbody tr td:not(:first-child) {
 table.raci-table th, table.raci-table td {
     border:2px solid #000000;
 }
+
+/* avatar */
+:root {
+  --avatar-size: 50px;
+}
+
+.avatar-circle {
+  /*background-color: #333;*/
+  border-radius: 50%;
+  height: var(--avatar-size);
+  text-align: center;
+  width: var(--avatar-size);
+}
+
+.avatar-initials {
+  color: #fff;
+  font-family: sans-serif;
+  font-size: calc(var(--avatar-size) / 2); /* 50% of parent */
+  line-height: 1;
+  position: relative;
+  top: calc(var(--avatar-size) / 4); /* 25% of parent */
+}
+
+/* end avatar */
