@@ -654,6 +654,7 @@ class EnablerAnswer(models.Model):
     essential_control = models.CharField(max_length=1, choices=[('Y', 'Y'), ('N', 'N')], blank=True)
     percentage_complete = models.IntegerField('% complete', default=0,
                                               validators=(MinValueValidator(0), MaxValueValidator(100)))
+
     class Meta:
         unique_together = ('enabler', 'scenario_category_answer')
 

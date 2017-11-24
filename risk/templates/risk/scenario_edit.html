@@ -5,6 +5,9 @@
 {{ form.non_field_errors }}
 
 <form class="form" method="post" action="">
+    <div>
+        {{ form.threat_type }}
+    </div>
     {% csrf_token %}
     {% for hidden in form.hidden_fields %}
         {{ hidden }}
@@ -388,9 +391,9 @@
             <div class="col-md-3 text-center">
                 Reference
             </div>
-            <div class="col-md-6 text-center">
-                Contribution to Response
-            </div>
+{#            <div class="col-md-6 text-center">#}
+{#                Contribution to Response#}
+{#            </div>#}
             <div class="col-md-1 text-center">
                 <abbr title="High / Medium / Low">Effect on Frequency</abbr>
             </div>
@@ -399,6 +402,9 @@
             </div>
             <div class="col-md-1 text-center">
                 <abbr title="Yes / No">Essential Control</abbr>
+            </div>
+            <div class="col-md-1 text-center">
+                <abbr title="Yes / No">% Complete</abbr>
             </div>
         </div>
         {% endifchanged %}
@@ -410,9 +416,9 @@
             <div class="col-md-3">
                 {{ enabler_answer_form.instance.enabler.reference }}
             </div>
-            <div class="col-md-6">
-                {{ enabler_answer_form.instance.enabler.contribution_to_response }}
-            </div>
+{#            <div class="col-md-6">#}
+{#                {{ enabler_answer_form.instance.enabler.contribution_to_response }}#}
+{#            </div>#}
             <div class="col-md-1">
                 <div class="form-group">
                     {{ enabler_answer_form.effect_on_frequency }}
@@ -426,6 +432,11 @@
             <div class="col-md-1">
                 <div class="form-group">
                     {{ enabler_answer_form.essential_control }}
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    {{ enabler_answer_form.percentage_complete }}
                 </div>
             </div>
         </div>
