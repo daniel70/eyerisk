@@ -5,9 +5,6 @@
 {{ form.non_field_errors }}
 
 <form class="form" method="post" action="">
-    <div>
-        {{ form.threat_type }}
-    </div>
     {% csrf_token %}
     {% for hidden in form.hidden_fields %}
         {{ hidden }}

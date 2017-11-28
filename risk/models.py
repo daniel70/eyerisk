@@ -7,6 +7,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from random import randint
+from multiselectfield import MultiSelectField
 
 
 def get_avatar_color():
@@ -505,15 +506,15 @@ class ScenarioCategoryAnswer(models.Model):
     # name = models.CharField(max_length=50)
     # company = models.ForeignKey(Company, on_delete=models.CASCADE)
     scenario_category = models.ForeignKey(ScenarioCategory, on_delete=models.CASCADE)
-    threat_type = models.CharField(max_length=100, help_text=threat_type_help, blank=True)
-    actor = models.CharField(max_length=100, help_text=actor_help, blank=True)
-    event = models.CharField(max_length=100, help_text=event_help, blank=True)
-    asset = models.CharField(max_length=100, help_text=asset_help, blank=True)
-    resource = models.CharField(max_length=100, help_text=resource_help, blank=True)
-    timing = models.CharField(max_length=100, blank=True)
-    duration = models.CharField(max_length=100, blank=True)
-    detection = models.CharField(max_length=100, blank=True)
-    time_lag = models.CharField(max_length=100, blank=True)
+    threat_type = MultiSelectField(choices=THREAT_TYPE_CHOICES, help_text=threat_type_help, blank=True)
+    actor = MultiSelectField(choices=ACTOR_CHOICES, help_text=actor_help, blank=True)
+    event = MultiSelectField(choices=EVENT_CHOICES, help_text=event_help, blank=True)
+    asset = MultiSelectField(choices=ASSET_RESOURCE_CHOICES, help_text=asset_help, blank=True)
+    resource = MultiSelectField(choices=ASSET_RESOURCE_CHOICES, help_text=resource_help, blank=True)
+    timing = MultiSelectField(choices=TIMING_CHOICES, blank=True)
+    duration = MultiSelectField(choices=DURATION_CHOICES, blank=True)
+    detection = MultiSelectField(choices=DETECTION_CHOICES, blank=True)
+    time_lag = MultiSelectField(choices=TIME_LAG_CHOICES, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
