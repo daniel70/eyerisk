@@ -658,6 +658,7 @@ class EnablerAnswer(models.Model):
 
     class Meta:
         unique_together = ('enabler', 'scenario_category_answer')
+        ordering = ['enabler']
 
     def __str__(self):
         return '{} - {}'.format(self.enabler, self.scenario_category_answer)
@@ -682,6 +683,7 @@ class ProcessEnablerAnswer(models.Model):
 
     class Meta:
         unique_together = ('control_practice', 'scenario_category_answer')
+        ordering = ['control_practice']
 
     def __str__(self):
         return '{} - {}'.format(self.control_practice, self.scenario_category_answer)
@@ -698,6 +700,7 @@ class RiskTypeAnswer(models.Model):
 
     class Meta:
         unique_together = ('risk_type', 'scenario_category_answer')
+        ordering = ['risk_type']
 
     def __str__(self):
         return '{} - {}'.format(self.risk_type, self.scenario_category_answer)
