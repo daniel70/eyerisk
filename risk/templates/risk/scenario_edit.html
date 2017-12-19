@@ -326,11 +326,15 @@
                         {{ process_enabler_answer_form.instance.control_practice.practice_name }}
                     </div>
                     <div class="col-md-2">
-                    <button type="button" class="btn btn-default" aria-label="Collapse" data-toggle="collapse"
-                        data-target="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"
-                        aria-controls="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"
-                        aria-expanded="false">
-                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+{#                    <button type="button" class="btn btn-default" aria-label="Collapse" data-toggle="popover" role="tab"#}
+{#                        data-target="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"#}
+{#                        aria-controls="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"#}
+{#                        aria-expanded="false">#}
+{#                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>#}
+{#                    </button>#}
+                    <button type="button" class="btn btn-default" data-toggle="popover" data-container="body" data-placement="auto bottom" data-title="Governance and Management Practices" data-content="
+                    {{ process_enabler_answer_form.instance.control_practice.practice_governance }}">
+                        <span class="glyphicon glyphicon-info-sign"></span>
                     </button>
                     </div>
                 </div>
@@ -362,18 +366,16 @@
                 </div>
             </div>
         </div>
-        <div class="collapse" id="governance_{{ process_enabler_answer_form.instance.control_practice.pk }}">
-            <div class="row">
-                <div class="col-md-5 text-center">
-                    Governance and Management Practices
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5">
-                    {{ process_enabler_answer_form.instance.control_practice.practice_governance }}
-                </div>
-            </div>
-        </div>
+
+{#Text displayed when click on info button#}
+{#        <div class="popover" role="tabpanel" id="governance_{{ process_enabler_answer_form.instance.control_practice.pk }}">#}
+{#            <div class="row">#}
+{#                <div class="col-md-12">#}
+{#                    <h5>Governance and Management Practices</h5>#}
+{#                    <em>{{ process_enabler_answer_form.instance.control_practice.practice_governance }}</em>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
 
     {% endfor %}
 
@@ -446,3 +448,4 @@
     </div>
 </form>
 {% endblock content %}
+

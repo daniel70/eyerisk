@@ -5,3 +5,7 @@ $(function() {
       .toggleClass('glyphicon-chevron-down');
   })
 });
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
