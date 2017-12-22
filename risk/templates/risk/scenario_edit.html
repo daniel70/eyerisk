@@ -2,450 +2,452 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% block content %}
-{{ form.non_field_errors }}
+    {{ form.non_field_errors }}
 
-<form class="form" method="post" action="">
-    {% csrf_token %}
-    {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
-    {{ risk_type_answer_formset.management_form }}
-    {{ process_enabler_answer_formset.management_form }}
-    {{ enabler_answer_formset.management_form }}
-
-    <div class="cobit">
-    <div class="row cobit-title text-center">
-        <div class="col-md-12">
-            Risk Scenario Category {{form.instance.scenario_category.nr}}: {{form.instance.scenario_category.name}}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <b>Risk Scenario</b><br>
-            {{form.instance.scenario_category.risk_scenario}}
-        </div>
-    </div>
-    <div class="row cobit-divider">
-        <div class="col-md-12">
-            Risk Scenario Components
-        </div>
-    </div>
-
-    {% with field=form.threat_type %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="checkbox">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.actor %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="checkbox">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.event %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="checkbox">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.asset %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="checkbox">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.resource %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="checkbox">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.timing %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="radio">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.duration %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="radio">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.detection %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="radio">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-    {% with field=form.time_lag %}
-    <div class="row">
-        <div class="col-md-6">
-            <b>{{ field.label_tag }}</b><br>
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="col-md-6">
-            {% for choice in field %}
-            <div class="radio">
-                {{ choice }}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endwith %}
-
-
-    <div class="row cobit-divider">
-        <div class="col-md-12">
-            Risk Type<br>
-            <small>Describe the consequences resulting from the event.
-            Include whether the risk type is primary or secondary.</small>
-        </div>
-    </div>
-    <div class="row cobit-header">
-        <div class="col-md-4 text-center">
-            Risk Type
-        </div>
-        <div class="col-md-1 text-center">
-            <abbr title="Primary / Secundary">P/S</abbr>
-        </div>
-        <div class="col-md-7 text-center">
-            Risk Description
-        </div>
-    </div>
-
-    {% for risk_type_answer_form in risk_type_answer_formset %}
-        <div class="row">
-            {% for hidden in risk_type_answer_form.hidden_fields %}
+    <form class="form" method="post" action="">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
             {{ hidden }}
-            {% endfor %}
-            <div class="col-md-4">
-                {{ risk_type_answer_form.instance.risk_type.description }}
+        {% endfor %}
+        {{ risk_type_answer_formset.management_form }}
+        {{ process_enabler_answer_formset.management_form }}
+        {{ enabler_answer_formset.management_form }}
+
+        <div class="cobit">
+            <div class="row cobit-title text-center">
+                <div class="col-md-12">
+                    Risk Scenario
+                    Category {{ form.instance.scenario_category.nr }}: {{ form.instance.scenario_category.name }}
+                </div>
             </div>
-            <div class="col-md-1 text-center">
-                {{ risk_type_answer_form.instance.risk_type.get_impact_display }}
-            </div>
-            <div class="col-md-7">
-                {{ risk_type_answer_form.description }}
-            </div>
-        </div>
-    {% endfor %}
-
-    <div class="row cobit-divider">
-        <div class="col-md-12">
-            Gross Risk
-        </div>
-    </div>
-    <div class="row cobit-header">
-
-        <div class="col-md-1 col-md-offset-7 text-center">
-            1
-        </div>
-        <div class="col-md-1 text-center">
-            2
-        </div>
-        <div class="col-md-1 text-center">
-            3
-        </div>
-        <div class="col-md-1 text-center">
-            4
-        </div>
-        <div class="col-md-1 text-center">
-            5
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-7">
-            <label><abbr title="Number of times per year">Frequency</abbr> of scenario</label>
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-7">
-            <label>Impact of scenario</label>
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-        <div class="col-md-1 text-center">
-            <input type="radio">
-        </div>
-    </div>
-
-    <div class="row cobit-divider">
-        <div class="col-md-12">
-            Process Enabler
-        </div>
-    </div>
-    <div class="row cobit-header">
-        <div class="col-md-1 text-center">
-            Reference
-        </div>
-        <div class="col-md-3 text-center">
-            Title Description
-        </div>
-
-        <!-- md-1 is too small and md-2 is too big, so we split an md-3 in two -->
-        <div class="col-md-3">
             <div class="row">
-                <div class="col-md-6 text-center">
-                    <abbr title="High / Medium / Low">Effect on Frequency</abbr>
-                </div>
-                <div class="col-md-6 text-center">
-                    <abbr title="High / Medium / Low">Effect on Impact</abbr>
+                <div class="col-md-12">
+                    <b>Risk Scenario</b><br>
+                    {{ form.instance.scenario_category.risk_scenario }}
                 </div>
             </div>
-        </div>
-        <div class="col-md-1 text-center">
-            <abbr title="Yes / No">Essential Control</abbr>
-        </div>
-        <div class="col-md-1 text-center">
-            % Complete
-        </div>
-
-    </div>
-
-    {% for process_enabler_answer_form in process_enabler_answer_formset %}
-        <div class="row">
-            {% for hidden in process_enabler_answer_form.hidden_fields %}
-            {{ hidden }}
-            {% endfor %}
-            <div class="col-md-1">
-                {{ process_enabler_answer_form.instance.control_practice.practice_id }}
+            <div class="row cobit-divider">
+                <div class="col-md-12">
+                    Risk Scenario Components
+                </div>
             </div>
-            <div class="col-md-3">
+
+            {% with field=form.threat_type %}
                 <div class="row">
-                    <div class="col-md-10">
-                        {{ process_enabler_answer_form.instance.control_practice.practice_name }}
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
                     </div>
-                    <div class="col-md-2">
-{#                    <button type="button" class="btn btn-default" aria-label="Collapse" data-toggle="popover" role="tab"#}
-{#                        data-target="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"#}
-{#                        aria-controls="#governance_{{ process_enabler_answer_form.instance.control_practice.pk }}"#}
-{#                        aria-expanded="false">#}
-{#                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>#}
-{#                    </button>#}
-                    <button type="button" class="btn btn-default" data-toggle="popover" data-container="body" data-placement="auto bottom" data-title="Governance and Management Practices" data-content="
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="checkbox">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.actor %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="checkbox">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.event %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="checkbox">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.asset %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="checkbox">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.resource %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="checkbox">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.timing %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="radio">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.duration %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="radio">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.detection %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="radio">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+            {% with field=form.time_lag %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>{{ field.label_tag }}</b><br>
+                        <small>{{ field.help_text }}</small>
+                    </div>
+                    <div class="col-md-6">
+                        {% for choice in field %}
+                            <div class="radio">
+                                {{ choice }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endwith %}
+
+
+            <div class="row cobit-divider">
+                <div class="col-md-12">
+                    Risk Type<br>
+                    <small>Describe the consequences resulting from the event.
+                        Include whether the risk type is primary or secondary.
+                    </small>
+                </div>
+            </div>
+            <div class="row cobit-header">
+                <div class="col-md-4 text-center">
+                    Risk Type
+                </div>
+                <div class="col-md-1 text-center">
+                    <abbr title="Primary / Secundary">P/S</abbr>
+                </div>
+                <div class="col-md-7 text-center">
+                    Risk Description
+                </div>
+            </div>
+
+            {% for risk_type_answer_form in risk_type_answer_formset %}
+                <div class="row">
+                    {% for hidden in risk_type_answer_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <div class="col-md-4">
+                        {{ risk_type_answer_form.instance.risk_type.description }}
+                    </div>
+                    <div class="col-md-1 text-center">
+                        {{ risk_type_answer_form.instance.risk_type.get_impact_display }}
+                    </div>
+                    <div class="col-md-7">
+                        {{ risk_type_answer_form.description }}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="row cobit-divider">
+                <div class="col-md-12">
+                    Gross Risk
+                </div>
+            </div>
+            <div class="row cobit-header">
+
+                <div class="col-md-1 col-md-offset-7 text-center">
+                    1
+                </div>
+                <div class="col-md-1 text-center">
+                    2
+                </div>
+                <div class="col-md-1 text-center">
+                    3
+                </div>
+                <div class="col-md-1 text-center">
+                    4
+                </div>
+                <div class="col-md-1 text-center">
+                    5
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7">
+                    <label><abbr title="Number of times per year">Frequency</abbr> of scenario</label>
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-7">
+                    <label>Impact of scenario</label>
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+                <div class="col-md-1 text-center">
+                    <input type="radio">
+                </div>
+            </div>
+
+            <div class="row cobit-divider">
+                <div class="col-md-12">
+                    Process Enabler
+                </div>
+            </div>
+            <div class="row cobit-header">
+                <div class="col-md-1 text-center">
+                    Reference
+                </div>
+                <div class="col-md-3 text-center">
+                    Title Description
+                </div>
+
+                <!-- md-1 is too small and md-2 is too big, so we split an md-3 in two -->
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <abbr title="High / Medium / Low">Effect on Frequency</abbr>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <abbr title="High / Medium / Low">Effect on Impact</abbr>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 text-center">
+                    <abbr title="Yes / No">Essential Control</abbr>
+                </div>
+                <div class="col-md-1 text-center">
+                    % Complete
+                </div>
+
+            </div>
+
+            {% for process_enabler_answer_form in process_enabler_answer_formset %}
+                <div class="row">
+                    {% for hidden in process_enabler_answer_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <div class="col-md-1">
+                        {{ process_enabler_answer_form.instance.control_practice.practice_id }}
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-10">
+                                {{ process_enabler_answer_form.instance.control_practice.practice_name }}
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-default" data-toggle="popover"
+                                        data-container="body" data-placement="auto bottom"
+                                        data-title="Governance and Management Practices" data-content="
                     {{ process_enabler_answer_form.instance.control_practice.practice_governance }}">
-                        <span class="glyphicon glyphicon-info-sign"></span>
-                    </button>
-                    </div>
-                </div>
-            </div>
-            <!-- md-1 is too small and md-2 is too big, so we split an md-3 in two -->
-            <div class="col-md-3">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {% bootstrap_field process_enabler_answer_form.effect_on_frequency show_label=False %}
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <!-- md-1 is too small and md-2 is too big, so we split an md-3 in two -->
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {% bootstrap_field process_enabler_answer_form.effect_on_frequency show_label=False %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {% bootstrap_field process_enabler_answer_form.effect_on_impact show_label=False %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
                         <div class="form-group">
-                            {% bootstrap_field process_enabler_answer_form.effect_on_impact show_label=False %}
+                            {% bootstrap_field process_enabler_answer_form.essential_control show_label=False %}
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            {% bootstrap_field process_enabler_answer_form.percentage_complete show_label=False %}
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-1">
-                <div class="form-group">
-                    {% bootstrap_field process_enabler_answer_form.essential_control show_label=False %}
-                </div>
-            </div>
-            <div class="col-md-1">
-                <div class="form-group">
-                    {% bootstrap_field process_enabler_answer_form.percentage_complete show_label=False %}
-                </div>
-            </div>
-        </div>
-
-{#Text displayed when click on info button#}
-{#        <div class="popover" role="tabpanel" id="governance_{{ process_enabler_answer_form.instance.control_practice.pk }}">#}
-{#            <div class="row">#}
-{#                <div class="col-md-12">#}
-{#                    <h5>Governance and Management Practices</h5>#}
-{#                    <em>{{ process_enabler_answer_form.instance.control_practice.practice_governance }}</em>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-
-    {% endfor %}
-
-    {% for enabler_answer_form in enabler_answer_formset %}
-        {% ifchanged enabler_answer_form.instance.enabler.type %}
-        <div class="row cobit-divider">
-            <div class="col-md-12">
-                {{ enabler_answer_form.instance.enabler.get_type_display}}
-            </div>
-        </div>
-        <div class="row cobit-header">
-            <div class="col-md-3 text-center">
-                Reference
-            </div>
-{#            <div class="col-md-6 text-center">#}
-{#                Contribution to Response#}
-{#            </div>#}
-            <div class="col-md-1 text-center">
-                <abbr title="High / Medium / Low">Effect on Frequency</abbr>
-            </div>
-            <div class="col-md-1 text-center">
-                <abbr title="High / Medium / Low">Effect on Impact</abbr>
-            </div>
-            <div class="col-md-1 text-center">
-                <abbr title="Yes / No">Essential Control</abbr>
-            </div>
-            <div class="col-md-1 text-center">
-                <abbr title="Yes / No">% Complete</abbr>
-            </div>
-        </div>
-        {% endifchanged %}
-
-        <div class="row">
-            {% for hidden in enabler_answer_form.hidden_fields %}
-            {{ hidden }}
             {% endfor %}
-            <div class="col-md-3">
-                {{ enabler_answer_form.instance.enabler.reference }}
-            </div>
-{#            <div class="col-md-6">#}
-{#                {{ enabler_answer_form.instance.enabler.contribution_to_response }}#}
-{#            </div>#}
-            <div class="col-md-1">
-                <div class="form-group">
-                    {{ enabler_answer_form.effect_on_frequency }}
+
+            {% for enabler_answer_form in enabler_answer_formset %}
+                {% ifchanged enabler_answer_form.instance.enabler.type %}
+                    <div class="row cobit-divider">
+                        <div class="col-md-12">
+                            {{ enabler_answer_form.instance.enabler.get_type_display }}
+                        </div>
+                    </div>
+                    <div class="row cobit-header">
+                        <div class="col-md-4 text-center">
+                            Reference
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    <abbr title="High / Medium / Low">Effect on Frequency</abbr>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    <abbr title="High / Medium / Low">Effect on Impact</abbr>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <abbr title="Yes / No">Essential Control</abbr>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <abbr title="Yes / No">% Complete</abbr>
+                        </div>
+                    </div>
+                {% endifchanged %}
+
+                <div class="row">
+                    {% for hidden in enabler_answer_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-10">
+                                {{ enabler_answer_form.instance.enabler.reference }}
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-default" data-toggle="popover"
+                                        data-container="body" data-placement="auto bottom"
+                                        data-title="Contribution to response"
+                                        data-content="{{ enabler_answer_form.instance.enabler.contribution_to_response }}">
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {% bootstrap_field enabler_answer_form.effect_on_frequency show_label=False %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {% bootstrap_field enabler_answer_form.effect_on_impact show_label=False %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            {% bootstrap_field enabler_answer_form.essential_control show_label=False %}
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            {% bootstrap_field enabler_answer_form.percentage_complete show_label=False %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-1">
-                <div class="form-group">
-                    {{ enabler_answer_form.effect_on_impact }}
-                </div>
-            </div>
-            <div class="col-md-1">
-                <div class="form-group">
-                    {{ enabler_answer_form.essential_control }}
-                </div>
-            </div>
-            <div class="col-md-1">
-                <div class="form-group">
-                    {{ enabler_answer_form.percentage_complete }}
-                </div>
-            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-    </div>
-    <br />
-    <div class="form-group submit-row">
-        <a href="{% url 'scenario-list' %}" class="btn btn-default">CANCEL</a>
-        <button type="submit" class="btn btn-primary pull-right">SAVE</button>
-    </div>
-</form>
+        <br/>
+        <div class="form-group submit-row">
+            <a href="{% url 'scenario-list' %}" class="btn btn-default">CANCEL</a>
+            <button type="submit" class="btn btn-primary pull-right">SAVE</button>
+        </div>
+    </form>
 {% endblock content %}
 
