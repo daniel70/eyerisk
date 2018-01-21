@@ -117,10 +117,11 @@ LANGUAGES = (
     ('nl', gettext('Dutch')),
 )
 
-# INTERNAL_IPS = [
-#     '127.0.0.1',
-#     '::1',
-# ]
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '::1',
+    '*',
+]
 
 # for 2FA
 LOGIN_URL = 'two_factor:login'
