@@ -2,15 +2,18 @@ from .base import *
 ALLOWED_HOSTS = ["*"]
 
 # debug toolbar settings
-DEBUG = True
+try:
+    DEBUG = (os.environ['DEBUG'] == "True")
+except:
+    DEBUG = False
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS += [
     'debug_toolbar',
 ]
-MIDDLEWARE_CLASSES.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 # end debug toolbar settings
-MIDDLEWARE_CLASSES.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

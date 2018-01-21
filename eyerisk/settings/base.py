@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -117,10 +117,10 @@ LANGUAGES = (
     ('nl', gettext('Dutch')),
 )
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-    '::1',
-]
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+#     '::1',
+# ]
 
 # for 2FA
 LOGIN_URL = 'two_factor:login'
