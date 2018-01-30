@@ -536,7 +536,7 @@ def scenario_category_answer_saved(sender, **kwargs):
     raw = kwargs.pop('raw', None)
     using = kwargs.pop('using', None)
     update_fields = kwargs.pop('update_fields', None)
-
+    print("Hier komen de wijzigingen")
     if created:
         sc = instance.scenario_category
         # get the risk types
