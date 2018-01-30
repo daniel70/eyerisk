@@ -655,7 +655,7 @@ class EnablerAnswer(models.Model):
     scenario_category_answer = models.ForeignKey(ScenarioCategoryAnswer, on_delete=models.CASCADE)
     effect_on_frequency = models.CharField(max_length=1, choices=EFFECTS, blank=True)
     effect_on_impact = models.CharField(max_length=1, choices=EFFECTS, blank=True)
-    essential_control = models.CharField(max_length=1, choices=[('Y', 'Y'), ('N', 'N')], blank=True)
+    essential_control = models.CharField(max_length=1, choices=[('Y', 'Yes'), ('N', 'No')], blank=True)
     percentage_complete = models.IntegerField('% complete', default=0,
                                               validators=(MinValueValidator(0), MaxValueValidator(100)))
 
