@@ -537,6 +537,7 @@ def scenario_category_answer_saved(sender, **kwargs):
     using = kwargs.pop('using', None)
     update_fields = kwargs.pop('update_fields', None)
     print("Hier komen de wijzigingen")
+    #SCA.objects.filter(project__company__name="iRiskIT", project__name="Default")
     if created:
         sc = instance.scenario_category
         # get the risk types
@@ -557,6 +558,8 @@ def scenario_category_answer_saved(sender, **kwargs):
             ProcessEnablerAnswer.objects.bulk_create(process_enablers)
             EnablerAnswer.objects.bulk_create(enablers)
 
+        print(f"Het nummer is {sc.name}")
+        print(f"Mijn project name is {instance.project.company.name}")
 
 class Scenario(models.Model):
     NOT_AVAILABLE = 'N/A'
