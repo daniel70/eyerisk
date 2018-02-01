@@ -530,36 +530,74 @@ def scenario_category_answer_saved(sender, **kwargs):
     """
     create an EnablerAnswer from this Enabler and save it to all ScenarioCategoryAnswers that point to the
     scenario_category that this Enabler points to.
+
+    If there is a template scenario category answer for the iRiskIT company than we will copy those values.
+    If there is no template then we will use empty values
     """
+
     instance = kwargs.pop('instance', None)
     created = kwargs.pop('created', None)
     raw = kwargs.pop('raw', None)
     using = kwargs.pop('using', None)
     update_fields = kwargs.pop('update_fields', None)
-    print("Hier komen de wijzigingen")
-    #SCA.objects.filter(project__company__name="iRiskIT", project__name="Default")
     if created:
-        sc = instance.scenario_category
-        # get the risk types
         risk_types = []
-        for risk_type in sc.risk_types.all():
-            risk_types.append(RiskTypeAnswer(risk_type=risk_type, scenario_category_answer=instance))
-
         process_enablers = []
-        for process_enabler in sc.process_enablers.all():
-            process_enablers.append(ProcessEnablerAnswer(control_practice=process_enabler, scenario_category_answer=instance))
-
         enablers = []
-        for enabler in sc.enabler_set.all():
-            enablers.append(EnablerAnswer(enabler=enabler, scenario_category_answer=instance))
 
+        # if there is a default template for this Scenario Category then we use that
+        if ScenarioCategoryAnswer.objects.filter(project__company__name="iRiskIT", project__name="Default",
+                                                 project__type="Q",
+                                                 scenario_category_id=instance.scenario_category_id).exists():
+            sca_template = ScenarioCategoryAnswer.objects.get(project__company__name="iRiskIT", project__name="Default",
+                                                 project__type="Q",
+                                                 scenario_category_id=instance.scenario_category_id)
+            # update the fields of this scenario category answer with the templates values
+            instance.threat_type = sca_template.threat_type
+            instance.actor = sca_template.actor
+            instance.event = sca_template.event
+            instance.asset = sca_template.asset
+            instance.resource = sca_template.resource
+            instance.timing = sca_template.timing
+            instance.duration = sca_template.duration
+            instance.detection = sca_template.detection
+            instance.time_lag = sca_template.time_lag
+            instance.save()
+
+            # and now create the answer rows by copying them from the template
+            for row in sca_template.risktypeanswer_set.all():
+                row.id = None
+                row.scenario_category_answer = instance
+                risk_types.append(row)
+
+            for row in sca_template.processenableranswer_set.all():
+                row.id = None
+                row.scenario_category_answer = instance
+                process_enablers.append(row)
+
+            for row in sca_template.enableranswer_set.all():
+                row.id = None
+                row.scenario_category_answer = instance
+                enablers.append(row)
+
+        else:
+            # a template was not found so we use the empty values
+            sc = instance.scenario_category
+            for risk_type in sc.risk_types.all():
+                risk_types.append(RiskTypeAnswer(risk_type=risk_type, scenario_category_answer=instance))
+
+            for process_enabler in sc.process_enablers.all():
+                process_enablers.append(ProcessEnablerAnswer(control_practice=process_enabler, scenario_category_answer=instance))
+
+            for enabler in sc.enabler_set.all():
+                enablers.append(EnablerAnswer(enabler=enabler, scenario_category_answer=instance))
+
+        # finally we create the records here
         with transaction.atomic():
             RiskTypeAnswer.objects.bulk_create(risk_types)
             ProcessEnablerAnswer.objects.bulk_create(process_enablers)
             EnablerAnswer.objects.bulk_create(enablers)
 
-        print(f"Het nummer is {sc.name}")
-        print(f"Mijn project name is {instance.project.company.name}")
 
 class Scenario(models.Model):
     NOT_AVAILABLE = 'N/A'

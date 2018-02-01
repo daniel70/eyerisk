@@ -18,7 +18,13 @@ class EmployeeInline(admin.StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (EmployeeInline, )
+    # adding Company to the display of users
+    list_display = ('username', 'get_company', 'email', 'first_name', 'last_name', 'is_staff')
 
+    def get_company(self, obj):
+        return obj.employee.company
+    get_company.short_description = 'Company'
+    get_company.admin_order_field = 'employee__company'
 
 class StandardAdmin(admin.ModelAdmin):
     list_display = ('name', 'is_active', 'nr_of_controls')
