@@ -502,6 +502,21 @@ class ScenarioCategoryAnswer(models.Model):
         (2, 'Delayed'),
     )
 
+    GROSS_FREQUENCY_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+
+    GROSS_IMPACT_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     # name = models.CharField(max_length=50)
     # company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -515,6 +530,8 @@ class ScenarioCategoryAnswer(models.Model):
     duration = models.CharField(max_length=100, blank=True)
     detection = models.CharField(max_length=100, blank=True)
     time_lag = models.CharField(max_length=100, blank=True)
+    gross_frequency = models.CharField(max_length=100, blank=True)
+    gross_impact = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

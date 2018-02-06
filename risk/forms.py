@@ -35,7 +35,7 @@ class ScenarioCategoryForm(ModelForm):
 class ScenarioCategoryAnswerForm(ModelForm):
     class Meta:
         model = ScenarioCategoryAnswer
-        fields = ('threat_type', 'actor', 'event', 'asset', 'resource', 'timing', 'duration', 'detection', 'time_lag')
+        fields = ('threat_type', 'actor', 'event', 'asset', 'resource', 'timing', 'duration', 'detection', 'time_lag', 'gross_frequency', 'gross_impact')
         widgets = {
             'threat_type': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.THREAT_TYPE_CHOICES),
             'actor': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ACTOR_CHOICES),
@@ -46,6 +46,8 @@ class ScenarioCategoryAnswerForm(ModelForm):
             'duration': RadioSelect(choices=ScenarioCategoryAnswer.DURATION_CHOICES),
             'detection': RadioSelect(choices=ScenarioCategoryAnswer.DETECTION_CHOICES),
             'time_lag': RadioSelect(choices=ScenarioCategoryAnswer.TIME_LAG_CHOICES),
+            'gross_frequency': RadioSelect(choices=ScenarioCategoryAnswer.GROSS_FREQUENCY_CHOICES),
+            'gross_impact': RadioSelect(choices=ScenarioCategoryAnswer.GROSS_IMPACT_CHOICES),
         }
 
 
