@@ -579,6 +579,8 @@ def scenario_category_answer_saved(sender, **kwargs):
             instance.duration = sca_template.duration
             instance.detection = sca_template.detection
             instance.time_lag = sca_template.time_lag
+            instance.gross_frequency = sca_template.gross_frequency
+            instance.gross_impact = sca_template.gross_impact
             instance.save()
 
             # and now create the answer rows by copying them from the template
