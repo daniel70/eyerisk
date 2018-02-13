@@ -113,8 +113,14 @@ class EnablerAnswerInline(admin.TabularInline):
 
 class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
     form = ScenarioCategoryAnswerAdminForm
-    list_display = ('__str__', 'project', 'created', 'updated')
+    list_display = ('__str__', 'get_company', 'project', 'created', 'updated')
     # exclude = ('risk_type_answer',)
+
+    def get_company(self, obj):
+            return obj.project.company
+    get_company.short_description = 'Company'
+    get_company.admin_order_field = 'project__company'
+
     inlines = (RiskTypeAnswerInline, ProcessEnablerAnswerInline, EnablerAnswerInline)
 
 
