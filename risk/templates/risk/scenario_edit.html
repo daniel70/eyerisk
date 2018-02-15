@@ -417,7 +417,8 @@
         <br/>
         <div class="form-group submit-row">
             <a href="{% url 'scenario-list' %}" class="btn btn-default">CANCEL</a>
-            <button type="submit" class="btn btn-primary pull-right">SAVE</button>
+            <button type="submit" name="_default" class="btn btn-warning">SAVE AS DEFAULT</button>
+            <button type="submit" name="_save" class="btn btn-primary pull-right">SAVE</button>
         </div>
     </form>
 {% endblock content %}

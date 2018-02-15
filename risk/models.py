@@ -84,7 +84,7 @@ def company_created(sender, instance, created, **kwargs):
 
         # create the CIA Impacts
         Impact.objects.create(company=instance, cia_type='C', level=1, description='Low direct and indirect costs < € 1m')
-
+        # hier dus
 
 class Software(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -532,11 +532,12 @@ class ScenarioCategoryAnswer(models.Model):
     time_lag = models.CharField(max_length=100, blank=True)
     gross_frequency = models.CharField(max_length=100, blank=True)
     gross_impact = models.CharField(max_length=100, blank=True)
+    is_default = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ['project', 'scenario_category']
+        unique_together = ['project', 'scenario_category', 'is_default']
 
     def __str__(self):
         return "{}".format(self.project)
@@ -563,38 +564,42 @@ def scenario_category_answer_saved(sender, **kwargs):
         enablers = []
 
         # if there is a default template for this Scenario Category then we use that
-        if ScenarioCategoryAnswer.objects.filter(project__company__name="iRiskIT", project__name="Default",
-                                                 project__type="Q",
-                                                 scenario_category_id=instance.scenario_category_id).exists():
-            sca_template = ScenarioCategoryAnswer.objects.get(project__company__name="iRiskIT", project__name="Default",
-                                                 project__type="Q",
-                                                 scenario_category_id=instance.scenario_category_id)
+        sca_default = ScenarioCategoryAnswer.objects.filter(project__company_id=instance.project.company_id,
+                                                          scenario_category_id=instance.scenario_category_id,
+                                                          is_default=True,
+                                                          ).first()
+        if not sca_default:
+            sca_default = ScenarioCategoryAnswer.objects.filter(project__company__name="iRiskIT", project__name="Default",
+                                                     project__type="Q",
+                                                     scenario_category_id=instance.scenario_category_id).first()
+
+        if sca_default:
             # update the fields of this scenario category answer with the templates values
-            instance.threat_type = sca_template.threat_type
-            instance.actor = sca_template.actor
-            instance.event = sca_template.event
-            instance.asset = sca_template.asset
-            instance.resource = sca_template.resource
-            instance.timing = sca_template.timing
-            instance.duration = sca_template.duration
-            instance.detection = sca_template.detection
-            instance.time_lag = sca_template.time_lag
-            instance.gross_frequency = sca_template.gross_frequency
-            instance.gross_impact = sca_template.gross_impact
+            instance.threat_type = sca_default.threat_type
+            instance.actor = sca_default.actor
+            instance.event = sca_default.event
+            instance.asset = sca_default.asset
+            instance.resource = sca_default.resource
+            instance.timing = sca_default.timing
+            instance.duration = sca_default.duration
+            instance.detection = sca_default.detection
+            instance.time_lag = sca_default.time_lag
+            instance.gross_frequency = sca_default.gross_frequency
+            instance.gross_impact = sca_default.gross_impact
             instance.save()
 
             # and now create the answer rows by copying them from the template
-            for row in sca_template.risktypeanswer_set.all():
+            for row in sca_default.risktypeanswer_set.all():
                 row.id = None
                 row.scenario_category_answer = instance
                 risk_types.append(row)
 
-            for row in sca_template.processenableranswer_set.all():
+            for row in sca_default.processenableranswer_set.all():
                 row.id = None
                 row.scenario_category_answer = instance
                 process_enablers.append(row)
 
-            for row in sca_template.enableranswer_set.all():
+            for row in sca_default.enableranswer_set.all():
                 row.id = None
                 row.scenario_category_answer = instance
                 enablers.append(row)

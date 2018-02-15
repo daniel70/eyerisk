@@ -250,7 +250,8 @@ def scenario_list(request):
 
     else:
         form = ScenarioCategoryAnswerCreateForm(company=request.user.employee.company)
-    scenarios = ScenarioCategoryAnswer.objects.filter(project__company=request.user.employee.company).order_by('-updated')
+    scenarios = ScenarioCategoryAnswer.objects.filter(project__company=request.user.employee.company,
+                                                      is_default=False).order_by('-updated')
     context = {'scenario_list': scenarios, 'form': form}
     return render(request, template_name='risk/scenario_list.html', context=context)
 
@@ -286,12 +287,23 @@ def scenario_edit(request, pk):
                 and risk_type_answer_formset.is_valid() \
                 and process_enabler_answer_formset.is_valid() \
                 and enabler_answer_formset.is_valid():
+
+            if "_default" in request.POST:
+                ScenarioCategoryAnswer.objects.filter(project__company_id=sca.project.company_id,
+                                                      scenario_category_id=sca.scenario_category_id,
+                                                      is_default=True).delete()
+
+                record = form.save(commit=False)
+                record.is_default = True
+                record.pk=None
+
             form.save()
             risk_type_answer_formset.save()
             process_enabler_answer_formset.save()
             enabler_answer_formset.save()
             return HttpResponseRedirect(reverse('scenario-list'))
         else:
+            # TODO: 404
             print(form.errors)
             print(risk_type_answer_formset.errors)
             print(process_enabler_answer_formset.errors)
