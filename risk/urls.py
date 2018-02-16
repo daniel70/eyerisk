@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^selection/(?P<pk>\d+)/response$', selection_response, name='selection-response'),
     url(r'^selection/(?P<pk>\d+)/export$', selection_export, name='selection-export'),
 
-    url(r'^risk_maps/$', riskmaps, name='riskmaps'), #CAN BE DELETED
+    url(r'^risk_maps/$', riskmaps, name='riskmaps'), #TODO: CAN BE DELETED
     url(r'^risk_map/$', risk_map_list, name='risk-map-list'),
     url(r'^risk_map/(?P<pk>\d+)/$', risk_map_list, name='risk-map-list'),
     url(r'^risk_map/create$', risk_map_create, name='risk-map-create'),

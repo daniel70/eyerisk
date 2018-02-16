@@ -246,6 +246,7 @@ def scenario_list(request):
             sca = ScenarioCategoryAnswer(scenario_category=form.cleaned_data['scenario_category'],
                                          project=form.cleaned_data['project'])
             sca.save()
+            messages.info(request, 'The Scenario has been created successfully!')
             return HttpResponseRedirect(reverse('scenario-edit', args=[sca.pk]))
 
     else:
@@ -289,13 +290,35 @@ def scenario_edit(request, pk):
                 and enabler_answer_formset.is_valid():
 
             if "_default" in request.POST:
+                # delete the 'old' company default if it exists...
                 ScenarioCategoryAnswer.objects.filter(project__company_id=sca.project.company_id,
                                                       scenario_category_id=sca.scenario_category_id,
                                                       is_default=True).delete()
+                # create the new default
+                new_sca = form.save(commit=False)
+                new_sca.is_default = True
+                new_sca.pk=None
+                new_sca.save()
 
-                record = form.save(commit=False)
-                record.is_default = True
-                record.pk=None
+                # and create the related records of the new default
+                # TODO: this can be refactored using itertools.chain
+                for frm in risk_type_answer_formset.forms:
+                    rta = frm.save(commit=False)
+                    rta.scenario_category_answer_id = new_sca.pk
+                    rta.pk = None
+                    rta.save()
+
+                for frm in process_enabler_answer_formset.forms:
+                    peaf = frm.save(commit=False)
+                    peaf.scenario_category_answer_id = new_sca.pk
+                    peaf.pk = None
+                    peaf.save()
+
+                for frm in enabler_answer_formset.forms:
+                    eaf = frm.save(commit=False)
+                    eaf.scenario_category_answer_id = new_sca.pk
+                    eaf.pk = None
+                    eaf.save()
 
             form.save()
             risk_type_answer_formset.save()
