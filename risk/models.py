@@ -66,25 +66,27 @@ def company_created(sender, instance, created, **kwargs):
     The template record has a 'is_template' column that is True for templates.
     """
     if created:
-        t = RiskMap.objects.get(is_template=True)
-        if t is None:
+        riskmap = RiskMap.objects.get(is_template=True)
+        if riskmap is None:
             # no risk map template defined!
-            # log error
+            # TODO: log error
             return
 
         # before making changes to the RiskMap, first get its Values
-        rmv_list = list(RiskMapValue.objects.filter(risk_map=t))
-        t.parent_id = t.pk
-        t.pk = None
-        t.company = instance
-        t.is_template = False
-        t.name = 'ENTERPRISE'
-        t.level = 1  # Enterprise level
-        t.save()
+        riskmapvalues = list(RiskMapValue.objects.filter(risk_map=riskmap))
+        riskmap.parent_id = riskmap.pk
+        riskmap.pk = None
+        riskmap.company = instance
+        riskmap.is_template = False
+        riskmap.name = 'ENTERPRISE'
+        riskmap.level = 1  # Enterprise level
+        riskmap.save()
 
         # create the CIA Impacts
         Impact.objects.create(company=instance, cia_type='C', level=1, description='Low direct and indirect costs < € 1m')
-        # hier dus
+
+        # Every company has a project called Default of type 'Q' (Company)
+        Project.objects.create(company=instance, name='Default', type=Project.PERIODIC)
 
 class Software(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)

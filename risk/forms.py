@@ -35,7 +35,8 @@ class ScenarioCategoryForm(ModelForm):
 class ScenarioCategoryAnswerForm(ModelForm):
     class Meta:
         model = ScenarioCategoryAnswer
-        fields = ('threat_type', 'actor', 'event', 'asset', 'resource', 'timing', 'duration', 'detection', 'time_lag', 'gross_frequency', 'gross_impact')
+        fields = ('threat_type', 'actor', 'event', 'asset', 'resource', 'timing', 'duration', 'detection', 'time_lag',
+                  'gross_frequency', 'gross_impact')
         widgets = {
             'threat_type': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.THREAT_TYPE_CHOICES),
             'actor': CheckboxSelectMultiple(choices=ScenarioCategoryAnswer.ACTOR_CHOICES),
