@@ -272,7 +272,7 @@ class ControlActivity(models.Model):
 class Selection(models.Model):
     name = models.CharField(max_length=30, unique=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    standards = models.ManyToManyField(Standard, limit_choices_to={'is_active': True}, blank=True)
+    standards = models.ManyToManyField(Standard, limit_choices_to={'is_active': True}, blank=False)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
 
