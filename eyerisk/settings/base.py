@@ -81,6 +81,8 @@ WSGI_APPLICATION = 'eyerisk.wsgi.application'
 
 DATABASES = {'default': dj_database_url.config(conn_max_age=600)}
 
+AUTHENTICATION_BACKENDS = ('risk.backends.CaseInsensitiveModelBackend', )
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
