@@ -1,6 +1,18 @@
-from django.test import TestCase
+from django.contrib.auth.models import User
+from django.test import TestCase, Client
 from .models import Company, RiskMap, Impact, RiskMapValue, Standard, ControlDomain, ControlProcess, ControlPractice, \
-    ControlActivity, Selection, Scenario, Project, ScenarioCategory, ScenarioCategoryAnswer
+    ControlActivity, Selection, Scenario, Project, ScenarioCategory, ScenarioCategoryAnswer, Department, Software
+
+
+class UserModelTests(TestCase):
+
+    def test_that_user_can_login(self):
+        user = User.objects.create_user(username='TestUser', email='testuser@gmail.com', password='knowonewillno')
+        self.assertTrue(self.client.login(username='TestUser', password='knowonewillno'), 'Unable to log user in.')
+
+    def test_that_username_is_not_case_sensitive(self):
+        user = User.objects.create_user(username='TestUser', email='testuser@gmail.com', password='knowonewillno')
+        self.assertTrue(self.client.login(username='TESTUSER', password='knowonewillno'), 'Wrong password')
 
 
 class CompanyModelTests(TestCase):
@@ -31,7 +43,25 @@ class CompanyModelTests(TestCase):
         self.assertEqual(self.company.project_set.get().name, 'Default')
 
     def test_impacts_are_created_when_company_is_created(self):
-        self.assertEqual(self.company.impact_set.count(), 1, "Impact should be created when a company is created")
+        self.assertEqual(self.company.impact_set.count(), 1, 'Impact should be created when a company is created')
+
+
+class DepartmentModelTests(TestCase):
+    fixtures = ['riskmap.json', 'riskmapvalue.json', 'companies.json', 'software.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.company = Company.objects.get(name='iRisk iT')
+
+    def test_that_a_department_can_be_created(self):
+        department = Department.objects.create(company=self.company, name='Human Resources', manager='Anouk Reus')
+        self.assertEqual(Department.objects.count(), 1, 'There should be a department')
+
+    def test_that_a_department_with_software_can_be_created(self):
+        department = Department.objects.create(company=self.company, name='Human Resources', manager='Anouk Reus')
+        excel = Software.objects.get(name='Excel')
+        department.software.add(excel)
+        self.assertEqual(department.software.count(), 1, 'There should be software')
 
 
 class RiskMapModelTests(TestCase):

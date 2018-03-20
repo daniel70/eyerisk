@@ -1,0 +1,42 @@
+[
+{
+    "model": "risk.software",
+    "pk": 1,
+    "fields": {
+        "company": 1,
+        "name": "Action Website",
+        "description": "Retrieving information for customers",
+        "is_saas": true
+    }
+},
+{
+    "model": "risk.software",
+    "pk": 2,
+    "fields": {
+        "company": 1,
+        "name": "Excel",
+        "description": "rekenenblad",
+        "is_saas": false
+    }
+},
+{
+    "model": "risk.software",
+    "pk": 3,
+    "fields": {
+        "company": 2,
+        "name": "Adobe Reader",
+        "description": "PDF Reader from Acrobat",
+        "is_saas": true
+    }
+},
+{
+    "model": "risk.software",
+    "pk": 4,
+    "fields": {
+        "company": 2,
+        "name": "Acrobat Reader",
+        "description": "Reader for PDF files.",
+        "is_saas": false
+    }
+}
+]
