@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.support.ui import Select
 
 
 class MySeleniumTests(StaticLiveServerTestCase):
@@ -27,18 +28,35 @@ class MySeleniumTests(StaticLiveServerTestCase):
         password_input.send_keys('unittestpassword')
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
 
+        # create a company
+        self.selenium.get(self.live_server_url + '/admin/risk/company/add/')
+        name = self.selenium.find_element_by_name('name')
+        name.send_keys('iRisk')
+        name.submit()
+
+        self.selenium.get(self.live_server_url + '/admin/risk/company/')
+
         # create a standard that is active
         self.selenium.get(self.live_server_url + '/admin/risk/standard/add/')
-        name = self.selenium.find_element_by_name("name")
+        name = self.selenium.find_element_by_name('name')
         name.send_keys('Cobit 5')
         name.submit()
 
         # create a standard that is not active
         self.selenium.get(self.live_server_url + '/admin/risk/standard/add/')
-        name = self.selenium.find_element_by_name("name")
+        name = self.selenium.find_element_by_name('name')
         name.send_keys('Cobit 4')
+        self.selenium.find_element_by_name('is_active').click()
         name.submit()
 
         self.selenium.get(self.live_server_url + '/admin/risk/standard/')
-        self.selenium.implicitly_wait(100)
+
+        # create a department
+
+
+        # create a project
+
+
+
+
 
