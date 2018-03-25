@@ -18,20 +18,20 @@ class CompanyModelTests(TestCase):
 
     def test_if_risk_map_is_created_when_company_is_created(self):
         self.assertEqual(RiskMap.objects.get(company__name='ACME').name, 'ENTERPRISE')
-        self.assertEqual(self.company.riskmap_set.count(), 1, "There should be exactly one risk map for Company")
+        self.assertEqual(self.company.riskmap_set.count(), 1, 'There should be exactly one risk map for Company')
 
     def test_if_ten_risk_map_values_are_created_when_company_is_created(self):
         risk_map = RiskMap.objects.get(company__name='ACME')
         self.assertEqual(risk_map.values.all().count(), 10)
         self.assertEqual(self.company.riskmap_set.get().values.count(), 10,
-                         "There should be exactly ten RiskMapValue records for Company")
+                         'There should be exactly ten RiskMapValue records for Company')
 
     def test_that_a_default_project_is_created_when_a_company_is_created(self):
         self.assertEqual(self.company.project_set.count(), 1)
         self.assertEqual(self.company.project_set.get().name, 'Default')
 
     def test_impacts_are_created_when_company_is_created(self):
-        self.assertEqual(self.company.impact_set.count(), 1, "Impact should be created when a company is created")
+        self.assertEqual(self.company.impact_set.count(), 1, 'Impact should be created when a company is created')
 
 
 class RiskMapModelTests(TestCase):
@@ -46,7 +46,7 @@ class RiskMapModelTests(TestCase):
         """
         self.assertEqual(
             RiskMap.objects.filter(is_template=True, level=0, name="COSO").count(), 1,
-            "There is not exactly one template risk map record"
+            'There is not exactly one template risk map record'
         )
 
     def test_if_template_risk_map_values_exists(self):
