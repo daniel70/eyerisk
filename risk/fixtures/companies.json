@@ -1,0 +1,38 @@
+[
+{
+    "model": "risk.company",
+    "pk": 4,
+    "fields": {
+        "name": "Action",
+        "created": "2017-05-16T14:11:12.631Z",
+        "updated": "2016-06-27T11:23:48.281Z"
+    }
+},
+{
+    "model": "risk.company",
+    "pk": 3,
+    "fields": {
+        "name": "Maxeda",
+        "created": "2016-11-18T09:56:32.324Z",
+        "updated": "2016-11-18T09:56:32.324Z"
+    }
+},
+{
+    "model": "risk.company",
+    "pk": 2,
+    "fields": {
+        "name": "Apple",
+        "created": "2017-11-07T09:36:45.663Z",
+        "updated": "2016-11-29T10:04:13.189Z"
+    }
+},
+{
+    "model": "risk.company",
+    "pk": 1,
+    "fields": {
+        "name": "iRisk iT",
+        "created": "2018-01-30T23:12:29.936Z",
+        "updated": "2018-01-30T23:12:29.936Z"
+    }
+}
+]

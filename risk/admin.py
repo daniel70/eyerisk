@@ -115,6 +115,9 @@ class ScenarioCategoryAnswerAdmin(admin.ModelAdmin):
     form = ScenarioCategoryAnswerAdminForm
     list_display = ('__str__', 'get_company', 'project', 'created', 'updated')
     # exclude = ('risk_type_answer',)
+    list_filter = (
+        ('project__company', admin.RelatedOnlyFieldListFilter),
+    )
 
     def get_company(self, obj):
             return obj.project.company

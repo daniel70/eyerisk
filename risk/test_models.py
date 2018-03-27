@@ -1,6 +1,18 @@
-from django.test import TestCase
+from django.contrib.auth.models import User
+from django.test import TestCase, Client
 from .models import Company, RiskMap, Impact, RiskMapValue, Standard, ControlDomain, ControlProcess, ControlPractice, \
-    ControlActivity, Selection, Scenario, Project, ScenarioCategory, ScenarioCategoryAnswer
+    ControlActivity, Selection, Scenario, Project, ScenarioCategory, ScenarioCategoryAnswer, Department, Software
+
+
+class UserModelTests(TestCase):
+
+    def test_that_user_can_login(self):
+        user = User.objects.create_user(username='TestUser', email='testuser@gmail.com', password='knowonewillno')
+        self.assertTrue(self.client.login(username='TestUser', password='knowonewillno'), 'Unable to log user in.')
+
+    def test_that_username_is_not_case_sensitive(self):
+        user = User.objects.create_user(username='TestUser', email='testuser@gmail.com', password='knowonewillno')
+        self.assertTrue(self.client.login(username='TESTUSER', password='knowonewillno'), 'Wrong password')
 
 
 class CompanyModelTests(TestCase):
@@ -18,13 +30,13 @@ class CompanyModelTests(TestCase):
 
     def test_if_risk_map_is_created_when_company_is_created(self):
         self.assertEqual(RiskMap.objects.get(company__name='ACME').name, 'ENTERPRISE')
-        self.assertEqual(self.company.riskmap_set.count(), 1, 'There should be exactly one risk map for Company')
+        self.assertEqual(self.company.riskmap_set.count(), 1, "There should be exactly one risk map for Company")
 
     def test_if_ten_risk_map_values_are_created_when_company_is_created(self):
         risk_map = RiskMap.objects.get(company__name='ACME')
         self.assertEqual(risk_map.values.all().count(), 10)
         self.assertEqual(self.company.riskmap_set.get().values.count(), 10,
-                         'There should be exactly ten RiskMapValue records for Company')
+                         "There should be exactly ten RiskMapValue records for Company")
 
     def test_that_a_default_project_is_created_when_a_company_is_created(self):
         self.assertEqual(self.company.project_set.count(), 1)
@@ -32,6 +44,24 @@ class CompanyModelTests(TestCase):
 
     def test_impacts_are_created_when_company_is_created(self):
         self.assertEqual(self.company.impact_set.count(), 1, 'Impact should be created when a company is created')
+
+
+class DepartmentModelTests(TestCase):
+    fixtures = ['riskmap.json', 'riskmapvalue.json', 'companies.json', 'software.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.company = Company.objects.get(name='iRisk iT')
+
+    def test_that_a_department_can_be_created(self):
+        department = Department.objects.create(company=self.company, name='Human Resources', manager='Anouk Reus')
+        self.assertEqual(Department.objects.count(), 1, 'There should be a department')
+
+    def test_that_a_department_with_software_can_be_created(self):
+        department = Department.objects.create(company=self.company, name='Human Resources', manager='Anouk Reus')
+        excel = Software.objects.get(name='Excel')
+        department.software.add(excel)
+        self.assertEqual(department.software.count(), 1, 'There should be software')
 
 
 class RiskMapModelTests(TestCase):
@@ -46,7 +76,7 @@ class RiskMapModelTests(TestCase):
         """
         self.assertEqual(
             RiskMap.objects.filter(is_template=True, level=0, name="COSO").count(), 1,
-            'There is not exactly one template risk map record'
+            "There is not exactly one template risk map record"
         )
 
     def test_if_template_risk_map_values_exists(self):
