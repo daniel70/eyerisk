@@ -61,11 +61,141 @@ class MySeleniumTests(StaticLiveServerTestCase):
         manager.send_keys('Anouk Reus')
 
         self.selenium.find_element_by_name('_save').click()
-        time.sleep(4)
 
         # create a project
+        self.selenium.get(self.live_server_url + '/admin/risk/project/add/')
+        name = self.selenium.find_element_by_name('name')
+        name.send_keys('Action')
+        type = Select(self.selenium.find_element_by_name('type'))
+        type.select_by_index(1)
+        company = Select(self.selenium.find_element_by_name('company'))
+        company.select_by_index(1)
 
+        self.selenium.find_element_by_name('_save').click()
 
+        # add software
+        self.selenium.get(self.live_server_url + '/admin/risk/software/add/')
+        company = Select(self.selenium.find_element_by_name('company'))
+        company.select_by_index(1)
+        name = self.selenium.find_element_by_name('name')
+        name.send_keys('EYErisk')
+        description = self.selenium.find_element_by_name('description')
+        description.send_keys('Software for risk management')
+        self.selenium.find_element_by_name('is_saas').click()
 
+        self.selenium.find_element_by_name('_save').click()
 
+        # create a selection
+        self.selenium.get(self.live_server_url + '/admin/risk/selection/add/')
+        name = self.selenium.find_element_by_name('name')
+        name.send_keys('Selenium test')
+        company = Select(self.selenium.find_element_by_name('company'))
+        company.select_by_index(1)
+        standard = Select(self.selenium.find_element_by_name('standards'))
+        standard.select_by_visible_text('Cobit 5')
 
+        self.selenium.find_element_by_name('_save').click()
+
+        # create a process
+        self.selenium.get(self.live_server_url + '/admin/risk/process/add/')
+        department = Select(self.selenium.find_element_by_name('department'))
+        department.select_by_index(1)
+        name = self.selenium.find_element_by_name('name')
+        name.send_keys('abc')
+        owner = self.selenium.find_element_by_name('owner')
+        owner.send_keys('Daniel')
+        scope = self.selenium.find_element_by_name('scope')
+        scope.send_keys('abc')
+
+        self.selenium.find_element_by_name('_save').click()
+
+        # create a risk type
+        self.selenium.get(self.live_server_url + '/admin/risk/risktype/add/')
+        description = self.selenium.find_element_by_name('description')
+        description.send_keys('IT program and project delivery')
+        impact = Select(self.selenium.find_element_by_name('impact'))
+        impact.select_by_index(1)
+
+        self.selenium.find_element_by_name('_save').click()
+
+        # create control domain
+        self.selenium.get(self.live_server_url + '/admin/risk/controldomain/add/')
+        standard = Select(self.selenium.find_element_by_name('standard'))
+        standard.select_by_visible_text('Cobit 5')
+        ordering = self.selenium.find_element_by_name('ordering')
+        ordering.send_keys('1')
+        area = Select(self.selenium.find_element_by_name('area'))
+        area.select_by_index(1)
+        domain = self.selenium.find_element_by_name('domain_en')
+        domain.send_keys('Security')
+
+        self.selenium.find_element_by_name('_save').click()
+
+        # create a control process
+        self.selenium.get(self.live_server_url + '/admin/risk/controlprocess/add/')
+        controldomain = Select(self.selenium.find_element_by_name('controldomain'))
+        controldomain.select_by_index(1)
+        ordering = self.selenium.find_element_by_name('ordering')
+        ordering.send_keys('1')
+        id = self.selenium.find_element_by_name('process_id')
+        id.send_keys('TEST01')
+        name = self.selenium.find_element_by_name('process_name_en')
+        name.send_keys('Selenium test')
+        description = self.selenium.find_element_by_name('process_description_en')
+        description.send_keys('Process description')
+        purpose = self.selenium.find_element_by_name('process_purpose_en')
+        purpose.send_keys('Process purpose')
+
+        self.selenium.find_element_by_name('_save').click()
+
+        # create a control practice
+        self.selenium.get(self.live_server_url + '/admin/risk/controlpractice/add/')
+        process = Select(self.selenium.find_element_by_name('controlprocess'))
+        process.select_by_index(1)
+        ordering = self.selenium.find_element_by_name('ordering')
+        ordering.send_keys('1')
+        id = self.selenium.find_element_by_name('practice_id')
+        id.send_keys('TEST01')
+        name = self.selenium.find_element_by_name('practice_name_en')
+        name.send_keys('Selenium test')
+        governance = self.selenium.find_element_by_name('practice_governance_en')
+        governance.send_keys('Practice governance')
+
+        self.selenium.find_element_by_name('_save').click()
+
+        # create a control activity
+        self.selenium.get(self.live_server_url + '/admin/risk/controlactivity/add/')
+        practice = Select(self.selenium.find_element_by_name('controlpractice'))
+        practice.select_by_index(1)
+        ordering = self.selenium.find_element_by_name('ordering')
+        ordering.send_keys('1')
+        id = self.selenium.find_element_by_name('activity_id')
+        id.send_keys('1')
+        activity = self.selenium.find_element_by_name('activity_en')
+        activity.send_keys('Control activity')
+        help = self.selenium.find_element_by_name('activity_help_en')
+        help.send_keys('Control activity help text')
+
+        self.selenium.find_element_by_name('_save').click()
+
+        # create a scenario category
+        self.selenium.get(self.live_server_url + '/admin/risk/scenariocategory/add/')
+        nr = self.selenium.find_element_by_name('nr')
+        nr.send_keys('01')
+        name = self.selenium.find_element_by_name('name')
+        name.send_keys('Selenium test')
+        scenario = self.selenium.find_element_by_name('risk_scenario')
+        scenario.send_keys('Risk scenario')
+        type = Select(self.selenium.find_element_by_name('risk_types'))
+        type.select_by_value('1')
+        process_enabler = Select(self.selenium.find_element_by_name('process_enablers'))
+        process_enabler.select_by_value('1')
+        enabler = Select(self.selenium.find_element_by_name('enabler_set-0-type'))
+        enabler.select_by_index(2)
+        reference = self.selenium.find_element_by_name('enabler_set-0-reference')
+        reference.send_keys('Reference 1')
+        ctr = self.selenium.find_element_by_name('enabler_set-0-contribution_to_response')
+        ctr.send_keys('Contribution to response 1')
+        self.selenium.find_element_by_link_text('Add another Enabler').click()
+
+        time.sleep(5)

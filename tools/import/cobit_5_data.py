@@ -23,7 +23,7 @@ del_stmnt = "DELETE FROM risk_controlpracticeraci WHERE controlpractice_id = %s"
 ins_stmnt = "INSERT INTO risk_controlpracticeraci (controlpractice_id, {}) VALUES ({}, {})"
 
 if not raci:
-    print("No rows in spreadsheet where found")
+    print("No rows in spreadsheet were found")
     quit()
     
 with psycopg2.connect(DATABASE_URL) as conn:
