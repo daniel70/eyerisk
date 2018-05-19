@@ -56,3 +56,4 @@ secrets.py
 *.pdf
 /tools/pg_backup/
 tools/import/secret_google_drive.json
+geckodriver.log

@@ -1,3 +1,4 @@
 # these lines processed by Heroku
 # https://devcenter.heroku.com/articles/slug-compiler#ignoring-files-with-
 documentation
+requirements_test.txt
