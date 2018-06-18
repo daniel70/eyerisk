@@ -12,7 +12,7 @@
         <form class="form" method="post" action="">
             {% csrf_token %}
             <div class="modal-body">
-                {% bootstrap_form form %}
+                {% bootstrap_form form %} <!--TODO: when project and scenario already exist, give user feedback instead of 500 -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>

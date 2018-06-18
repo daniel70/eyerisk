@@ -289,7 +289,7 @@ def scenario_edit(request, pk):
                 and process_enabler_answer_formset.is_valid() \
                 and enabler_answer_formset.is_valid():
 
-            if "_default" in request.POST:
+            if request.POST.get('save_as', '') == '_default':
                 # delete the 'old' company default if it exists...
                 ScenarioCategoryAnswer.objects.filter(project__company_id=sca.project.company_id,
                                                       scenario_category_id=sca.scenario_category_id,
