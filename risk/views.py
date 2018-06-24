@@ -297,28 +297,28 @@ def scenario_edit(request, pk):
                 # create the new default
                 new_sca = form.save(commit=False)
                 new_sca.is_default = True
-                new_sca.pk=None
+                new_sca.pk = None
                 new_sca.save()
 
                 # and create the related records of the new default
                 # TODO: this can be refactored using itertools.chain
-                for frm in risk_type_answer_formset.forms:
-                    rta = frm.save(commit=False)
-                    rta.scenario_category_answer_id = new_sca.pk
-                    rta.pk = None
-                    rta.save()
-
-                for frm in process_enabler_answer_formset.forms:
-                    peaf = frm.save(commit=False)
-                    peaf.scenario_category_answer_id = new_sca.pk
-                    peaf.pk = None
-                    peaf.save()
-
-                for frm in enabler_answer_formset.forms:
-                    eaf = frm.save(commit=False)
-                    eaf.scenario_category_answer_id = new_sca.pk
-                    eaf.pk = None
-                    eaf.save()
+                # for frm in risk_type_answer_formset.forms:
+                #     rta = frm.save(commit=False)
+                #     rta.scenario_category_answer_id = new_sca.pk
+                #     rta.pk = None
+                #     rta.save()
+                #
+                # for frm in process_enabler_answer_formset.forms:
+                #     peaf = frm.save(commit=False)
+                #     peaf.scenario_category_answer_id = new_sca.pk
+                #     peaf.pk = None
+                #     peaf.save()
+                #
+                # for frm in enabler_answer_formset.forms:
+                #     eaf = frm.save(commit=False)
+                #     eaf.scenario_category_answer_id = new_sca.pk
+                #     eaf.pk = None
+                #     eaf.save()
 
             form.save()
             risk_type_answer_formset.save()
