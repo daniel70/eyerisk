@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models, transaction
 from django.db.models.signals import m2m_changed, post_save, post_delete
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator

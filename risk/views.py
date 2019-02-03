@@ -3,7 +3,7 @@ import xlwt
 from datetime import datetime as dt
 from collections import OrderedDict, namedtuple
 from django.utils.text import slugify
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.forms.widgets import CheckboxSelectMultiple
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect

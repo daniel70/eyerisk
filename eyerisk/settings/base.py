@@ -10,15 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy
 
 import os
 import dj_database_url
 
-try:
-    SECRET_KEY = os.environ['SECRET_KEY']
-except:
-    pass
+SECRET_KEY = os.environ['SECRET_KEY']
 
 gettext = lambda s: s
 
@@ -48,13 +44,19 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
+    # needed for two-factor auth
     'django_otp.middleware.OTPMiddleware',
+
+    # needed for Twilio gateway
     'two_factor.middleware.threadlocals.ThreadLocals',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -160,7 +162,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_FILTER_BACKENDS': (
-        'rest_framework.filters.DjangoFilterBackend',
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
 

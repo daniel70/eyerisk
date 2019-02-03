@@ -17,11 +17,11 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth.views import logout
+from django.contrib.auth import logout
 from two_factor.urls import urlpatterns as tf_urls
 from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
 from rest_framework import routers
-from risk import views as riskviews
+# from risk import views as riskviews
 from risk import api
 
 router = routers.DefaultRouter()
@@ -32,9 +32,11 @@ router.register(r'riskmap', api.RiskMapViewSet, base_name='Risk Map')
 urlpatterns = [
     url(r'^', include('risk.urls')),
     url(r'^risk/', include('risk.urls')),
-    url(r'^api/', include(router.urls, namespace='api')),
+    url(r'^api/', include(router.urls)),
+    # url(r'^api/', include(router.urls, namespace='api')),
     # url(r'^api-auth/', include('rest_framework.urls')), WE SHOULD NOT CREATE ANOTHER ATTACK SURFACE !!!
-    url(r'', include(tf_urls + tf_twilio_urls, 'two_factor')),
+    url(r'', include(tf_urls)),
+    url(r'', include(tf_twilio_urls)),
     url(r'^account/logout/$', view=logout, name='logout'),
     url(r'^admin/', admin.site.urls),
 ]
