@@ -1,63 +1,77 @@
-# django-two-factor-auth requires
 django-two-factor-auth==1.8.0
-Babel==2.6.0
-Django==2.1.5
-django-formtools==2.1
-django-otp==0.5.1
-django-phonenumber-field==2.2.0
-phonenumberslite==8.10.4
-pytz==2018.9
-qrcode==6.1
-six==1.12.0
+# django-two-factor-auth requires
+# Babel==2.6.0
+# Django==2.1.5
+# django-formtools==2.1
+# django-otp==0.5.1
+# django-phonenumber-field==2.2.0
+# qrcode==6.1
+# six==1.12.0
 
-# django-otp-yubikey requires (extra)
 django-otp-yubikey==0.5.0
-pycryptodome==3.7.3
-YubiOTP==0.2.2
+# django-otp-yubikey requires (extra)
+# pycryptodome==3.7.3
+# YubiOTP==0.2.2
 
-
-appdirs==1.4.3
-asn1crypto==0.24.0
-beautifulsoup4==4.7.1
-certifi==2018.11.29
-cffi==1.11.5
-chardet==3.0.4
-cryptography==2.5
-dj-database-url==0.5.0
-django-bootstrap3==11.0.0
-django-crispy-forms==1.7.2
-django-debug-toolbar==1.11
-django-filter==2.1.0
-#django-modeltranslation==0.12.1
-django-multiselectfield==0.1.8
-djangorestframework==3.9.1
-gspread==3.1.0
-gunicorn==19.9.0
-httplib2==0.12.0
-humanize==0.5.1
-idna==2.8
-Markdown==3.0.1
-oauth2client==4.1.3
-olefile==0.46
-packaging==19.0
-phonenumbers==8.10.4
-Pillow==5.4.1
-psycopg2-binary==2.7.7
-pyasn1==0.4.5
-pyasn1-modules==0.2.4
-pycparser==2.19
-PyJWT==1.7.1
-pyOpenSSL==19.0.0
-pyparsing==2.3.1
-PySocks==1.6.8
-reportlab==3.5.13
-requests==2.21.0
-rsa==4.0
-soupsieve==1.7.3
-sqlparse==0.2.4
-twilio==6.23.1
-urllib3==1.24.1
-whitenoise==4.1.2
+# export to excel functionality
 xlwt==1.3.0
 
+
+twilio==6.23.1
+# twilio requires
+# PyJWT==1.7.1
+# PySocks==1.6.8
+# pytz==2018.9
+# requests==2.21.0
+#   certifi==2018.11.29
+#   chardet==3.0.4
+#   idna==2.8
+#   urllib3==1.24.1
+
+
+dj-database-url==0.5.0
+django-bootstrap3==11.0.0
+# feb opruiming django-crispy-forms==1.7.2
+
+django-debug-toolbar==1.11
+#   sqlparse==0.2.4
+
+# used by the debug-toolbar and restframework?
+django-filter==2.1.0
+
+django-multiselectfield==0.1.8
+djangorestframework==3.9.1
+gunicorn==19.9.0
+Markdown==3.0.1
+
+psycopg2-binary==2.7.7
+# only used in prod
+whitenoise==4.1.2
+
+#django-modeltranslation==0.12.1
 https://github.com/abdolhosein/django-modeltranslation/archive/patch-the-issue-with-django2.zip
+
+# oauth2client==4.1.3
+#   httplib2==0.12.0
+#   pyasn1==0.4.5
+#   pyasn1-modules==0.2.4
+#   rsa==4.0
+
+# packaging==19.0
+#   pyparsing==2.3.1
+
+# feb opruiming phonenumberslite==8.10.4
+# feb opruiming olefile==0.46
+# feb opruiming phonenumbers==8.10.4
+# feb opruiming Pillow==5.4.1
+# februari opruiming pycparser==2.19
+# februari opruiming pyOpenSSL==19.0.0
+# feb opruiming reportlab==3.5.13
+# feb used by tools soupsieve==1.7.3
+# feb opruiming humanize==0.5.1
+# feb tools gspread==3.1.0
+# februari opruiming appdirs==1.4.3
+# februari opruiming asn1crypto==0.24.0
+# feb used by tools beautifulsoup4==4.7.1
+# februari opruiming cffi==1.11.5
+# februari opruiming cryptography==2.5
