@@ -238,7 +238,8 @@ class ControlPractice(models.Model):
     controlprocess = models.ForeignKey(ControlProcess, on_delete=models.CASCADE)
     ordering = models.IntegerField()
     practice_id = models.CharField(max_length=15, blank=True)
-    practice_name = models.CharField(max_length=100, blank=True)
+    practice_name = models.CharField(max_length=200, blank=True)
+    practice_name = models.CharField(max_length=200, blank=True)
     practice_governance = models.TextField(blank=True)  # code_text
 
     def __str__(self):
