@@ -1,8 +1,9 @@
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support.ui import Select
-import time
+# import time
+
 
 class MySeleniumTests(StaticLiveServerTestCase):
     fixtures = ['users.json', 'riskmap.json', 'riskmapvalue.json']
@@ -11,7 +12,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.selenium = WebDriver()
-        cls.selenium.implicitly_wait(10)
+        cls.selenium.implicitly_wait(5)
 
     @classmethod
     def tearDownClass(cls):
@@ -19,7 +20,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_login(self):
-        admin = User.objects.get(username='daniel')
+        # admin = User.objects.get(username='daniel')
 
         self.selenium.get('%s%s' % (self.live_server_url, '/admin/'))
         username_input = self.selenium.find_element_by_name("auth-username")
@@ -66,8 +67,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.get(self.live_server_url + '/admin/risk/project/add/')
         name = self.selenium.find_element_by_name('name')
         name.send_keys('Action')
-        type = Select(self.selenium.find_element_by_name('type'))
-        type.select_by_index(1)
+        _type = Select(self.selenium.find_element_by_name('type'))
+        _type.select_by_index(1)
         company = Select(self.selenium.find_element_by_name('company'))
         company.select_by_index(1)
 
@@ -137,8 +138,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
         controldomain.select_by_index(1)
         ordering = self.selenium.find_element_by_name('ordering')
         ordering.send_keys('1')
-        id = self.selenium.find_element_by_name('process_id')
-        id.send_keys('TEST01')
+        _id = self.selenium.find_element_by_name('process_id')
+        _id.send_keys('TEST01')
         name = self.selenium.find_element_by_name('process_name_en')
         name.send_keys('Selenium test')
         description = self.selenium.find_element_by_name('process_description_en')
@@ -154,8 +155,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
         process.select_by_index(1)
         ordering = self.selenium.find_element_by_name('ordering')
         ordering.send_keys('1')
-        id = self.selenium.find_element_by_name('practice_id')
-        id.send_keys('TEST01')
+        _id = self.selenium.find_element_by_name('practice_id')
+        _id.send_keys('TEST01')
         name = self.selenium.find_element_by_name('practice_name_en')
         name.send_keys('Selenium test')
         governance = self.selenium.find_element_by_name('practice_governance_en')
@@ -169,12 +170,12 @@ class MySeleniumTests(StaticLiveServerTestCase):
         practice.select_by_index(1)
         ordering = self.selenium.find_element_by_name('ordering')
         ordering.send_keys('1')
-        id = self.selenium.find_element_by_name('activity_id')
-        id.send_keys('1')
+        _id = self.selenium.find_element_by_name('activity_id')
+        _id.send_keys('1')
         activity = self.selenium.find_element_by_name('activity_en')
         activity.send_keys('Control activity')
-        help = self.selenium.find_element_by_name('activity_help_en')
-        help.send_keys('Control activity help text')
+        _help = self.selenium.find_element_by_name('activity_help_en')
+        _help.send_keys('Control activity help text')
 
         self.selenium.find_element_by_name('_save').click()
 
@@ -186,8 +187,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
         name.send_keys('Selenium test')
         scenario = self.selenium.find_element_by_name('risk_scenario')
         scenario.send_keys('Risk scenario')
-        type = Select(self.selenium.find_element_by_name('risk_types'))
-        type.select_by_value('1')
+        _type = Select(self.selenium.find_element_by_name('risk_types'))
+        _type.select_by_value('1')
         process_enabler = Select(self.selenium.find_element_by_name('process_enablers'))
         process_enabler.select_by_value('1')
         enabler = Select(self.selenium.find_element_by_name('enabler_set-0-type'))
@@ -230,8 +231,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.selenium.get(self.live_server_url + '/admin/risk/enabler/add/')
         sc = Select(self.selenium.find_element_by_name('scenario_category'))
         sc.select_by_index(1)
-        type = Select(self.selenium.find_element_by_name('type'))
-        type.select_by_index(3)
+        _type = Select(self.selenium.find_element_by_name('type'))
+        _type.select_by_index(3)
         ref = self.selenium.find_element_by_name('reference')
         ref.send_keys('Reference')
         ctr = self.selenium.find_element_by_name('contribution_to_response')
@@ -315,8 +316,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
         # Create a risk type answer
         self.selenium.get(self.live_server_url + '/admin/risk/risktypeanswer/add/')
-        type = Select(self.selenium.find_element_by_name('risk_type'))
-        type.select_by_index(1)
+        _type = Select(self.selenium.find_element_by_name('risk_type'))
+        _type.select_by_index(1)
         sca = Select(self.selenium.find_element_by_name('scenario_category_answer'))
         sca.select_by_index(1)
         description = self.selenium.find_element_by_name('description')
@@ -344,8 +345,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
         cause.send_keys('Test cause')
         effect = self.selenium.find_element_by_name('effect')
         effect.send_keys('Test effect')
-        time = self.selenium.find_element_by_name('time')
-        time.send_keys('Test time')
+        _time = self.selenium.find_element_by_name('time')
+        _time.send_keys('Test time')
         benefit = Select(self.selenium.find_element_by_name('it_benefit'))
         benefit.select_by_index(1)
         programme = Select(self.selenium.find_element_by_name('it_programme'))
