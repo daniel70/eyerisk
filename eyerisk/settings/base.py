@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'otp_yubikey',
     'two_factor',
     # 'bootstrapform',
-    'bootstrap3',
+    'bootstrap4',
     'rest_framework',
     # 'crispy_forms',
 ]

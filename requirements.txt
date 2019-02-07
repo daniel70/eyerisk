@@ -31,7 +31,7 @@ twilio==6.23.1
 
 
 dj-database-url==0.5.0
-django-bootstrap3==11.0.0
+django-bootstrap4
 # feb opruiming django-crispy-forms==1.7.2
 
 django-debug-toolbar==1.11
