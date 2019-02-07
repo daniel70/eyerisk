@@ -1,5 +1,5 @@
 {% extends "risk/base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% block content %}
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -61,7 +61,7 @@
             </td>
             {% if perms.risk.change_scenariocategoryanswer %}
             <td>
-                <a href="{% url 'scenario-edit' pk=scenario.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="{% url 'scenario-edit' pk=scenario.pk %}"><i class="fa fa-pencil"></i></a>
             </td>
             {% endif %}
             {% if perms.risk.delete_scenariocategoryanswer %}

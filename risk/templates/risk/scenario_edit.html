@@ -1,6 +1,6 @@
 {% extends "risk/base.html" %}
 {% load staticfiles %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% block content %}
     {{ form.non_field_errors }}
 
@@ -303,7 +303,7 @@
                                         data-container="body" data-placement="auto bottom"
                                         data-title="Governance and Management Practices" data-content="
                     {{ process_enabler_answer_form.instance.control_practice.practice_governance }}">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                    <i class="fas fa-info-circle"></i>
                                 </button>
                             </div>
                         </div>
@@ -422,4 +422,12 @@
         </div>
     </form>
 {% endblock content %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+</script>
+{% endblock script %}
 

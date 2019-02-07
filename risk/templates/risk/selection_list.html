@@ -30,15 +30,15 @@
             </td>
             {% if perms.risk.change_selection %}
             <td>
-                <a href="{% url 'selection-edit' pk=selection.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="{% url 'selection-edit' pk=selection.pk %}"><i class="fas fa-pencil"></i></a>
             </td>
             <td>
-                <a href="{% url 'selection-export' pk=selection.pk %}"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                <a href="{% url 'selection-export' pk=selection.pk %}"><i class="fas fa-file-excel" aria-hidden="true"></i></a>
             </td>
             {% endif %}
             {% if perms.risk.delete_selection %}
             <td>
-                <a href="{% url 'selection-delete' pk=selection.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
+                <a href="{% url 'selection-delete' pk=selection.pk %}"><i class="fas fa-trash"></i></a>
             </td>
             {% endif %}
         </tr>

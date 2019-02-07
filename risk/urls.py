@@ -1,5 +1,7 @@
 import django.contrib.auth.urls
 from django.conf.urls import url, include
+from django.views.generic import TemplateView
+
 from .views import home, riskmaps, scenario_list, scenario_edit, scenario_delete, selection_list, selection_delete, \
     selection_create, selection_edit, selection_response, risk_map_list, risk_map_create, risk_map_create_category, \
     no_company, risk_map_delete, impact_list, settings, department_create, department_edit, department_delete, \
@@ -43,5 +45,7 @@ urlpatterns = [
 
     url(r'^register/$', register_list, name='register-list'),
     url(r'^raci/(?P<pk>\d+)/view$', raci_view, name='raci-view'),
+
+    url(r'^cobit-2019', TemplateView.as_view(template_name='risk/cobit-2019.html'), name='cobit-2019'),
 
 ]

@@ -1,6 +1,6 @@
 {% extends "risk/base.html" %}
 {% load risk_tags %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% block content %}
 <form action="" method="post" role="form">{% csrf_token %}
     <legend>SELECTIONS</legend>
@@ -16,7 +16,7 @@
         <a href="#list-group-standard-{{ pk }}" class="list-group-item {{ standard.response|response }}" data-toggle="collapse">
             <div class="row">
                 <div class="col-xs-8 col-md-10">
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <i class="fas fa-chevron-right"></i>
                     {{ standard.text }}
                 </div>
                 <div class="col-xs-4 col-md-2">
@@ -34,7 +34,7 @@
             <a href="#list-group-domain-{{ pk }}" class="list-group-item {{ domain.response|response }}" data-toggle="collapse">
             <div class="row">
                 <div class="col-xs-8 col-md-10">
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    <i class="fas fa-chevron-right"></i>
                     {{ domain.text }}
                 </div>
                 <div class="col-xs-4 col-md-2">
@@ -52,7 +52,7 @@
                 <a href="#list-group-process-{{ pk }}" class="list-group-item {{ process.response|response }}" data-toggle="collapse">
                 <div class="row">
                     <div class="col-xs-8 col-md-10">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
+                        <i class="fas fa-chevron-right"></i>
                         {{ process.text }}
                     </div>
                     <div class="col-xs-4 col-md-2">
@@ -70,7 +70,7 @@
                     <a href="#list-group-practice-{{ pk }}" class="list-group-item {{ practice.response|response }}" data-toggle="collapse">
                     <div class="row">
                         <div class="col-xs-8 col-md-10">
-                            <i class="glyphicon glyphicon-chevron-right"></i>
+                            <i class="fas fa-chevron-right"></i>
                             {{ practice.text }}
                         </div>
                         <div class="col-xs-4 col-md-2">
@@ -112,7 +112,19 @@
     {% endfor %}
     </div>
 {% endif %}
+{% endblock content %}
+
+{% block script %}
 <script>
+    $(function() {
+      $('.list-group-item').on('click', function() {
+        $('.fas', this)
+          .toggleClass('fa-chevron-right')
+          .toggleClass('fa-chevron-down');
+        console.log('done with function');
+      })
+    });
+
     $("button[data-type=response]").click(function(event) {
         event.stopPropagation();
         var response = $(this).text();
@@ -181,4 +193,4 @@
         }
     });
 </script>
-{% endblock content %}
+{% endblock script %}

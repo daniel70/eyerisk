@@ -1,116 +1,111 @@
 {% load staticfiles %}
+{% load bootstrap4 %}
 {% load risk_tags %}
 <!doctype html>
-<html class="no-js" lang="">
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        {% if user.is_authenticated %}
-        <title>EYERISK - {{ user.username|upper }} - {{ user.employee.company|upper }}</title>
-        {% else %}
-        <title>EYERISK</title>
-        {% endif %}
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html class="no-js" lang="en">
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+{% if user.is_authenticated %}
+    <title>EYERISK - {{ user.username|upper }} - {{ user.employee.company|upper }}</title>
+{% else %}
+    <title>EYERISK</title>
+{% endif %}
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <!-- Place favicon.ico in the root directory -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="{% static 'risk/css/normalize.css' %}">
-        <link rel="stylesheet" href="{% static 'risk/css/main.css' %}">
-        <script src="{% static 'risk/js/vendor/modernizr-2.8.3.min.js' %}"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-              crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'risk/css/all.css' %}"/>
+{% bootstrap_css %}
+<link rel="stylesheet" href="{% static 'risk/css/eyerisk.css' %}">
+{% block css %}{% endblock css %}
+</head>
+<body>
+<!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-              integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
-              crossorigin="anonymous">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'risk-home' %}">EYE RISK</a>
 
-        <link rel="stylesheet" href="{% static 'risk/css/eyerisk.css' %}">
-        {% block css %}{% endblock css %}
-        <script src="https://cdn.jsdelivr.net/lodash/4.16.4/lodash.min.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script src="https://unpkg.com/react@15.3.2/dist/react-with-addons.js"></script>
-        <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.min.js"></script>
-        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-        <script src="{% static 'risk/js/plugins.js' %}"></script>
-        <script src="{% static 'risk/js/main.js' %}"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous">
-        </script>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#myNavbar"
+            aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    </head>
-    <body>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+    {% if user.is_authenticated %}
+    {% with request.resolver_match.url_name as url_name %}
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="navbar-nav mr-auto">
 
-        <nav class="navbar navbar-default">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="{% url 'risk-home' %}">EYE RISK</a>
-            </div>
-            {% if user.is_authenticated %}
-            {% with request.resolver_match.url_name as url_name %}
-            <div class="collapse navbar-collapse" id="myNavbar">
-              <ul class="nav navbar-nav">
-                <li class="{% if url_name == 'risk-home' %}active{% endif %}">
-                    <a href="{% url 'risk-home' %}">HOME</a>
-                </li>
-                {% if perms.risk %}
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">RISK<span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="{% url 'selection-list' %}">SELECTIONS</a></li>
-                    <li><a href="{% url 'risk-map-list' %}">MAPS</a></li>
-                    <li><a href="{% url 'scenario-list' %}">SCENARIOS</a></li>
-                    <li><a href="{% url 'impact-list' %}">IMPACTS</a></li>
-                  </ul>
-                </li>
-                {% endif %}
-              </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if user.is_superuser %}
-                    <li><a href="/admin">ADMIN</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-user"></span> {{ user.username|upper }}</a></li>
-                <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
-              </ul>
-            </div>
-            {% endwith %}
+            <li class="nav-item {% if url_name == 'risk-home' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'risk-home' %}">HOME</a>
+            </li>
+
+            {% if perms.risk %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="riskDropdown" role="button"
+                   data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                    RISK
+                </a>
+                <div class="dropdown-menu" aria-labelledby="riskDropdown">
+                    <a class="dropdown-item" href="{% url 'selection-list' %}">SELECTIONS</a>
+                    <a class="dropdown-item" href="{% url 'risk-map-list' %}">MAPS</a>
+                    <a class="dropdown-item" href="{% url 'scenario-list' %}">SCENARIOS</a>
+                    <a class="dropdown-item" href="{% url 'impact-list' %}">IMPACTS</a>
+                </div>
+            </li>
             {% endif %}
-          </div>
-        </nav>
-        <div class="container">
 
-        {% for msg in messages %}
-        <div class="alert alert-{{ msg.level_tag }}" role="alert">
-            <span class="{{ msg.level_tag|msg_icon_class }}" aria-hidden="true"></span>
-            {{msg.message}}
-        </div>
-        {% endfor %}
-        {% block content_wrapper %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="frameworksDropdown" role="button"
+                   data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                    FRAMEWORKS
+                </a>
+                <div class="dropdown-menu" aria-labelledby="frameworksDropdown">
+                    <a class="dropdown-item" href="{% url 'cobit-2019' %}">COBIT 2019</a>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link" href="/admin"> {% comment %}TODO: link to admin url{% endcomment %}
+                    <i class="fa fa-cog"></i> ADMIN </a>
+            </li>
+            {% endif %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'settings' %}">
+                    <i class="fa fa-user"></i> {{ user.username|upper }}
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="fa fa-sign-out"></i> LOGOUT
+                </a>
+            </li>
+        </ul>
+    </div>
+    {% endwith %}
+    {% endif %}
+</nav>
+
+<div class="container">
+
+    {% for msg in messages %}
+    <div class="alert alert-{{ msg.level_tag }}" role="alert">
+        <span class="{{ msg.level_tag|msg_icon_class }}" aria-hidden="true"></span>
+        {{ msg.message }}
+    </div>
+    {% endfor %}
+    {% block content_wrapper %}
         {% block content %}{% endblock content %}
-        {% endblock content_wrapper %}
+    {% endblock content_wrapper %}
 
-        </div>
+</div>
 
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-            e.src='https://www.google-analytics.com/analytics.js';
-            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-        </script>
-    </body>
+{% bootstrap_javascript jquery='full' %}
+{% block script %}{% endblock script %}
+</body>
 </html>
