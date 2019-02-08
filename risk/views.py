@@ -14,8 +14,9 @@ from django.forms import inlineformset_factory, modelformset_factory
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
-from .models import Selection, ControlProcess, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, ProcessEnablerAnswer, \
-    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department, Software, Register, ControlPracticeRACI
+from .models import Selection, ControlProcess, ControlSelection, ScenarioCategoryAnswer, RiskTypeAnswer, \
+    ProcessEnablerAnswer, \
+    EnablerAnswer, RiskMap, RiskMapValue, Impact, Department, Software, Register, ControlPracticeRACI, Standard
 from .forms import SelectionForm, ScenarioCategoryAnswerForm, ScenarioCategoryAnswerCreateForm, \
     RiskMapCategoryCreateForm, RiskMapValueFormSet, ImpactDescriptionFormSet, UserSettingsForm, CompanySettingsForm, \
     DepartmentAdminForm, DepartmentForm, SoftwareForm, RegisterForm
@@ -773,4 +774,17 @@ def raci_view(request, pk):
 
     context = {'headers': headers, 'rows': rows}
     return render(request, template_name='risk/raci_view.html', context=context)
+
+
+def framework_info(request, standard_name="Cobit 2019", process_name="APO01"):
+    """
+    This view show the practices of a framework. It can be used for reference work.
+    :param standard_name: the name of the standard (e.g. "Cobit 2019")
+    :param process_name: the process_name of the controlprocess (e.g. "APO05")
+    """
+    process = get_object_or_404(ControlProcess,
+                                process_id=process_name,
+                                controldomain__standard__name=standard_name)
+    context = {'process': process}
+    return render(request, template_name='risk/framework_info.html', context=context)
 

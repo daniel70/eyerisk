@@ -5,153 +5,257 @@
 .cobit-button {
     white-space: normal;
     font-size: smaller;
-    height: 94px;
-    width: 112px;
+    height: 70px;
+    width: 118px;
+    line-height: 1;
+}
+
+.cobit-button > div {
+    display: table-cell;
+    vertical-align: middle;
+    height: 70px;
+}
+
+.kop {
+    background-color: #7b1c3a;
+}
+
+.vlak {
+    background-color: #163a79;
+}
+
+.controls {
+    background-color: #5c6ba7;
 }
 </style>
-
 {% endblock css %}
 
 {% block content %}
-<h1>Cobit 2019</h1>
-<div class="container">
-    <div class="row" style="background-color: #1d2124">
-        <div class="col-10">
-            <div class="d-flex flex-wrap">
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>EDM01</b>&ndash;Ensured Governance Framework Setting and Maintenance</button>
-                </div>
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>EDM02</b>&ndash;Ensured Benefits Delivery</button>
-                </div>
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>EDM03</b>&ndash;Ensured Risk Optimization</button>
-                </div>
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>EDM04</b>&ndash;Ensured Resource Optimization</button>
-                </div>
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>EDM05</b>&ndash;Ensured Stakeholder Engagement</button>
-                </div>
+<div class="container mt-3">
+    <!--
+    <div class="d-flex flex-wrap justify-content-around controls">
+        <a href="{% url 'framework_info' 'Cobit 2019' 'EDM02' %}" role="button" class="btn btn-light cobit-button p-0 m-1">
+
+            <div><b>EDM02</b>&ndash;Ensured Benefits Delivery</div>
+        </a>
+    </div>
+    -->
+    <div class="kop"><h2 class="text-center text-white">COBIT Core Model</h2></div>
+    <div class="d-flex flex-column vlak">
+        <div class="d-flex flex-wrap justify-content-around">
+            <div>
+                <a href="{% url 'framework_info' 'Cobit 2019' 'EDM01' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                    <div><b>EDM01</b>&ndash;Ensured Governance Framework Setting and Maintenance</div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'framework_info' 'Cobit 2019' 'EDM02' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                    <div><b>EDM02</b>&ndash;Ensured Benefits Delivery</div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'framework_info' 'Cobit 2019' 'EDM03' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                    <div><b>EDM03</b>&ndash;Ensured Risk Optimization</div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'framework_info' 'Cobit 2019' 'EDM04' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                    <div><b>EDM04</b>&ndash;Ensured Resource Optimization</div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'framework_info' 'Cobit 2019' 'EDM05' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                    <div><b>EDM05</b>&ndash;Ensured Stakeholder Engagement</div>
+                </a>
             </div>
         </div>
     </div>
     <br>
-    <div class="row" style="background-color: #1d2124">
+    <div class="row no-gutters pl-2 vlak">
         <div class="col-10">
-            <div class="d-flex flex-wrap mx-1 my-3" style="background-color: #5a6268">
+            <div class="d-flex flex-wrap mx-1 my-3 controls">
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO01</b>&ndash;Managed I&T Management Framework</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO01' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO01</b>&ndash;Managed I&T Management Framework</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO02</b>&ndash;Managed Strategy</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO02' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO02</b>&ndash;Managed Strategy</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO03</b>&ndash;Managed Enterprise Architecture</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO03' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO03</b>&ndash;Managed Enterprise Architecture</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO04</b>&ndash;Managed Innovation</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO04' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO04</b>&ndash;Managed Innovation</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO05</b>&ndash;Managed Portfolio</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO05' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO05</b>&ndash;Managed Portfolio</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO06</b>&ndash;Managed Budget and Costs</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO06' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO06</b>&ndash;Managed Budget and Costs</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO07</b>&ndash;Managed Human Resources</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO07' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO07</b>&ndash;Managed Human Resources</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO08</b>&ndash;Managed Relationships</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO08' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO08</b>&ndash;Managed Relationships</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO09</b>&ndash;Managed Service Agreements</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO09' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO09</b>&ndash;Managed Service Agreements</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO10</b>&ndash;Managed Vendors</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO10' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO10</b>&ndash;Managed Vendors</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO11</b>&ndash;Managed Quality</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO11' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO11</b>&ndash;Managed Quality</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO12</b>&ndash;Managed Risk</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO12' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO12</b>&ndash;Managed Risk</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO13</b>&ndash;Managed Security</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO13' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO13</b>&ndash;Managed Security</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>APO14</b>&ndash;Managed Data</button>
-                </div>
-            </div>
-            <div class="d-flex flex-wrap mx-1 my-3" style="background-color: #5a6268">
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI01</b>&ndash;Managed Programs</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI02</b>&ndash;Managed Requirements Definition</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI03</b>&ndash;Managed Solutions Identification and Build</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI04</b>&ndash;Managed Availability and Capacity</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI05</b>&ndash;Managed Organisational Change</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI06</b>&ndash;Managed IT Changes</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI07</b>&ndash;Managed IT Change Acceptance and Transitioning</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI08</b>&ndash;Managed Knowledge</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI09</b>&ndash;Managed Assets</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI10</b>&ndash;Managed Configuration</button>
-                </div>
-                <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>BAI11</b>&ndash;Managed Projects</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'APO14' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>APO14</b>&ndash;Managed Data</div>
+                    </a>
                 </div>
             </div>
-            <div class="d-flex flex-wrap mx-1 my-3" style="background-color: #5a6268">
+            <div class="d-flex flex-wrap mx-1 my-3 controls">
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>DSS01</b>&ndash;Managed Operations</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI01' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI01</b>&ndash;Managed Programs</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>DSS02</b>&ndash;Managed Service Requests and Incidents</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI02' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI02</b>&ndash;Managed Requirements Definition</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>DSS03</b>&ndash;Managed Problems</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI03' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI03</b>&ndash;Managed Solutions Identification and Build</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>DSS04</b>&ndash;Managed Continuity</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI04' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI04</b>&ndash;Managed Availability and Capacity</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>DSS05</b>&ndash;Managed Security Services</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI05' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI05</b>&ndash;Managed Organisational Change</div>
+                    </a>
                 </div>
                 <div>
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>DSS01</b>&ndash;Managed Business Process Controls</button>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI06' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI06</b>&ndash;Managed IT Changes</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI07' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI07</b>&ndash;Managed IT Change Acceptance and Transitioning</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI08' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI08</b>&ndash;Managed Knowledge</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI09' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI09</b>&ndash;Managed Assets</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI10' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI10</b>&ndash;Managed Configuration</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'BAI11' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>BAI11</b>&ndash;Managed Projects</div>
+                    </a>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap mx-1 my-3 controls">
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'DSS01' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>DSS01</b>&ndash;Managed Operations</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'DSS02' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>DSS02</b>&ndash;Managed Service Requests and Incidents</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'DSS03' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>DSS03</b>&ndash;Managed Problems</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'DSS04' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>DSS04</b>&ndash;Managed Continuity</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'DSS05' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>DSS05</b>&ndash;Managed Security Services</div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'DSS06' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>DSS01</b>&ndash;Managed Business Process Controls</div>
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col-2">
-            <div class="d-flex flex-column flex-grow-1" style="background-color: #5b4268">
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>MEA01</b>&ndash;Managed Performance and Conformance Monitoring</button>
+        <div class="col-2 d-flex justify-content-center">
+            <div class="d-flex flex-column justify-content-around mx-1 my-3 px-2 controls">
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'MEA01' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>MEA01</b>&ndash;Managed Performance and Conformance Monitoring</div>
+                    </a>
                 </div>
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>MEA02</b>&ndash;Managed System of Internal Control</button>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'MEA02' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>MEA02</b>&ndash;Managed System of Internal Control</div>
+                    </a>
                 </div>
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>MEA03</b>&ndash;Managed Compliance with External Requirements</button>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'MEA03' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>MEA03</b>&ndash;Managed Compliance with External Requirements</div>
+                    </a>
                 </div>
-                <div class="flex-fill">
-                    <button type="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0"><b>MEA04</b>&ndash;Managed Assurance</button>
+                <div>
+                    <a href="{% url 'framework_info' 'Cobit 2019' 'MEA04' %}" role="button" class="cobit-button btn btn-light mx-1 my-2 mb-2 p-0">
+                        <div><b>MEA04</b>&ndash;Managed Assurance</div>
+                    </a>
                 </div>
             </div>
         </div>

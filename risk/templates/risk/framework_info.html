@@ -1,0 +1,12 @@
+{% extends 'risk/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Process: {{ process.process_name }}</h1>
+    <ul>
+    {% for practice in process.controlpractice_set.all %}
+        <li>{{ practice.practice_id }} : {{ practice.practice_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
