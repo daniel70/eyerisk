@@ -239,7 +239,6 @@ class ControlPractice(models.Model):
     ordering = models.IntegerField()
     practice_id = models.CharField(max_length=15, blank=True)
     practice_name = models.CharField(max_length=200, blank=True)
-    practice_name = models.CharField(max_length=200, blank=True)
     practice_governance = models.TextField(blank=True)  # code_text
 
     def __str__(self):
@@ -566,16 +565,18 @@ def scenario_category_answer_saved(sender, **kwargs):
         process_enablers = []
         enablers = []
 
-        if instance.project.company.name != "iRiskIT" and instance.project.name != "Default":
-            # if we are not in iRiskIT project Default, and there is a default template for this Scenario Category then we use that
+        if instance.project.company.name != "iRiskIT" and instance.project.name == "Default":
+            # if we are not in iRiskIT project Default, and there is a default template for this Scenario Category
+            # then we use that
             sca_default = ScenarioCategoryAnswer.objects.filter(project__company_id=instance.project.company_id,
-                                                              scenario_category_id=instance.scenario_category_id,
-                                                              is_default=True,
-                                                              ).first()
+                                                                scenario_category_id=instance.scenario_category_id,
+                                                                is_default=True,
+                                                                ).first()
             if not sca_default:
-                sca_default = ScenarioCategoryAnswer.objects.filter(project__company__name="iRiskIT", project__name="Default",
-                                                         project__type="Q",
-                                                         scenario_category_id=instance.scenario_category_id).first()
+                sca_default = ScenarioCategoryAnswer.objects.filter(project__company__name="iRiskIT",
+                                                                    project__name="Default",
+                                                                    project__type="Q",
+                                                                    scenario_category_id=instance.scenario_category_id).first()
 
             if sca_default:
                 # update the fields of this scenario category answer with the templates values
